@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+lsof -i tcp:$@
+if [ -n "$(command -v "netstat")" ]
+then
+    sudo $(which netstat) -tunlp tcp | grep "$@"
+fi
