@@ -222,6 +222,10 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get update
 
+
+RUN apt-get update && \
+    apt-get install -y ubuntu-session yaru-theme-gtk yaru-theme-icon yaru-theme-sound gnome-shell-extension-appindicator
+
 ADD ./docker_scripts/xstartup.sh /root/.vnc/xstartup
 ADD ./docker_scripts/spawn-desktop.sh /usr/local/etc/spawn-desktop.sh
 

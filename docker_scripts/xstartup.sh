@@ -8,6 +8,9 @@ unset DBUS_SESSION_BUS_ADDRESS
 xsetroot -solid grey
 vncconfig -iconic &
 
+gnome-session --session=ubuntu
+
+
 gnome-panel &
 gnome-settings-daemon &
 metacity &
