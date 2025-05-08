@@ -226,11 +226,8 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y ubuntu-session yaru-theme-gtk yaru-theme-icon yaru-theme-sound gnome-shell-extension-appindicator
 
-RUN locale-gen de_DE.UTF-8 && \
-    apt-get install -y xfonts-75dpi && \
+RUN apt-get install -y xfonts-75dpi && \
     apt-get install -y xfonts-100dpi && \
-    apt-get install -y gnome-panel && \
-    apt-get install -y metacity && \
     apt-get install -y light-themes
 
 ADD ./docker_scripts/xstartup.sh /root/.vnc/xstartup
