@@ -227,6 +227,7 @@ ADD ./docker_scripts/spawn-desktop.sh /usr/local/etc/spawn-desktop.sh
 
 RUN chmod 755 /root/.vnc/xstartup && chmod +x /usr/local/etc/spawn-desktop.sh
 # CMD bash -C '/usr/local/etc/spawn-desktop.sh';'bash'
+RUN echo 'sh /usr/local/etc/spawn-desktop.sh;. "/opt/ros/$ROS_DISTRO/setup.bash" --' > /root/.bashrc
 
 # Expose ports.
 EXPOSE 5901/tcp
@@ -234,4 +235,4 @@ EXPOSE 5901/tcp
 # ENTRYPOINT ["/startup.sh"]
 # ENV DEBIAN_FRONTEND=noninteractive
 
-CMD ["bash", "-c", "/usr/local/etc/spawn-desktop.sh; source \"/opt/ros/$ROS_DISTRO/setup.bash\" --; bash"]
+# CMD ["bash", "-c", "/usr/local/etc/spawn-desktop.sh; source \"/opt/ros/$ROS_DISTRO/setup.bash\" --; bash"]

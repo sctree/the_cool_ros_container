@@ -13,4 +13,4 @@ chmod 600 /root/.vnc/passwd
 mkdir -p ~/.config/nautilus
 
 #this starts the vnc server
-USER=root vncserver :1 -geometry "$resolution" -depth 24
+USER=root vncserver :1 -geometry "$resolution" -depth 24 &
