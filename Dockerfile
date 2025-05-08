@@ -232,7 +232,4 @@ RUN echo 'sh /usr/local/etc/spawn-desktop.sh;. "/opt/ros/$ROS_DISTRO/setup.bash"
 # Expose ports.
 EXPOSE 5901/tcp
 
-# ENTRYPOINT ["/startup.sh"]
-# ENV DEBIAN_FRONTEND=noninteractive
-
-# CMD ["bash", "-c", "/usr/local/etc/spawn-desktop.sh; source \"/opt/ros/$ROS_DISTRO/setup.bash\" --; bash"]
+CMD ["bash"]
