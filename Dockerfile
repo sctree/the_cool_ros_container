@@ -224,10 +224,8 @@ RUN apt-get update && \
 
 ADD ./docker_scripts/xstartup.sh /root/.vnc/xstartup
 ADD ./docker_scripts/spawn-desktop.sh /usr/local/etc/spawn-desktop.sh
-ADD ./docker_scripts/start-vnc-expect-script.sh /usr/local/etc/start-vnc-expect-script.sh
 
-
-RUN chmod 755 /root/.vnc/xstartup && chmod +x /usr/local/etc/start-vnc-expect-script.sh && chmod +x /usr/local/etc/spawn-desktop.sh
+RUN chmod 755 /root/.vnc/xstartup && chmod +x /usr/local/etc/spawn-desktop.sh
 # CMD bash -C '/usr/local/etc/spawn-desktop.sh';'bash'
 
 # Expose ports.
