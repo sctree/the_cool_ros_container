@@ -206,7 +206,7 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
 	
 # Setup enviroment variables
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 ENV USER=root
 
