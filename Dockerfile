@@ -240,4 +240,15 @@ RUN echo 'sh /usr/local/etc/spawn-desktop.sh;. "/opt/ros/$ROS_DISTRO/setup.bash"
 # Expose ports.
 EXPOSE 5901/tcp
 
-CMD ["bash"]
+#CMD ["bash"]
+
+RUN apt-get update && apt-get install -y systemd systemd-sysv
+
+
+ENV container=docker
+
+STOPSIGNAL SIGRTMIN+3
+
+VOLUME [ "/sys/fs/cgroup" ]
+
+CMD ["bash", "-c", "/sbin/init && bash"]
