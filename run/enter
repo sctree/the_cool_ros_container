@@ -1,3 +1,30 @@
 #!/usr/bin/env bash
 
-docker run -it -p 5901:5901 crc /bin/bash
+#docker run -it -p 5901:5901 crc /bin/bash
+
+#docker run --privileged --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:ro -d --name ubuntu-systemd crc
+
+#docker run --privileged --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:ro -d --name ubuntu-systemd crc /sbin/init
+
+# Running container interactively. currently the container immediately stops after running.
+# However, the container name is still used and must be removed before the run command can be attempted again.
+#docker run --privileged --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name ubuntu-systemd -it crc /sbin/init
+
+# Mounting additional directories to make them writable
+#docker run --privileged --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v /tmp:/tmp -v /run:/run -d --name ubuntu-systemd crc /sbin/init
+
+# Need to start VNC before launching systemd since systemd is now the main process instead of an interactive shell.
+# also, expose ports
+#docker run --privileged --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw -d --name ubuntu-systemd -p 5901:5901 crc /bin/bash -c "tightvncserver :1 && /sbin/init"
+
+docker run --privileged --cgroupns=host \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+  -d --name ubuntu-systemd -p 5901:5901 crc \
+  /sbin/init
+
+# ^ this works but run this in terminal:
+
+#docker exec -it ubuntu-systemd bash
+#tightvncserver :1
+
+# docker exec into it and then start the VNC manually
