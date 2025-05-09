@@ -1,0 +1,89 @@
+Learning tasks:
+- ## Understanding bash/linux
+    - Explain to me how to find and kill a running process
+    - Convince me you know what a PID is
+    - Tell me about process exit codes 
+    - What are common edgecases and painpoints in bash
+    - Self quiz on bash argument parsing specifically with env vars as arguments. Tell GPT to make quiz questions that are likely to trip up people new to bash.
+    - How does bash/shell startup work (.profile, .bashrc, .zshenv, etc) tell me the difference between all those files 
+    - Tell me how to add (and remove!) a command from the command line. What's the difference between a function, executable, and binary
+    - Tell me how hashbangs work and what they are. Make a hashbang for a python script, explain to me how you'd make a hashbang for a different language
+- ## Code For this Project
+    - Your code should always be easily and reliably runnable by someone else. Thats my rule, and I have really high standards for that. This section for that. 
+    - Install deno
+    - Youll probably have to read deno documentation because chatgpt usually sucks at deno related stuff and hallucinates a lot. Maybe use GPT to search deno docs. 
+    - Make a hello world for deno and run it
+    - Figure out how to run a remote script  (url) using deno
+    - Push your hello world to a public github repo (cool ros repo is fine)
+    - Run your hello world using a URL (github raw)
+    - Send me the command so I can run it on my machine
+    - In a new JS file, make a function, export it, push that file to github
+    - Edit your hello world script. Import the function from that other file, but import it from a raw github URL. Call the function
+    - Find one of my functions on my good-js github repo, import it, use it, run the script
+    - Google "JSR", explain to me what it is, show me a package from it
+    - Go to to [https://esm.sh/](https://esm.sh/) explain to me how ESM can be used with JSR. Explain to me how to pick a specific version of a package
+    - Use esm.sh to import a library called deno dax
+    - Use deno dax to run an echo command (the deno dax github readme has all the info)
+    - Use dax to run an echo command AND get the exit code
+    - Use dax to run an echo command and store the output (stdout) in a string
+    - Use esm.sh to import a library named cliffy (search deno cliffy)
+    - Use cliffy to make a little command line app that asks for some different things, fav color, etc
+    - Push to github
+    - Send me the command so I can run it on my system
+    - Go to my github, find deno_bundler, binaryify, html bundle, and archy and install all four of those.
+    - Reminder: have me tell you about bundling and debugging URL code
+- ## Networking
+    - Show me a hello world deno server that uses no packages/libraries
+    - What is the difference between a public and private IP address. Tell me what a hostname is
+    - Get a deno server running on your computer that I can access from my computer
+    - Make a HTML endpoint on the server
+    - Make a JSON endpoint on the server
+    - Show me how to "hit" those enpoints using the browser or CURL
+    - Tell gpt: You have two laptops, both are running Python code. What are some different ways you can get them to send data to eachother, what needs to be done. How can those methods be debugged. 
+    - Show me an https server running on your computer. Explain what's necessary for https thats not necessary for http
+    - Explain to me the benefits and downsides of websockets. What can they do that http requests cannot. 
+    - Explain how to get a certificate / domain from a certificate authority. See if you can get a free domain somewhere 
+- ## Later
+    - Explain to me how async/await works in JavaScript. Look up visuals that compare it to synchronous and parallel processing. Have gpt quiz you on common async footguns. Try to trip me up with some examples.
+    - Explain to me what CORS is, and how it can be a problem when you're using URL imports in JavaScript
+    - Tell me the difference between EcmaScript (esm) imports and CommonJS imports. 
+
+# Actual Tasks:
+- get systemd installed on docker
+- get foxglove listener installed on docker
+- install Boston dynamics wrapper for ROS in docker
+- install deno in docker
+- install VS Code in docker
+- Add your hello-world deno server to docker and have it start as part of the bashrc. Access the server (running in docker) from your browser. Debug it with chatgpt.
+- See if I can access the server while its running in docker on your computer
+- Figure out how to ssh into docker (harder than it might seem, need to install ssh server and do port mapping)
+- Google ssh-copy-id and explain to me what it does and how to use it
+- Figure out how to run the hello-world of Boston Dynamics spot on your laptop (install python sdk, connect to spot, run a script)
+- Figure out how to ssh into the Linux machine on spot (not docker)
+- Figure out how to use VS Code remote ssh with the Linux machine (not docker)
+- Test building/running your docker image on spot
+- Once its running connect to it from your laptop in several different ways
+- 1. Be able to ssh from your laptop into docker. This is going to be hard. 
+- 2. Use VS Code's remote ssh to connect to the docker filesystem
+- 3. Connect to VNC from your laptop into docker
+- 4. Get ros running, then try to render foxglove on your laptop 
+- Make a nice looking 3D foxglove interface
+
+# Extras / Whenever
+- Make the dockerfile more configurable
+    - How to set env var from docker run command 
+    - vnc password should be env var
+    - vnc screen resolution should be env var
+    - toggle vnc entirely
+- Figure out how Linux desktop stuff works
+    - What are the names of common desktops (gnome, unity)
+    - How to switch between them
+    - How is gnome typically configured
+    - How to change gnome themes
+    - How to set the font
+    - How to add the gnome dock
+    - What is X11
+- Get webvnc working
+    - Understand the commented out code in the docker. Which parts setup the webvnc
+- Use your deno server to serve an HTML page that loads a Three.js example with orbit controls
+- Setup a websocket connection. Make a deno endpoint for it and have your HTML page connect to it.  
