@@ -11,10 +11,9 @@ RUN echo 'Etc/UTC' > /etc/timezone && \
     ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
     apt-get update && \
     apt-get install -q -y --no-install-recommends tzdata && \
-    rm -rf /var/lib/apt/lists/*
-
+    rm -rf /var/lib/apt/lists/* && \
 # install packages
-RUN apt-get update && apt-get install -q -y --no-install-recommends \
+    apt-get update && apt-get install -q -y --no-install-recommends \
     dirmngr \
     gnupg2 \
     && rm -rf /var/lib/apt/lists/*
@@ -44,14 +43,12 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-rosdep \
     python3-rosinstall \
     python3-vcstools \
-    && rm -rf /var/lib/apt/lists/*
-
+    && rm -rf /var/lib/apt/lists/* && \
 # bootstrap rosdep
-RUN rosdep init && \
-  rosdep update --rosdistro $ROS_DISTRO
-
+    rosdep init && \
+    rosdep update --rosdistro $ROS_DISTRO && \
 # install ros packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-desktop-full=1.5.0-1* \
     && rm -rf /var/lib/apt/lists/*
 
@@ -199,11 +196,9 @@ RUN set -xe && echo '#!/bin/sh' > /usr/sbin/policy-rc.d && echo 'exit 101' >> /u
     echo 'APT::Update::Post-Invoke { "rm -f /var/cache/apt/archives/*.deb /var/cache/apt/archives/partial/*.deb /var/cache/apt/*.bin || true"; };' >> /etc/apt/apt.conf.d/docker-clean && \
     echo 'Dir::Cache::pkgcache ""; Dir::Cache::srcpkgcache "";' >> /etc/apt/apt.conf.d/docker-clean && \
     echo 'Acquire::Languages "none";' > /etc/apt/apt.conf.d/docker-no-languages && \
-    echo 'Acquire::GzipIndexes "true"; Acquire::CompressionTypes::Order:: "gz";' > /etc/apt/apt.conf.d/docker-gzip-indexes
-
-RUN rm -rf /var/lib/apt/lists/*
-
-RUN sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
+    echo 'Acquire::GzipIndexes "true"; Acquire::CompressionTypes::Order:: "gz";' > /etc/apt/apt.conf.d/docker-gzip-indexes && \
+    rm -rf /var/lib/apt/lists/* && \
+    sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
 	
 # Setup enviroment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -215,18 +210,14 @@ RUN apt-get update && \
     apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && \
     apt-get install -y tightvncserver && \
     apt-get install -y expect && \
-    mkdir /root/.vnc
-
+    mkdir /root/.vnc && \
 #Update the package manager and upgrade the system
-RUN apt-get update && \
+    apt-get update && \
     apt-get upgrade -y && \
-    apt-get update
-
-
-RUN apt-get update && \
-    apt-get install -y ubuntu-session yaru-theme-gtk yaru-theme-icon yaru-theme-sound gnome-shell-extension-appindicator
-
-RUN apt-get install -y xfonts-75dpi && \
+    apt-get update && \ 
+    apt-get update && \
+    apt-get install -y ubuntu-session yaru-theme-gtk yaru-theme-icon yaru-theme-sound gnome-shell-extension-appindicator && \
+    apt-get install -y xfonts-75dpi && \
     apt-get install -y xfonts-100dpi && \
     apt-get install -y light-themes
 
@@ -252,3 +243,7 @@ STOPSIGNAL SIGRTMIN+3
 VOLUME [ "/sys/fs/cgroup" ]
 
 CMD ["bash", "-c", "/sbin/init && bash"]
+# bash -c runs string as a command in a new bash shell
+# /sbin/init starts systemd and if successful, start new interactive bash shell
+
+# interestingly enough, for some reason tightvnvserver: 1 is no longer needed?
