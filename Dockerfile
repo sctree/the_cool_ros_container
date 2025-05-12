@@ -229,11 +229,44 @@ RUN chmod 755 /root/.vnc/xstartup && chmod +x /usr/local/etc/spawn-desktop.sh
 RUN echo 'sh /usr/local/etc/spawn-desktop.sh;. "/opt/ros/$ROS_DISTRO/setup.bash" --' > /root/.bashrc
 
 # Expose ports.
-EXPOSE 5901/tcp
+EXPOSE 5901/tcp/3000
 
 #CMD ["bash"]
 
+# install dependencies for systemd
 RUN apt-get update && apt-get install -y systemd systemd-sysv
+
+# install dependencies for Foxglove Studio
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg2 \
+    lsb-release \
+    build-essential \
+    libgconf-2-4 \
+    libnss3 \
+    libx11-xcb1 \
+    libsecret-1-0 \
+    libasound2 \
+    libappindicator3-1 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libgbm1 \
+    libxss1 \
+    libxtst6 \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.js and npm (needed for Foxglove Studio)
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs
+
+# Foxglove Studio (Listener)
+RUN npm install -g @foxglove/studio
+
+# expose port 3000 for the web app
+#EXPOSE 3000
+
+#CMD ["foxglove-studio", "--listen", "0.0.0.0"]
 
 
 ENV container=docker
