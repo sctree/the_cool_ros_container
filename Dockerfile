@@ -12,21 +12,23 @@ RUN echo 'Etc/UTC' > /etc/timezone && \
     apt-get update && \
     apt-get install -q -y --no-install-recommends tzdata && \
     rm -rf /var/lib/apt/lists/* && \
+# ping
+    apt update && apt install iputils-ping -y && \
 # install packages
     apt-get update && apt-get install -q -y --no-install-recommends \
     dirmngr \
     gnupg2 \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* && \
 
 # setup keys
-RUN set -eux; \
-       key='C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654'; \
-       export GNUPGHOME="$(mktemp -d)"; \
-       gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
-       mkdir -p /usr/share/keyrings; \
-       gpg --batch --export "$key" > /usr/share/keyrings/ros1-latest-archive-keyring.gpg; \
-       gpgconf --kill all; \
-       rm -rf "$GNUPGHOME"
+    set -eux; \
+    key='C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654'; \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+    mkdir -p /usr/share/keyrings; \
+    gpg --batch --export "$key" > /usr/share/keyrings/ros1-latest-archive-keyring.gpg; \
+    gpgconf --kill all; \
+    rm -rf "$GNUPGHOME"
 
 # setup sources.list
 RUN echo "deb [ signed-by=/usr/share/keyrings/ros1-latest-archive-keyring.gpg ] http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros1-latest.list
@@ -50,7 +52,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # install ros packages
     apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-desktop-full=1.5.0-1* \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* && \
+#install python3, pip, Spot SDK dependencies
+    apt-get update && apt-get install -y \
+    python3-pip \
+    python3-dev \
+    git && \
+    pip3 install bosdyn-client bosdyn-mission bosdyn-choreography
+
 
 # 
 # 
@@ -270,10 +279,20 @@ RUN npm install -g @foxglove/studio
 
 
 ENV container=docker
-
 STOPSIGNAL SIGRTMIN+3
-
 VOLUME [ "/sys/fs/cgroup" ]
+
+# ROS and systemd already set up before this point...
+
+# Set up ROS workspace
+RUN mkdir -p /root/catkin_ws/src && \
+    cd /root/catkin_ws/src && \
+    /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_init_workspace" && \
+    cd /root/catkin_ws && \
+    /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make" && \
+    echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && \
+    echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
 
 CMD ["bash", "-c", "/sbin/init && bash"]
 # bash -c runs string as a command in a new bash shell
