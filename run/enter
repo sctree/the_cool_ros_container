@@ -21,7 +21,7 @@ docker run --privileged --cgroupns=host \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
   -d --name ubuntu-systemd -p 5901:5901 crc \
   /sbin/init \
-&& docker exec -it ubuntu-systemd bash -c "foxglove-studio --listen 0.0.0.0 & exec bash && ping 192.168.80.3"
+&& docker exec -it ubuntu-systemd bash -c "foxglove-studio --listen 0.0.0.0 & exec bash"
 
 # ^ this works but run this in terminal:
 
