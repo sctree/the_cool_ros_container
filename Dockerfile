@@ -18,17 +18,17 @@ RUN echo 'Etc/UTC' > /etc/timezone && \
     apt-get update && apt-get install -q -y --no-install-recommends \
     dirmngr \
     gnupg2 \
-    && rm -rf /var/lib/apt/lists/* && \
+    && rm -rf /var/lib/apt/lists/*
 
 # setup keys
-    set -eux; \
-    key='C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654'; \
-    export GNUPGHOME="$(mktemp -d)"; \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
-    mkdir -p /usr/share/keyrings; \
-    gpg --batch --export "$key" > /usr/share/keyrings/ros1-latest-archive-keyring.gpg; \
-    gpgconf --kill all; \
-    rm -rf "$GNUPGHOME"
+RUN set -eux; \
+        key='C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654'; \
+        export GNUPGHOME="$(mktemp -d)"; \
+        gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+        mkdir -p /usr/share/keyrings; \
+        gpg --batch --export "$key" > /usr/share/keyrings/ros1-latest-archive-keyring.gpg; \
+        gpgconf --kill all; \
+        rm -rf "$GNUPGHOME"
 
 # setup sources.list
 RUN echo "deb [ signed-by=/usr/share/keyrings/ros1-latest-archive-keyring.gpg ] http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros1-latest.list
@@ -58,7 +58,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-pip \
     python3-dev \
     git && \
-    pip3 install bosdyn-client bosdyn-mission bosdyn-choreography
+    python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos
 
 
 # 
@@ -285,8 +285,10 @@ VOLUME [ "/sys/fs/cgroup" ]
 # ROS and systemd already set up before this point...
 
 # Set up ROS workspace
+# Create and initialize ROS workspace
 RUN mkdir -p /root/catkin_ws/src && \
     cd /root/catkin_ws/src && \
+    #git clone git clone https://github.com/boston-dynamics/spot-sdk.git && \
     /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_init_workspace" && \
     cd /root/catkin_ws && \
     /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make" && \
@@ -295,6 +297,8 @@ RUN mkdir -p /root/catkin_ws/src && \
 
 
 CMD ["bash", "-c", "/sbin/init && bash"]
+# CMD ["/bin/bash", "-c", "/sbin/init && foxglove-studio --listen 0.0.0.0"] start foxglove
+
 # bash -c runs string as a command in a new bash shell
 # /sbin/init starts systemd and if successful, start new interactive bash shell
 
