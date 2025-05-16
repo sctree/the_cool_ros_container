@@ -316,6 +316,17 @@ WORKDIR /app
 # Copy your Deno app into the container
 COPY . .
 
+# Install code-server (adjust version as needed)
+ARG CODE_SERVER_VERSION=4.22.1
+RUN cd /tmp && \
+    curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
+    tar -xzf code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
+    mv code-server-${CODE_SERVER_VERSION}-linux-amd64/code-server /usr/local/bin/code-server && \
+    chmod +x /usr/local/bin/code-server && \
+    rm -rf code-server-${CODE_SERVER_VERSION}*
+
+    
+
 
 
 CMD ["bash", "-c", "/sbin/init && bash"]
