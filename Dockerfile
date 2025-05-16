@@ -62,6 +62,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     apt-transport-https \ 
     && rm -rf /var/lib/apt/lists/*
 RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos
+RUN python3 -m pip install foxglove-websocket
 
 # 
 # 
@@ -240,7 +241,7 @@ RUN chmod 755 /root/.vnc/xstartup && chmod +x /usr/local/etc/spawn-desktop.sh
 RUN echo 'sh /usr/local/etc/spawn-desktop.sh;. "/opt/ros/$ROS_DISTRO/setup.bash" --' > /root/.bashrc
 
 # Expose ports.
-EXPOSE 5901/tcp/3000
+EXPOSE 5901/tcp/8765
 
 #CMD ["bash"]
 
@@ -271,7 +272,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs
 
-# Foxglove Studio (Listener)
+# # Foxglove Studio (Listener)
 RUN npm install -g @foxglove/studio
 
 # expose port 3000 for the web app
