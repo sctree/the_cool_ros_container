@@ -309,20 +309,21 @@ ENV DENO_INSTALL=/root/.deno
 ENV PATH="${DENO_INSTALL}/bin:${PATH}"
 
 # Set the working directory
-WORKDIR /app
+#WORKDIR /app
 
 # Copy your Deno app into the container
-COPY . .
+#COPY . .
 
 # Install code-server (adjust version as needed)
+#curl -fOL https://github.com/coder/code-server/releases/download/v4.22.1/code-server-4.22.1-linux-amd64.tar.gz
 
-# ARG CODE_SERVER_VERSION=4.22.1
-# RUN cd /tmp && \
-#     curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
-#     tar -xzf code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
-#     mv code-server-${CODE_SERVER_VERSION}-linux-amd64/code-server /usr/local/bin/code-server && \
-#     chmod +x /usr/local/bin/code-server && \
-#     rm -rf code-server-${CODE_SERVER_VERSION}*
+ARG CODE_SERVER_VERSION=4.22.1
+RUN cd /tmp && \
+    curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
+    tar -xzf code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
+    mv code-server-${CODE_SERVER_VERSION}-linux-amd64/bin/code-server /usr/local/bin/code-server && \
+    chmod +x /usr/local/bin/code-server && \
+    rm -rf code-server-${CODE_SERVER_VERSION}*
 
 # Set up openssh server for ssh
 
