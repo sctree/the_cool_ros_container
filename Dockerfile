@@ -301,8 +301,7 @@ RUN mkdir -p /root/catkin_ws/src && \
 # Install dependencies and Deno
 RUN apt-get update && \
     apt-get install -y curl unzip ca-certificates && \
-    curl -fsSL https://deno.land/install.sh | sh && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    curl -fsSL https://deno.land/install.sh | sh
 
 # Set environment variables to add Deno to PATH
 ENV DENO_INSTALL=/root/.deno
