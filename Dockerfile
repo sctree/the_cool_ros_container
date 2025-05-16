@@ -57,13 +57,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     apt-get update && apt-get install -y \
     python3-pip \
     python3-dev \
-    git && \
-    python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos \ 
-# install dependencies for vscode (many are alr listed previously)
+    git \
     sudo \
-    apt-transport-https \
+    apt-transport-https \ 
     && rm -rf /var/lib/apt/lists/*
-
+RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos
 
 # 
 # 
@@ -325,8 +323,27 @@ RUN cd /tmp && \
     chmod +x /usr/local/bin/code-server && \
     rm -rf code-server-${CODE_SERVER_VERSION}*
 
-    
+# Set up openssh server for ssh
 
+# Install ssh
+RUN apt-get update && \
+    apt-get install -y openssh-server && \
+    mkdir /var/run/sshd
+
+# Create user with password
+RUN useradd -m -s /bin/bash myuser && \
+    echo 'myuser:mypassword' | chpasswd && \
+    usermod -aG sudo myuser
+
+# Allow password authentication for sshd
+RUN sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# Enable sshd service in systemd
+RUN systemctl enable ssh
+
+# Expose ssh port
+EXPOSE 22
 
 
 CMD ["bash", "-c", "/sbin/init && bash"]
