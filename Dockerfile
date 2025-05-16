@@ -58,7 +58,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-pip \
     python3-dev \
     git && \
-    python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos
+    python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos \ 
+# install dependencies for vscode (many are alr listed previously)
+    sudo \
+    apt-transport-https \
+    && rm -rf /var/lib/apt/lists/*
 
 
 # 
@@ -294,6 +298,24 @@ RUN mkdir -p /root/catkin_ws/src && \
     /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make" && \
     echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && \
     echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+
+# Install dependencies and Deno
+RUN apt-get update && \
+    apt-get install -y curl unzip ca-certificates && \
+    curl -fsSL https://deno.land/install.sh | sh && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables to add Deno to PATH
+ENV DENO_INSTALL=/root/.deno
+ENV PATH="${DENO_INSTALL}/bin:${PATH}"
+
+# Set the working directory
+WORKDIR /app
+
+# Copy your Deno app into the container
+COPY . .
+
 
 
 CMD ["bash", "-c", "/sbin/init && bash"]
