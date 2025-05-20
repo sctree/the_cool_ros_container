@@ -62,7 +62,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     apt-transport-https \ 
     && rm -rf /var/lib/apt/lists/*
 RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos
-RUN python3 -m pip install foxglove-websocket
+#RUN python3 -m pip install foxglove-websocket
+RUN apt-get update && \
+    apt-get install -y ros-noetic-foxglove-bridge && \
+    rm -rf /var/lib/apt/lists/*
 
 # 
 # 
@@ -269,11 +272,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Node.js and npm (needed for Foxglove Studio)
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
+#RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+#    apt-get install -y nodejs
 
 # # Foxglove Studio (Listener)
-RUN npm install -g @foxglove/studio
+#RUN npm install -g @foxglove/studio
 
 # expose port 3000 for the web app
 #EXPOSE 3000
