@@ -26,7 +26,7 @@ docker run --privileged --cgroupns=host \
 #docker exec -it ubuntu-systemd bash -c "foxglove-studio --listen 0.0.0.0 & exec bash" && \
 #docker exec -it my-container bash -c "source /opt/ros/noetic/setup.bash && foxglove-websocket --port 8765"
 docker exec -it ubuntu-systemd bash -c "foxglove-studio --listen 0.0.0.0 --port 8765 & exec bash"
-
+#docker exec -it ubuntu-systemd bash systemctl status foxglove.service & exec bash
 
 
 # ^ this works but run this in terminal:

@@ -1,0 +1,12 @@
+[Unit]
+Description=Foxglove Bridge
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/foxglove-bridge --ros-node-name=foxglove_bridge_node
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
