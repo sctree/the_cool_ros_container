@@ -63,10 +63,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos
 #RUN python3 -m pip install foxglove-websocket
+# foxglove bridge binary
 RUN apt-get update && \
     apt-get install -y ros-noetic-foxglove-bridge && \
     rm -rf /var/lib/apt/lists/*
-
 # 
 # 
 # novnc setup
@@ -327,28 +327,28 @@ RUN cd /tmp && \
     mv code-server-${CODE_SERVER_VERSION}-linux-amd64/bin/code-server /usr/local/bin/code-server && \
     chmod +x /usr/local/bin/code-server && \
     rm -rf code-server-${CODE_SERVER_VERSION}*
-
 # Set up openssh server for ssh
-
 # Install ssh
 RUN apt-get update && \
     apt-get install -y openssh-server && \
     mkdir /var/run/sshd
-
 # Create user with password
 RUN useradd -m -s /bin/bash myuser && \
     echo 'myuser:mypassword' | chpasswd && \
     usermod -aG sudo myuser
-
 # Allow password authentication for sshd
 RUN sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
     sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
 # Enable sshd service in systemd
 RUN systemctl enable ssh
-
 # Expose ssh port
 EXPOSE 22
+
+# Copy your service file into the systemd directory
+#COPY foxglove_bridge.service /etc/systemd/system/foxglove_bridge.service
+
+# Enable the service
+#RUN systemctl enable foxglove_bridge.service
 
 
 CMD ["bash", "-c", "/sbin/init && bash"]
