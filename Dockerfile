@@ -61,7 +61,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     sudo \
     apt-transport-https \ 
     && rm -rf /var/lib/apt/lists/*
-RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos
+RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos bosdyn-api bosdyn-core
 #RUN python3 -m pip install foxglove-websocket
 # foxglove bridge binary
 RUN apt-get update && \
