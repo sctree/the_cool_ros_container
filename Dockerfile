@@ -301,7 +301,14 @@ RUN mkdir -p /root/catkin_ws/src && \
     echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && \
     echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
+# for the catkin
+RUN apt update && apt install -y \
+    python3-catkin-tools \
+    python3-osrf-pycommon \
+    python3-pip
 
+RUN apt-get update && \
+    apt-get install -y ros-noetic-joy ros-noetic-interactive-marker-twist-server ros-noetic-teleop-twist-joy ros-noetic-twist-mux
 # Install dependencies and Deno
 RUN apt-get update && \
     apt-get install -y curl unzip ca-certificates && \
