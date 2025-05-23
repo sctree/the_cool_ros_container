@@ -309,8 +309,17 @@ RUN apt update && apt install -y \
     ros-noetic-turtlebot3 \
     ros-noetic-turtlebot3-msgs \
     ros-noetic-turtlebot3-simulations \
-    ros-noetic-turtlebot3-navigation
+    ros-noetic-turtlebot3-navigation \
+    ros-noetic-turtlebot3-description \
+    os-noetic-turtlebot3-gazebo
 # added turtle bot dependencies
+#git clone -b noetic-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
+#git clone -b noetic-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+# git clone -b noetic-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
+# git clone -b noetic-devel https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+#git clone -b main https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+# git clone -b noetic-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+
 RUN apt-get update && \
     apt-get install -y ros-noetic-joy ros-noetic-interactive-marker-twist-server ros-noetic-teleop-twist-joy ros-noetic-twist-mux
 # Install dependencies and Deno
