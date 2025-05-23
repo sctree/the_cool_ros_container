@@ -306,7 +306,11 @@ RUN apt update && apt install -y \
     python3-catkin-tools \
     python3-osrf-pycommon \
     python3-pip
-
+    ros-noetic-turtlebot3 \
+    ros-noetic-turtlebot3-msgs \
+    ros-noetic-turtlebot3-simulations \
+    ros-noetic-turtlebot3-navigation
+# added turtle bot dependencies
 RUN apt-get update && \
     apt-get install -y ros-noetic-joy ros-noetic-interactive-marker-twist-server ros-noetic-teleop-twist-joy ros-noetic-twist-mux
 # Install dependencies and Deno
