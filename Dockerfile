@@ -283,6 +283,12 @@ RUN apt-get update && apt-get install -y \
 
 #CMD ["foxglove-studio", "--listen", "0.0.0.0"]
 
+# vim and nano
+RUN apt-get update && \
+    apt-get install -y vim nano && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 
 ENV container=docker
 STOPSIGNAL SIGRTMIN+3
@@ -380,3 +386,18 @@ CMD ["bash", "-c", "/sbin/init && bash"]
 # /sbin/init starts systemd and if successful, start new interactive bash shell
 
 # interestingly enough, for some reason tightvnvserver: 1 is no longer needed?
+
+
+
+# ROS SET UP INSTRUCTIONS
+# 1. run the python command:       pip3 install -e ./src/spot_ros/spot_wrapper/
+# 2. delete build and devel from the catkin_ws folder
+# 3. run catkin_make 3 times
+# 4. source ./devel/setup.bash
+# 5. export PYTHONPATH="$PYTHONPATH:/root/catkin_ws/src/spot_ros"
+
+# Open file where spot_wrapper fails to import.
+# Above it, put
+# import sys
+# sys.path.append("/root/catkin_ws/src/spot_ros")
+# how to change python path while doing roslaunch thing (not v productive path to go down)
