@@ -1,0 +1,34 @@
+rates:
+  # loop_frequency is the frequency of the loop which publishes messages
+  loop_frequency: 50.0
+  # These are desired frequencies. You should not expect to receive messages at exactly the specified frequency. For
+  # higher frequencies, you will need to modify the loop frequency and the rates below.
+  robot_state: 20.0
+  metrics: 0.04
+  lease: 1.0
+  camera_images: 10.0
+  point_cloud: 10.0
+  hand_image: 10.0
+  feedback: 10.0
+  mobility_params: 20.0
+  check_subscribers: 10.0
+  world_objects: 10.0
+
+# If true, automatically claim the lease when the driver starts
+auto_claim: False
+# If true, automatically power on when the driver starts (requires auto_claim)
+auto_power_on: False
+# If true, automatically stand when the driver starts (requires auto_power_on)
+auto_stand: False
+
+# If true, requests depth images mapped in the vision frame for cameras on the Spot robot
+depth_in_visual: True
+# "vision" or "odom", picks the type of odometry passed from the Spot robot to the ROS package
+mode_parent_odom_tf: vision
+
+claim:
+  # If true, forcefully take the lease, instead of acquiring it, which can fail if someone else has it
+  use_take_lease: False
+  # If true, try and claim the lease when doing actions if we don't already have it. Also automatically powers on for
+  # stand, rollover and self-right commands
+  get_lease_on_action: False
