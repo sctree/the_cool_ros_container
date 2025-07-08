@@ -1,7 +1,7 @@
 """Helper classes for the wrapper. This file is necessary to prevent circular imports caused by the modules also
 using these classes"""
-import functools
 import typing
+import functools
 from dataclasses import dataclass
 
 
@@ -28,7 +28,9 @@ class ClaimAndPowerDecorator:
         self.claim = claim_function
         self._get_lease_on_action = get_lease_on_action
 
-    def _make_function_take_lease_and_power_on(self, func: typing.Callable, power_on: bool = True) -> typing.Callable:
+    def _make_function_take_lease_and_power_on(
+        self, func: typing.Callable, power_on: bool = True
+    ) -> typing.Callable:
         """
         Decorator which tries to acquire the lease before executing the wrapped function
 
@@ -75,7 +77,7 @@ class ClaimAndPowerDecorator:
         if not hasattr(decorated_object, function_name):
             raise AttributeError(
                 f"Requested decoration of function {function_name} of object {decorated_object}, but the object does "
-                "not have a function by that name."
+                f"not have a function by that name."
             )
 
         setattr(
@@ -107,7 +109,9 @@ class ClaimAndPowerDecorator:
             decorated_funcs_no_power = []
 
         for func in decorated_funcs_no_power:
-            self.make_function_take_lease_and_power_on(decorated_object, func, power_on=False)
+            self.make_function_take_lease_and_power_on(
+                decorated_object, func, power_on=False
+            )
 
 
 @dataclass()

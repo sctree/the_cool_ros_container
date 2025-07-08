@@ -390,7 +390,7 @@ CMD ["bash", "-c", "/sbin/init && bash"]
 
 
 # ROS SET UP INSTRUCTIONS
-# 1. run the python command:       pip3 install -e ./src/spot_ros/spot_wrapper/
+# 1. run the python command:      python3 -m pip3 install -e ./src/spot_ros/spot_wrapper/
 # 2. delete build and devel from the catkin_ws folder
 # 3. run catkin_make 3 times
 # 4. source ./devel/setup.bash
