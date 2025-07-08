@@ -371,8 +371,7 @@ EXPOSE 22
 # Enable the service
 #RUN systemctl enable foxglove_bridge.service
 
-COPY ros_packages/spot_interface /root/catkin_ws/src/
-COPY ros_packages/spot_ros /root/catkin_ws/src/
+COPY ros_packages/ /root/catkin_ws/src/
 
 CMD ["bash", "-c", "/sbin/init && bash"]
 # CMD ["/bin/bash", "-c", "/sbin/init && foxglove-studio --listen 0.0.0.0"] start foxglove
