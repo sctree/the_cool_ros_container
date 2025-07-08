@@ -76,6 +76,8 @@ from spot_msgs.srv import SetSwingHeight, SetSwingHeightResponse
 from spot_msgs.srv import SetTerrainParams
 from spot_msgs.srv import SetVelocity, SetVelocityResponse
 from spot_msgs.srv import SpotCheckRequest, SpotCheckResponse, SpotCheck
+import sys
+sys.path.append("/root/catkin_ws/src/spot_ros")
 from spot_wrapper.wrapper import SpotWrapper
 from std_msgs.msg import Bool
 from std_srvs.srv import Trigger, TriggerResponse, SetBool, SetBoolResponse
