@@ -302,16 +302,17 @@ RUN mkdir -p /root/catkin_ws/src && \
     echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 # for the catkin
-RUN apt update && apt install -y \
-    python3-catkin-tools \
-    python3-osrf-pycommon \
-    python3-pip \
-    ros-noetic-turtlebot3 \
-    ros-noetic-turtlebot3-msgs \
-    ros-noetic-turtlebot3-simulations \
-    ros-noetic-turtlebot3-navigation \
-    ros-noetic-turtlebot3-description \
-    os-noetic-turtlebot3-gazebo
+# commenting this out for now
+    # RUN apt update && apt install -y \
+    #     python3-catkin-tools \
+    #     python3-osrf-pycommon \
+    #     python3-pip \
+    #     ros-noetic-turtlebot3 \
+    #     ros-noetic-turtlebot3-msgs \
+    #     ros-noetic-turtlebot3-simulations \
+    #     ros-noetic-turtlebot3-navigation \
+    #     ros-noetic-turtlebot3-description \
+    #     os-noetic-turtlebot3-gazebo
 # added turtle bot dependencies
 #git clone -b noetic-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
 #git clone -b noetic-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
