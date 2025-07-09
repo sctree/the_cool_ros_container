@@ -1,0 +1,2826 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+            <script>
+                !function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(e="undefined"!=typeof globalThis?globalThis:e||self).EventEmitter3=t()}(this,(function(){"use strict";var e={};return function(e){var t=Object.prototype.hasOwnProperty,n="~";function r(){}function o(e,t,n){this.fn=e,this.context=t,this.once=n||!1}function s(e,t,r,s,i){if("function"!=typeof r)throw new TypeError("The listener must be a function");var c=new o(r,s||e,i),f=n?n+t:t;return e._events[f]?e._events[f].fn?e._events[f]=[e._events[f],c]:e._events[f].push(c):(e._events[f]=c,e._eventsCount++),e}function i(e,t){0==--e._eventsCount?e._events=new r:delete e._events[t]}function c(){this._events=new r,this._eventsCount=0}Object.create&&(r.prototype=Object.create(null),(new r).__proto__||(n=!1)),c.prototype.eventNames=function(){var e,r,o=[];if(0===this._eventsCount)return o;for(r in e=this._events)t.call(e,r)&&o.push(n?r.slice(1):r);return Object.getOwnPropertySymbols?o.concat(Object.getOwnPropertySymbols(e)):o},c.prototype.listeners=function(e){var t=n?n+e:e,r=this._events[t];if(!r)return[];if(r.fn)return[r.fn];for(var o=0,s=r.length,i=new Array(s);o<s;o++)i[o]=r[o].fn;return i},c.prototype.listenerCount=function(e){var t=n?n+e:e,r=this._events[t];return r?r.fn?1:r.length:0},c.prototype.emit=function(e,t,r,o,s,i){var c=n?n+e:e;if(!this._events[c])return!1;var f,u,a=this._events[c],l=arguments.length;if(a.fn){switch(a.once&&this.removeListener(e,a.fn,void 0,!0),l){case 1:return a.fn.call(a.context),!0;case 2:return a.fn.call(a.context,t),!0;case 3:return a.fn.call(a.context,t,r),!0;case 4:return a.fn.call(a.context,t,r,o),!0;case 5:return a.fn.call(a.context,t,r,o,s),!0;case 6:return a.fn.call(a.context,t,r,o,s,i),!0}for(u=1,f=new Array(l-1);u<l;u++)f[u-1]=arguments[u];a.fn.apply(a.context,f)}else{var p,v=a.length;for(u=0;u<v;u++)switch(a[u].once&&this.removeListener(e,a[u].fn,void 0,!0),l){case 1:a[u].fn.call(a[u].context);break;case 2:a[u].fn.call(a[u].context,t);break;case 3:a[u].fn.call(a[u].context,t,r);break;case 4:a[u].fn.call(a[u].context,t,r,o);break;default:if(!f)for(p=1,f=new Array(l-1);p<l;p++)f[p-1]=arguments[p];a[u].fn.apply(a[u].context,f)}}return!0},c.prototype.on=function(e,t,n){return s(this,e,t,n,!1)},c.prototype.once=function(e,t,n){return s(this,e,t,n,!0)},c.prototype.removeListener=function(e,t,r,o){var s=n?n+e:e;if(!this._events[s])return this;if(!t)return i(this,s),this;var c=this._events[s];if(c.fn)c.fn!==t||o&&!c.once||r&&c.context!==r||i(this,s);else{for(var f=0,u=[],a=c.length;f<a;f++)(c[f].fn!==t||o&&!c[f].once||r&&c[f].context!==r)&&u.push(c[f]);u.length?this._events[s]=1===u.length?u[0]:u:i(this,s)}return this},c.prototype.removeAllListeners=function(e){var t;return e?(t=n?n+e:e,this._events[t]&&i(this,t)):(this._events=new r,this._eventsCount=0),this},c.prototype.off=c.prototype.removeListener,c.prototype.addListener=c.prototype.on,c.prefixed=n,c.EventEmitter=c,e.exports=c}({get exports(){return e},set exports(t){e=t}}),e}));//# sourceMappingURL=eventemitter3.umd.min.js.map
+            </script>
+            <script>
+                var __defProp = Object.defineProperty;
+                var __getOwnPropNames = Object.getOwnPropertyNames;
+                var __esm = (fn, res) => function __init() {
+                return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+                };
+                var __export = (target, all) => {
+                for (var name in all)
+                    __defProp(target, name, { get: all[name], enumerable: true });
+                };
+
+                // subrepos/roslibjs/src/util/decompressPng.js
+                var decompressPng_exports = {};
+                __export(decompressPng_exports, {
+                default: () => decompressPng
+                });
+                function decompressPng(data, callback) {
+                var buffer = new Buffer(data, "base64");
+                pngparse.parse(buffer, function(err, data2) {
+                    if (err) {
+                    console.warn("Cannot process PNG encoded message ");
+                    } else {
+                    var jsonData = data2.data.toString();
+                    callback(JSON.parse(jsonData));
+                    }
+                });
+                }
+                var pngparse;
+                var init_decompressPng = __esm({
+                "subrepos/roslibjs/src/util/decompressPng.js"() {
+                }
+                });
+
+                // subrepos/roslibjs/src/util/shim/decompressPng.js
+                var decompressPng_exports2 = {};
+                __export(decompressPng_exports2, {
+                default: () => decompressPng2
+                });
+                function decompressPng2(data, callback) {
+                var image = new Image();
+                image.onload = function() {
+                    var canvas = document.createElement("canvas");
+                    var context = canvas.getContext("2d");
+                    if (!context) {
+                    throw new Error("Failed to create Canvas context!");
+                    }
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+                    context.imageSmoothingEnabled = false;
+                    context.drawImage(image, 0, 0);
+                    var imageData = context.getImageData(0, 0, image.width, image.height).data;
+                    var jsonData = "";
+                    for (var i = 0; i < imageData.length; i += 4) {
+                    jsonData += String.fromCharCode(
+                        imageData[i],
+                        imageData[i + 1],
+                        imageData[i + 2]
+                    );
+                    }
+                    callback(JSON.parse(jsonData));
+                };
+                image.src = "data:image/png;base64," + data;
+                }
+                var init_decompressPng2 = __esm({
+                "subrepos/roslibjs/src/util/shim/decompressPng.js"() {
+                }
+                });
+
+                // https://esm.sh/cbor-js@0.1.0/denonext/cbor-js.mjs
+                var N = Object.create;
+                var z = Object.defineProperty;
+                var Q = Object.getOwnPropertyDescriptor;
+                var X = Object.getOwnPropertyNames;
+                var Y = Object.getPrototypeOf;
+                var Z = Object.prototype.hasOwnProperty;
+                var $ = (x, o) => () => (o || x((o = { exports: {} }).exports, o), o.exports);
+                var l = (x, o, A2, d2) => {
+                if (o && typeof o == "object" || typeof o == "function") for (let g2 of X(o)) !Z.call(x, g2) && g2 !== A2 && z(x, g2, { get: () => o[g2], enumerable: !(d2 = Q(o, g2)) || d2.enumerable });
+                return x;
+                };
+                var C = (x, o, A2) => (A2 = x != null ? N(Y(x)) : {}, l(o || !x || !x.__esModule ? z(A2, "default", { value: x, enumerable: true }) : A2, x));
+                var G = $((E2, O2) => {
+                (function(x, o) {
+                    "use strict";
+                    var A2 = Math.pow(2, -24), d2 = Math.pow(2, 32), g2 = Math.pow(2, 53);
+                    function H(F) {
+                    var p = new ArrayBuffer(256), U = new DataView(p), h, s = 0;
+                    function u(r) {
+                        for (var i = p.byteLength, e = s + r; i < e; ) i *= 2;
+                        if (i !== p.byteLength) {
+                        var n = U;
+                        p = new ArrayBuffer(i), U = new DataView(p);
+                        for (var c = s + 3 >> 2, t = 0; t < c; ++t) U.setUint32(t * 4, n.getUint32(t * 4));
+                        }
+                        return h = r, U;
+                    }
+                    function y() {
+                        s += h;
+                    }
+                    function S(r) {
+                        y(u(8).setFloat64(s, r));
+                    }
+                    function w(r) {
+                        y(u(1).setUint8(s, r));
+                    }
+                    function j(r) {
+                        for (var i = u(r.length), e = 0; e < r.length; ++e) i.setUint8(s + e, r[e]);
+                        y();
+                    }
+                    function a(r) {
+                        y(u(2).setUint16(s, r));
+                    }
+                    function m2(r) {
+                        y(u(4).setUint32(s, r));
+                    }
+                    function L2(r) {
+                        var i = r % d2, e = (r - i) / d2, n = u(8);
+                        n.setUint32(s, e), n.setUint32(s + 4, i), y();
+                    }
+                    function v(r, i) {
+                        i < 24 ? w(r << 5 | i) : i < 256 ? (w(r << 5 | 24), w(i)) : i < 65536 ? (w(r << 5 | 25), a(i)) : i < 4294967296 ? (w(r << 5 | 26), m2(i)) : (w(r << 5 | 27), L2(i));
+                    }
+                    function V(r) {
+                        var i;
+                        if (r === false) return w(244);
+                        if (r === true) return w(245);
+                        if (r === null) return w(246);
+                        if (r === o) return w(247);
+                        switch (typeof r) {
+                        case "number":
+                            if (Math.floor(r) === r) {
+                            if (0 <= r && r <= g2) return v(0, r);
+                            if (-g2 <= r && r < 0) return v(1, -(r + 1));
+                            }
+                            return w(251), S(r);
+                        case "string":
+                            var e = [];
+                            for (i = 0; i < r.length; ++i) {
+                            var n = r.charCodeAt(i);
+                            n < 128 ? e.push(n) : n < 2048 ? (e.push(192 | n >> 6), e.push(128 | n & 63)) : n < 55296 ? (e.push(224 | n >> 12), e.push(128 | n >> 6 & 63), e.push(128 | n & 63)) : (n = (n & 1023) << 10, n |= r.charCodeAt(++i) & 1023, n += 65536, e.push(240 | n >> 18), e.push(128 | n >> 12 & 63), e.push(128 | n >> 6 & 63), e.push(128 | n & 63));
+                            }
+                            return v(3, e.length), j(e);
+                        default:
+                            var c;
+                            if (Array.isArray(r)) for (c = r.length, v(4, c), i = 0; i < c; ++i) V(r[i]);
+                            else if (r instanceof Uint8Array) v(2, r.length), j(r);
+                            else {
+                            var t = Object.keys(r);
+                            for (c = t.length, v(5, c), i = 0; i < c; ++i) {
+                                var f = t[i];
+                                V(f), V(r[f]);
+                            }
+                            }
+                        }
+                    }
+                    if (V(F), "slice" in p) return p.slice(0, s);
+                    for (var D = new ArrayBuffer(s), M = new DataView(D), b = 0; b < s; ++b) M.setUint8(b, U.getUint8(b));
+                    return D;
+                    }
+                    function J(F, p, U) {
+                    var h = new DataView(F), s = 0;
+                    typeof p != "function" && (p = function(e) {
+                        return e;
+                    }), typeof U != "function" && (U = function() {
+                        return o;
+                    });
+                    function u(e, n) {
+                        return s += n, e;
+                    }
+                    function y(e) {
+                        return u(new Uint8Array(F, s, e), e);
+                    }
+                    function S() {
+                        var e = new ArrayBuffer(4), n = new DataView(e), c = m2(), t = c & 32768, f = c & 31744, B = c & 1023;
+                        if (f === 31744) f = 261120;
+                        else if (f !== 0) f += 114688;
+                        else if (B !== 0) return B * A2;
+                        return n.setUint32(0, t << 16 | f << 13 | B << 13), n.getFloat32(0);
+                    }
+                    function w() {
+                        return u(h.getFloat32(s), 4);
+                    }
+                    function j() {
+                        return u(h.getFloat64(s), 8);
+                    }
+                    function a() {
+                        return u(h.getUint8(s), 1);
+                    }
+                    function m2() {
+                        return u(h.getUint16(s), 2);
+                    }
+                    function L2() {
+                        return u(h.getUint32(s), 4);
+                    }
+                    function v() {
+                        return L2() * d2 + L2();
+                    }
+                    function V() {
+                        return h.getUint8(s) !== 255 ? false : (s += 1, true);
+                    }
+                    function D(e) {
+                        if (e < 24) return e;
+                        if (e === 24) return a();
+                        if (e === 25) return m2();
+                        if (e === 26) return L2();
+                        if (e === 27) return v();
+                        if (e === 31) return -1;
+                        throw "Invalid length encoding";
+                    }
+                    function M(e) {
+                        var n = a();
+                        if (n === 255) return -1;
+                        var c = D(n & 31);
+                        if (c < 0 || n >> 5 !== e) throw "Invalid indefinite length element";
+                        return c;
+                    }
+                    function b(e, n) {
+                        for (var c = 0; c < n; ++c) {
+                        var t = a();
+                        t & 128 && (t < 224 ? (t = (t & 31) << 6 | a() & 63, n -= 1) : t < 240 ? (t = (t & 15) << 12 | (a() & 63) << 6 | a() & 63, n -= 2) : (t = (t & 15) << 18 | (a() & 63) << 12 | (a() & 63) << 6 | a() & 63, n -= 3)), t < 65536 ? e.push(t) : (t -= 65536, e.push(55296 | t >> 10), e.push(56320 | t & 1023));
+                        }
+                    }
+                    function r() {
+                        var e = a(), n = e >> 5, c = e & 31, t, f;
+                        if (n === 7) switch (c) {
+                        case 25:
+                            return S();
+                        case 26:
+                            return w();
+                        case 27:
+                            return j();
+                        }
+                        if (f = D(c), f < 0 && (n < 2 || 6 < n)) throw "Invalid length";
+                        switch (n) {
+                        case 0:
+                            return f;
+                        case 1:
+                            return -1 - f;
+                        case 2:
+                            if (f < 0) {
+                            for (var B = [], T = 0; (f = M(n)) >= 0; ) T += f, B.push(y(f));
+                            var q = new Uint8Array(T), I = 0;
+                            for (t = 0; t < B.length; ++t) q.set(B[t], I), I += B[t].length;
+                            return q;
+                            }
+                            return y(f);
+                        case 3:
+                            var W = [];
+                            if (f < 0) for (; (f = M(n)) >= 0; ) b(W, f);
+                            else b(W, f);
+                            return String.fromCharCode.apply(null, W);
+                        case 4:
+                            var _;
+                            if (f < 0) for (_ = []; !V(); ) _.push(r());
+                            else for (_ = new Array(f), t = 0; t < f; ++t) _[t] = r();
+                            return _;
+                        case 5:
+                            var k2 = {};
+                            for (t = 0; t < f || f < 0 && !V(); ++t) {
+                            var K = r();
+                            k2[K] = r();
+                            }
+                            return k2;
+                        case 6:
+                            return p(r(), f);
+                        case 7:
+                            switch (f) {
+                            case 20:
+                                return false;
+                            case 21:
+                                return true;
+                            case 22:
+                                return null;
+                            case 23:
+                                return o;
+                            default:
+                                return U(f);
+                            }
+                        }
+                    }
+                    var i = r();
+                    if (s !== F.byteLength) throw "Remaining bytes";
+                    return i;
+                    }
+                    var R = { encode: H, decode: J };
+                    typeof define == "function" && define.amd ? define("cbor/cbor", R) : typeof O2 < "u" && O2.exports ? O2.exports = R : x.CBOR || (x.CBOR = R);
+                })(E2);
+                });
+                var P = C(G());
+                var { encode: er, decode: nr } = P;
+                var tr = P.default ?? P;
+
+                // subrepos/roslibjs/src/util/cborTypedArrayTags.js
+                var UPPER32 = Math.pow(2, 32);
+                var warnedPrecision = false;
+                function warnPrecision() {
+                if (!warnedPrecision) {
+                    warnedPrecision = true;
+                    console.warn(
+                    "CBOR 64-bit integer array values may lose precision. No further warnings."
+                    );
+                }
+                }
+                function decodeUint64LE(bytes) {
+                warnPrecision();
+                var byteLen = bytes.byteLength;
+                var offset = bytes.byteOffset;
+                var arrLen = byteLen / 8;
+                var buffer = bytes.buffer.slice(offset, offset + byteLen);
+                var uint32View = new Uint32Array(buffer);
+                var arr = new Array(arrLen);
+                for (var i = 0; i < arrLen; i++) {
+                    var si = i * 2;
+                    var lo = uint32View[si];
+                    var hi = uint32View[si + 1];
+                    arr[i] = lo + UPPER32 * hi;
+                }
+                return arr;
+                }
+                function decodeInt64LE(bytes) {
+                warnPrecision();
+                var byteLen = bytes.byteLength;
+                var offset = bytes.byteOffset;
+                var arrLen = byteLen / 8;
+                var buffer = bytes.buffer.slice(offset, offset + byteLen);
+                var uint32View = new Uint32Array(buffer);
+                var int32View = new Int32Array(buffer);
+                var arr = new Array(arrLen);
+                for (var i = 0; i < arrLen; i++) {
+                    var si = i * 2;
+                    var lo = uint32View[si];
+                    var hi = int32View[si + 1];
+                    arr[i] = lo + UPPER32 * hi;
+                }
+                return arr;
+                }
+                function decodeNativeArray(bytes, ArrayType) {
+                var byteLen = bytes.byteLength;
+                var offset = bytes.byteOffset;
+                var buffer = bytes.buffer.slice(offset, offset + byteLen);
+                return new ArrayType(buffer);
+                }
+                var nativeArrayTypes = {
+                64: Uint8Array,
+                69: Uint16Array,
+                70: Uint32Array,
+                72: Int8Array,
+                77: Int16Array,
+                78: Int32Array,
+                85: Float32Array,
+                86: Float64Array
+                };
+                var conversionArrayTypes = {
+                71: decodeUint64LE,
+                79: decodeInt64LE
+                };
+                function cborTypedArrayTagger(data, tag) {
+                if (tag in nativeArrayTypes) {
+                    var arrayType = nativeArrayTypes[tag];
+                    return decodeNativeArray(data, arrayType);
+                }
+                if (tag in conversionArrayTypes) {
+                    return conversionArrayTypes[tag](data);
+                }
+                return data;
+                }
+
+                // subrepos/roslibjs/src/core/SocketAdapter.js
+                var BSON = null;
+                if (typeof bson !== "undefined") {
+                BSON = bson().BSON;
+                }
+                function SocketAdapter(client) {
+                var decoder = null;
+                if (client.transportOptions.decoder) {
+                    decoder = client.transportOptions.decoder;
+                }
+                function handleMessage(message) {
+                    if (message.op === "publish") {
+                    client.emit(message.topic, message.msg);
+                    } else if (message.op === "service_response") {
+                    client.emit(message.id, message);
+                    } else if (message.op === "call_service") {
+                    client.emit(message.service, message);
+                    } else if (message.op === "send_action_goal") {
+                    client.emit(message.action, message);
+                    } else if (message.op === "cancel_action_goal") {
+                    client.emit(message.id, message);
+                    } else if (message.op === "action_feedback") {
+                    client.emit(message.id, message);
+                    } else if (message.op === "action_result") {
+                    client.emit(message.id, message);
+                    } else if (message.op === "status") {
+                    if (message.id) {
+                        client.emit("status:" + message.id, message);
+                    } else {
+                        client.emit("status", message);
+                    }
+                    }
+                }
+                function handlePng(message, callback) {
+                    if (message.op === "png") {
+                    if (typeof window === "undefined") {
+                        Promise.resolve().then(() => (init_decompressPng(), decompressPng_exports)).then(({ default: decompressPng3 }) => decompressPng3(message.data, callback));
+                    } else {
+                        Promise.resolve().then(() => (init_decompressPng2(), decompressPng_exports2)).then(({ default: decompressPng3 }) => decompressPng3(message.data, callback));
+                    }
+                    } else {
+                    callback(message);
+                    }
+                }
+                function decodeBSON(data, callback) {
+                    if (!BSON) {
+                    throw "Cannot process BSON encoded message without BSON header.";
+                    }
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                    var uint8Array = new Uint8Array(this.result);
+                    var msg = BSON.deserialize(uint8Array);
+                    callback(msg);
+                    };
+                    reader.readAsArrayBuffer(data);
+                }
+                return {
+                    /**
+                    * Emit a 'connection' event on WebSocket connection.
+                    *
+                    * @param {function} event - The argument to emit with the event.
+                    * @memberof SocketAdapter
+                    */
+                    onopen: function onOpen(event) {
+                    client.isConnected = true;
+                    client.emit("connection", event);
+                    },
+                    /**
+                    * Emit a 'close' event on WebSocket disconnection.
+                    *
+                    * @param {function} event - The argument to emit with the event.
+                    * @memberof SocketAdapter
+                    */
+                    onclose: function onClose(event) {
+                    client.isConnected = false;
+                    client.emit("close", event);
+                    },
+                    /**
+                    * Emit an 'error' event whenever there was an error.
+                    *
+                    * @param {function} event - The argument to emit with the event.
+                    * @memberof SocketAdapter
+                    */
+                    onerror: function onError(event) {
+                    client.emit("error", event);
+                    },
+                    /**
+                    * Parse message responses from rosbridge and send to the appropriate
+                    * topic, service, or param.
+                    *
+                    * @param {Object} data - The raw JSON message from rosbridge.
+                    * @memberof SocketAdapter
+                    */
+                    onmessage: function onMessage(data) {
+                    if (decoder) {
+                        decoder(data.data, function(message2) {
+                        handleMessage(message2);
+                        });
+                    } else if (typeof Blob !== "undefined" && data.data instanceof Blob) {
+                        decodeBSON(data.data, function(message2) {
+                        handlePng(message2, handleMessage);
+                        });
+                    } else if (data.data instanceof ArrayBuffer) {
+                        var decoded = tr.decode(data.data, cborTypedArrayTagger);
+                        handleMessage(decoded);
+                    } else {
+                        var message = JSON.parse(typeof data === "string" ? data : data.data);
+                        handlePng(message, handleMessage);
+                    }
+                    }
+                };
+                }
+
+                // https://esm.sh/eventemitter3@5.0.1/denonext/eventemitter3.mjs
+                var E = Object.create;
+                var d = Object.defineProperty;
+                var L = Object.getOwnPropertyDescriptor;
+                var O = Object.getOwnPropertyNames;
+                var C2 = Object.getPrototypeOf;
+                var A = Object.prototype.hasOwnProperty;
+                var k = (n, e) => () => (e || n((e = { exports: {} }).exports, e), e.exports);
+                var P2 = (n, e, t, s) => {
+                if (e && typeof e == "object" || typeof e == "function") for (let i of O(e)) !A.call(n, i) && i !== t && d(n, i, { get: () => e[i], enumerable: !(s = L(e, i)) || s.enumerable });
+                return n;
+                };
+                var N2 = (n, e, t) => (t = n != null ? E(C2(n)) : {}, P2(e || !n || !n.__esModule ? d(t, "default", { value: n, enumerable: true }) : t, n));
+                var m = k((q, x) => {
+                "use strict";
+                var S = Object.prototype.hasOwnProperty, l2 = "~";
+                function _() {
+                }
+                Object.create && (_.prototype = /* @__PURE__ */ Object.create(null), new _().__proto__ || (l2 = false));
+                function T(n, e, t) {
+                    this.fn = n, this.context = e, this.once = t || false;
+                }
+                function w(n, e, t, s, i) {
+                    if (typeof t != "function") throw new TypeError("The listener must be a function");
+                    var u = new T(t, s || n, i), o = l2 ? l2 + e : e;
+                    return n._events[o] ? n._events[o].fn ? n._events[o] = [n._events[o], u] : n._events[o].push(u) : (n._events[o] = u, n._eventsCount++), n;
+                }
+                function y(n, e) {
+                    --n._eventsCount === 0 ? n._events = new _() : delete n._events[e];
+                }
+                function c() {
+                    this._events = new _(), this._eventsCount = 0;
+                }
+                c.prototype.eventNames = function() {
+                    var e = [], t, s;
+                    if (this._eventsCount === 0) return e;
+                    for (s in t = this._events) S.call(t, s) && e.push(l2 ? s.slice(1) : s);
+                    return Object.getOwnPropertySymbols ? e.concat(Object.getOwnPropertySymbols(t)) : e;
+                };
+                c.prototype.listeners = function(e) {
+                    var t = l2 ? l2 + e : e, s = this._events[t];
+                    if (!s) return [];
+                    if (s.fn) return [s.fn];
+                    for (var i = 0, u = s.length, o = new Array(u); i < u; i++) o[i] = s[i].fn;
+                    return o;
+                };
+                c.prototype.listenerCount = function(e) {
+                    var t = l2 ? l2 + e : e, s = this._events[t];
+                    return s ? s.fn ? 1 : s.length : 0;
+                };
+                c.prototype.emit = function(e, t, s, i, u, o) {
+                    var a = l2 ? l2 + e : e;
+                    if (!this._events[a]) return false;
+                    var r = this._events[a], p = arguments.length, h, f;
+                    if (r.fn) {
+                    switch (r.once && this.removeListener(e, r.fn, void 0, true), p) {
+                        case 1:
+                        return r.fn.call(r.context), true;
+                        case 2:
+                        return r.fn.call(r.context, t), true;
+                        case 3:
+                        return r.fn.call(r.context, t, s), true;
+                        case 4:
+                        return r.fn.call(r.context, t, s, i), true;
+                        case 5:
+                        return r.fn.call(r.context, t, s, i, u), true;
+                        case 6:
+                        return r.fn.call(r.context, t, s, i, u, o), true;
+                    }
+                    for (f = 1, h = new Array(p - 1); f < p; f++) h[f - 1] = arguments[f];
+                    r.fn.apply(r.context, h);
+                    } else {
+                    var b = r.length, v;
+                    for (f = 0; f < b; f++) switch (r[f].once && this.removeListener(e, r[f].fn, void 0, true), p) {
+                        case 1:
+                        r[f].fn.call(r[f].context);
+                        break;
+                        case 2:
+                        r[f].fn.call(r[f].context, t);
+                        break;
+                        case 3:
+                        r[f].fn.call(r[f].context, t, s);
+                        break;
+                        case 4:
+                        r[f].fn.call(r[f].context, t, s, i);
+                        break;
+                        default:
+                        if (!h) for (v = 1, h = new Array(p - 1); v < p; v++) h[v - 1] = arguments[v];
+                        r[f].fn.apply(r[f].context, h);
+                    }
+                    }
+                    return true;
+                };
+                c.prototype.on = function(e, t, s) {
+                    return w(this, e, t, s, false);
+                };
+                c.prototype.once = function(e, t, s) {
+                    return w(this, e, t, s, true);
+                };
+                c.prototype.removeListener = function(e, t, s, i) {
+                    var u = l2 ? l2 + e : e;
+                    if (!this._events[u]) return this;
+                    if (!t) return y(this, u), this;
+                    var o = this._events[u];
+                    if (o.fn) o.fn === t && (!i || o.once) && (!s || o.context === s) && y(this, u);
+                    else {
+                    for (var a = 0, r = [], p = o.length; a < p; a++) (o[a].fn !== t || i && !o[a].once || s && o[a].context !== s) && r.push(o[a]);
+                    r.length ? this._events[u] = r.length === 1 ? r[0] : r : y(this, u);
+                    }
+                    return this;
+                };
+                c.prototype.removeAllListeners = function(e) {
+                    var t;
+                    return e ? (t = l2 ? l2 + e : e, this._events[t] && y(this, t)) : (this._events = new _(), this._eventsCount = 0), this;
+                };
+                c.prototype.off = c.prototype.removeListener;
+                c.prototype.addListener = c.prototype.on;
+                c.prefixed = l2;
+                c.EventEmitter = c;
+                typeof x < "u" && (x.exports = c);
+                });
+                var g = N2(m(), 1);
+                var z2 = g.default;
+                var export_EventEmitter = g.default;
+
+                // subrepos/roslibjs/src/core/Topic.js
+                var Topic = class extends export_EventEmitter {
+                /** @type {boolean | undefined} */
+                waitForReconnect = void 0;
+                /** @type {(() => void) | undefined} */
+                reconnectFunc = void 0;
+                isAdvertised = false;
+                /**
+                * @param {Object} options
+                * @param {Ros} options.ros - The ROSLIB.Ros connection handle.
+                * @param {string} options.name - The topic name, like '/cmd_vel'.
+                * @param {string} options.messageType - The message type, like 'std_msgs/String'.
+                * @param {string} [options.compression=none] - The type of compression to use, like 'png', 'cbor', or 'cbor-raw'.
+                * @param {number} [options.throttle_rate=0] - The rate (in ms in between messages) at which to throttle the topics.
+                * @param {number} [options.queue_size=100] - The queue created at bridge side for re-publishing webtopics.
+                * @param {boolean} [options.latch=false] - Latch the topic when publishing.
+                * @param {number} [options.queue_length=0] - The queue length at bridge side used when subscribing.
+                * @param {boolean} [options.reconnect_on_close=true] - The flag to enable resubscription and readvertisement on close event.
+                */
+                constructor(options) {
+                    super();
+                    this.ros = options.ros;
+                    this.name = options.name;
+                    this.messageType = options.messageType;
+                    this.compression = options.compression || "none";
+                    this.throttle_rate = options.throttle_rate || 0;
+                    this.latch = options.latch || false;
+                    this.queue_size = options.queue_size || 100;
+                    this.queue_length = options.queue_length || 0;
+                    this.reconnect_on_close = options.reconnect_on_close !== void 0 ? options.reconnect_on_close : true;
+                    if (this.compression && this.compression !== "png" && this.compression !== "cbor" && this.compression !== "cbor-raw" && this.compression !== "none") {
+                    this.emit(
+                        "warning",
+                        this.compression + " compression is not supported. No compression will be used."
+                    );
+                    this.compression = "none";
+                    }
+                    if (this.throttle_rate < 0) {
+                    this.emit("warning", this.throttle_rate + " is not allowed. Set to 0");
+                    this.throttle_rate = 0;
+                    }
+                    if (this.reconnect_on_close) {
+                    this.callForSubscribeAndAdvertise = (message) => {
+                        this.ros.callOnConnection(message);
+                        this.waitForReconnect = false;
+                        this.reconnectFunc = () => {
+                        if (!this.waitForReconnect) {
+                            this.waitForReconnect = true;
+                            this.ros.callOnConnection(message);
+                            this.ros.once("connection", () => {
+                            this.waitForReconnect = false;
+                            });
+                        }
+                        };
+                        this.ros.on("close", this.reconnectFunc);
+                    };
+                    } else {
+                    this.callForSubscribeAndAdvertise = this.ros.callOnConnection;
+                    }
+                }
+                _messageCallback = (data) => {
+                    this.emit("message", data);
+                };
+                /**
+                * @callback subscribeCallback
+                * @param {T} message - The published message.
+                */
+                /**
+                * Every time a message is published for the given topic, the callback
+                * will be called with the message object.
+                *
+                * @param {subscribeCallback} callback - Function with the following params:
+                */
+                subscribe(callback) {
+                    if (typeof callback === "function") {
+                    this.on("message", callback);
+                    }
+                    if (this.subscribeId) {
+                    return;
+                    }
+                    this.ros.on(this.name, this._messageCallback);
+                    this.subscribeId = "subscribe:" + this.name + ":" + (++this.ros.idCounter).toString();
+                    this.callForSubscribeAndAdvertise({
+                    op: "subscribe",
+                    id: this.subscribeId,
+                    type: this.messageType,
+                    topic: this.name,
+                    compression: this.compression,
+                    throttle_rate: this.throttle_rate,
+                    queue_length: this.queue_length
+                    });
+                }
+                /**
+                * Unregister as a subscriber for the topic. Unsubscribing will stop
+                * and remove all subscribe callbacks. To remove a callback, you must
+                * explicitly pass the callback function in.
+                *
+                * @param {import('eventemitter3').EventEmitter.ListenerFn} [callback] - The callback to unregister, if
+                *     provided and other listeners are registered the topic won't
+                *     unsubscribe, just stop emitting to the passed listener.
+                */
+                unsubscribe(callback) {
+                    if (callback) {
+                    this.off("message", callback);
+                    if (this.listeners("message").length) {
+                        return;
+                    }
+                    }
+                    if (!this.subscribeId) {
+                    return;
+                    }
+                    this.ros.off(this.name, this._messageCallback);
+                    if (this.reconnect_on_close) {
+                    this.ros.off("close", this.reconnectFunc);
+                    }
+                    this.emit("unsubscribe");
+                    this.ros.callOnConnection({
+                    op: "unsubscribe",
+                    id: this.subscribeId,
+                    topic: this.name
+                    });
+                    this.subscribeId = null;
+                }
+                /**
+                * Register as a publisher for the topic.
+                */
+                advertise() {
+                    if (this.isAdvertised) {
+                    return;
+                    }
+                    this.advertiseId = "advertise:" + this.name + ":" + (++this.ros.idCounter).toString();
+                    this.callForSubscribeAndAdvertise({
+                    op: "advertise",
+                    id: this.advertiseId,
+                    type: this.messageType,
+                    topic: this.name,
+                    latch: this.latch,
+                    queue_size: this.queue_size
+                    });
+                    this.isAdvertised = true;
+                    if (!this.reconnect_on_close) {
+                    this.ros.on("close", () => {
+                        this.isAdvertised = false;
+                    });
+                    }
+                }
+                /**
+                * Unregister as a publisher for the topic.
+                */
+                unadvertise() {
+                    if (!this.isAdvertised) {
+                    return;
+                    }
+                    if (this.reconnect_on_close) {
+                    this.ros.off("close", this.reconnectFunc);
+                    }
+                    this.emit("unadvertise");
+                    this.ros.callOnConnection({
+                    op: "unadvertise",
+                    id: this.advertiseId,
+                    topic: this.name
+                    });
+                    this.isAdvertised = false;
+                }
+                /**
+                * Publish the message.
+                *
+                * @param {T} message - The message to publish.
+                */
+                publish(message) {
+                    if (!this.isAdvertised) {
+                    this.advertise();
+                    }
+                    this.ros.idCounter++;
+                    var call = {
+                    op: "publish",
+                    id: "publish:" + this.name + ":" + this.ros.idCounter,
+                    topic: this.name,
+                    msg: message,
+                    latch: this.latch
+                    };
+                    this.ros.callOnConnection(call);
+                }
+                };
+
+                // subrepos/roslibjs/src/core/Service.js
+                var Service = class extends export_EventEmitter {
+                /**
+                    * Stores a reference to the most recent service callback advertised so it can be removed from the EventEmitter during un-advertisement
+                    * @private
+                    * @type {((rosbridgeRequest) => any) | null}
+                    */
+                _serviceCallback = null;
+                isAdvertised = false;
+                /**
+                * @param {Object} options
+                * @param {Ros} options.ros - The ROSLIB.Ros connection handle.
+                * @param {string} options.name - The service name, like '/add_two_ints'.
+                * @param {string} options.serviceType - The service type, like 'rospy_tutorials/AddTwoInts'.
+                */
+                constructor(options) {
+                    super();
+                    this.ros = options.ros;
+                    this.name = options.name;
+                    this.serviceType = options.serviceType;
+                }
+                /**
+                * @callback callServiceCallback
+                *  @param {TResponse} response - The response from the service request.
+                */
+                /**
+                * @callback callServiceFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Call the service. Returns the service response in the
+                * callback. Does nothing if this service is currently advertised.
+                *
+                * @param {TRequest} request - The service request to send.
+                * @param {callServiceCallback} [callback] - Function with the following params:
+                * @param {callServiceFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                * @param {number} [timeout] - Optional timeout, in seconds, for the service call. A non-positive value means no timeout.
+                *                             If not provided, the rosbridge server will use its default value.
+                */
+                callService(request, callback, failedCallback, timeout) {
+                    if (this.isAdvertised) {
+                    return;
+                    }
+                    var serviceCallId = "call_service:" + this.name + ":" + (++this.ros.idCounter).toString();
+                    if (callback || failedCallback) {
+                    this.ros.once(serviceCallId, function(message) {
+                        if (message.result !== void 0 && message.result === false) {
+                        if (typeof failedCallback === "function") {
+                            failedCallback(message.values);
+                        }
+                        } else if (typeof callback === "function") {
+                        callback(message.values);
+                        }
+                    });
+                    }
+                    var call = {
+                    op: "call_service",
+                    id: serviceCallId,
+                    service: this.name,
+                    type: this.serviceType,
+                    args: request,
+                    timeout
+                    };
+                    this.ros.callOnConnection(call);
+                }
+                /**
+                * @callback advertiseCallback
+                * @param {TRequest} request - The service request.
+                * @param {Partial<TResponse>} response - An empty dictionary. Take care not to overwrite this. Instead, only modify the values within.
+                * @returns {boolean} true if the service has finished successfully, i.e., without any fatal errors.
+                */
+                /**
+                * Advertise the service. This turns the Service object from a client
+                * into a server. The callback will be called with every request
+                * that's made on this service.
+                *
+                * @param {advertiseCallback} callback - This works similarly to the callback for a C++ service and should take the following params
+                */
+                advertise(callback) {
+                    if (this.isAdvertised) {
+                    throw new Error("Cannot advertise the same Service twice!");
+                    }
+                    this._serviceCallback = (rosbridgeRequest) => {
+                    var response = {};
+                    var success = callback(rosbridgeRequest.args, response);
+                    var call = {
+                        op: "service_response",
+                        service: this.name,
+                        values: response,
+                        result: success
+                    };
+                    if (rosbridgeRequest.id) {
+                        call.id = rosbridgeRequest.id;
+                    }
+                    this.ros.callOnConnection(call);
+                    };
+                    this.ros.on(this.name, this._serviceCallback);
+                    this.ros.callOnConnection({
+                    op: "advertise_service",
+                    type: this.serviceType,
+                    service: this.name
+                    });
+                    this.isAdvertised = true;
+                }
+                unadvertise() {
+                    if (!this.isAdvertised) {
+                    throw new Error(`Tried to un-advertise service ${this.name}, but it was not advertised!`);
+                    }
+                    this.ros.callOnConnection({
+                    op: "unadvertise_service",
+                    service: this.name
+                    });
+                    if (this._serviceCallback) {
+                    this.ros.off(this.name, this._serviceCallback);
+                    }
+                    this.isAdvertised = false;
+                }
+                /**
+                * An alternate form of Service advertisement that supports a modern Promise-based interface for use with async/await.
+                * @param {(request: TRequest) => Promise<TResponse>} callback An asynchronous callback processing the request and returning a response.
+                */
+                advertiseAsync(callback) {
+                    if (this.isAdvertised) {
+                    throw new Error("Cannot advertise the same Service twice!");
+                    }
+                    this._serviceCallback = async (rosbridgeRequest) => {
+                    let rosbridgeResponse = {
+                        op: "service_response",
+                        service: this.name,
+                        result: false
+                    };
+                    try {
+                        rosbridgeResponse.values = await callback(rosbridgeRequest.args);
+                        rosbridgeResponse.result = true;
+                    } finally {
+                        if (rosbridgeRequest.id) {
+                        rosbridgeResponse.id = rosbridgeRequest.id;
+                        }
+                        this.ros.callOnConnection(rosbridgeResponse);
+                    }
+                    };
+                    this.ros.on(this.name, this._serviceCallback);
+                    this.ros.callOnConnection({
+                    op: "advertise_service",
+                    type: this.serviceType,
+                    service: this.name
+                    });
+                    this.isAdvertised = true;
+                }
+                };
+
+                // subrepos/roslibjs/src/core/Param.js
+                var Param = class {
+                /**
+                * @param {Object} options
+                * @param {Ros} options.ros - The ROSLIB.Ros connection handle.
+                * @param {string} options.name - The param name, like max_vel_x.
+                */
+                constructor(options) {
+                    this.ros = options.ros;
+                    this.name = options.name;
+                }
+                /**
+                * @callback getCallback
+                * @param {Object} value - The value of the param from ROS.
+                */
+                /**
+                * @callback getFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Fetch the value of the param.
+                *
+                * @param {getCallback} callback - The callback function.
+                * @param {getFailedCallback} [failedCallback] - The callback function when the service call failed.
+                */
+                get(callback, failedCallback) {
+                    var paramClient = new Service({
+                    ros: this.ros,
+                    name: "rosapi/get_param",
+                    serviceType: "rosapi/GetParam"
+                    });
+                    var request = { name: this.name };
+                    paramClient.callService(
+                    request,
+                    function(result) {
+                        var value = JSON.parse(result.value);
+                        callback(value);
+                    },
+                    failedCallback
+                    );
+                }
+                /**
+                * @callback setParamCallback
+                * @param {Object} response - The response from the service request.
+                */
+                /**
+                * @callback setParamFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Set the value of the param in ROS.
+                *
+                * @param {Object} value - The value to set param to.
+                * @param {setParamCallback} [callback] - The callback function.
+                * @param {setParamFailedCallback} [failedCallback] - The callback function when the service call failed.
+                */
+                set(value, callback, failedCallback) {
+                    var paramClient = new Service({
+                    ros: this.ros,
+                    name: "rosapi/set_param",
+                    serviceType: "rosapi/SetParam"
+                    });
+                    var request = {
+                    name: this.name,
+                    value: JSON.stringify(value)
+                    };
+                    paramClient.callService(request, callback, failedCallback);
+                }
+                /**
+                * Delete this parameter on the ROS server.
+                *
+                * @param {setParamCallback} callback - The callback function.
+                * @param {setParamFailedCallback} [failedCallback] - The callback function when the service call failed.
+                */
+                delete(callback, failedCallback) {
+                    var paramClient = new Service({
+                    ros: this.ros,
+                    name: "rosapi/delete_param",
+                    serviceType: "rosapi/DeleteParam"
+                    });
+                    var request = {
+                    name: this.name
+                    };
+                    paramClient.callService(request, callback, failedCallback);
+                }
+                };
+
+                // subrepos/roslibjs/src/actionlib/ActionClient.js
+                var ActionClient = class extends export_EventEmitter {
+                goals = {};
+                /** flag to check if a status has been received */
+                receivedStatus = false;
+                /**
+                * @param {Object} options
+                * @param {Ros} options.ros - The ROSLIB.Ros connection handle.
+                * @param {string} options.serverName - The action server name, like '/fibonacci'.
+                * @param {string} options.actionName - The action message name, like 'actionlib_tutorials/FibonacciAction'.
+                * @param {number} [options.timeout] - The timeout length when connecting to the action server.
+                * @param {boolean} [options.omitFeedback] - The flag to indicate whether to omit the feedback channel or not.
+                * @param {boolean} [options.omitStatus] - The flag to indicate whether to omit the status channel or not.
+                * @param {boolean} [options.omitResult] - The flag to indicate whether to omit the result channel or not.
+                */
+                constructor(options) {
+                    super();
+                    this.ros = options.ros;
+                    this.serverName = options.serverName;
+                    this.actionName = options.actionName;
+                    this.timeout = options.timeout;
+                    this.omitFeedback = options.omitFeedback;
+                    this.omitStatus = options.omitStatus;
+                    this.omitResult = options.omitResult;
+                    this.feedbackListener = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/feedback",
+                    messageType: this.actionName + "Feedback"
+                    });
+                    this.statusListener = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/status",
+                    messageType: "actionlib_msgs/GoalStatusArray"
+                    });
+                    this.resultListener = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/result",
+                    messageType: this.actionName + "Result"
+                    });
+                    this.goalTopic = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/goal",
+                    messageType: this.actionName + "Goal"
+                    });
+                    this.cancelTopic = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/cancel",
+                    messageType: "actionlib_msgs/GoalID"
+                    });
+                    this.goalTopic.advertise();
+                    this.cancelTopic.advertise();
+                    if (!this.omitStatus) {
+                    this.statusListener.subscribe((statusMessage) => {
+                        this.receivedStatus = true;
+                        statusMessage.status_list.forEach((status) => {
+                        var goal = this.goals[status.goal_id.id];
+                        if (goal) {
+                            goal.emit("status", status);
+                        }
+                        });
+                    });
+                    }
+                    if (!this.omitFeedback) {
+                    this.feedbackListener.subscribe((feedbackMessage) => {
+                        var goal = this.goals[feedbackMessage.status.goal_id.id];
+                        if (goal) {
+                        goal.emit("status", feedbackMessage.status);
+                        goal.emit("feedback", feedbackMessage.feedback);
+                        }
+                    });
+                    }
+                    if (!this.omitResult) {
+                    this.resultListener.subscribe((resultMessage) => {
+                        var goal = this.goals[resultMessage.status.goal_id.id];
+                        if (goal) {
+                        goal.emit("status", resultMessage.status);
+                        goal.emit("result", resultMessage.result);
+                        }
+                    });
+                    }
+                    if (this.timeout) {
+                    setTimeout(() => {
+                        if (!this.receivedStatus) {
+                        this.emit("timeout");
+                        }
+                    }, this.timeout);
+                    }
+                }
+                /**
+                * Cancel all goals associated with this ActionClient.
+                */
+                cancel() {
+                    var cancelMessage = {};
+                    this.cancelTopic.publish(cancelMessage);
+                }
+                /**
+                * Unsubscribe and unadvertise all topics associated with this ActionClient.
+                */
+                dispose() {
+                    this.goalTopic.unadvertise();
+                    this.cancelTopic.unadvertise();
+                    if (!this.omitStatus) {
+                    this.statusListener.unsubscribe();
+                    }
+                    if (!this.omitFeedback) {
+                    this.feedbackListener.unsubscribe();
+                    }
+                    if (!this.omitResult) {
+                    this.resultListener.unsubscribe();
+                    }
+                }
+                };
+
+                // subrepos/roslibjs/src/actionlib/Goal.js
+                var Goal = class extends export_EventEmitter {
+                isFinished = false;
+                status = void 0;
+                result = void 0;
+                feedback = void 0;
+                // Create a random ID
+                goalID = "goal_" + Math.random() + "_" + (/* @__PURE__ */ new Date()).getTime();
+                /**
+                * @param {Object} options
+                * @param {ActionClient} options.actionClient - The ROSLIB.ActionClient to use with this goal.
+                * @param {Object} options.goalMessage - The JSON object containing the goal for the action server.
+                */
+                constructor(options) {
+                    super();
+                    this.actionClient = options.actionClient;
+                    this.goalMessage = {
+                    goal_id: {
+                        stamp: {
+                        secs: 0,
+                        nsecs: 0
+                        },
+                        id: this.goalID
+                    },
+                    goal: options.goalMessage
+                    };
+                    this.on("status", (status) => {
+                    this.status = status;
+                    });
+                    this.on("result", (result) => {
+                    this.isFinished = true;
+                    this.result = result;
+                    });
+                    this.on("feedback", (feedback) => {
+                    this.feedback = feedback;
+                    });
+                    this.actionClient.goals[this.goalID] = this;
+                }
+                /**
+                * Send the goal to the action server.
+                *
+                * @param {number} [timeout] - A timeout length for the goal's result.
+                */
+                send(timeout) {
+                    this.actionClient.goalTopic.publish(this.goalMessage);
+                    if (timeout) {
+                    setTimeout(() => {
+                        if (!this.isFinished) {
+                        this.emit("timeout");
+                        }
+                    }, timeout);
+                    }
+                }
+                /**
+                * Cancel the current goal.
+                */
+                cancel() {
+                    var cancelMessage = {
+                    id: this.goalID
+                    };
+                    this.actionClient.cancelTopic.publish(cancelMessage);
+                }
+                };
+
+                // subrepos/roslibjs/src/math/Quaternion.js
+                var Quaternion = class _Quaternion {
+                /**
+                * @param {Object} [options]
+                * @param {number|null} [options.x=0] - The x value.
+                * @param {number|null} [options.y=0] - The y value.
+                * @param {number|null} [options.z=0] - The z value.
+                * @param {number|null} [options.w=1] - The w value.
+                */
+                constructor(options) {
+                    options = options || {};
+                    this.x = options.x || 0;
+                    this.y = options.y || 0;
+                    this.z = options.z || 0;
+                    this.w = typeof options.w === "number" ? options.w : 1;
+                }
+                /**
+                * Perform a conjugation on this quaternion.
+                */
+                conjugate() {
+                    this.x *= -1;
+                    this.y *= -1;
+                    this.z *= -1;
+                }
+                /**
+                * Return the norm of this quaternion.
+                */
+                norm() {
+                    return Math.sqrt(
+                    this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w
+                    );
+                }
+                /**
+                * Perform a normalization on this quaternion.
+                */
+                normalize() {
+                    var l2 = Math.sqrt(
+                    this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w
+                    );
+                    if (l2 === 0) {
+                    this.x = 0;
+                    this.y = 0;
+                    this.z = 0;
+                    this.w = 1;
+                    } else {
+                    l2 = 1 / l2;
+                    this.x = this.x * l2;
+                    this.y = this.y * l2;
+                    this.z = this.z * l2;
+                    this.w = this.w * l2;
+                    }
+                }
+                /**
+                * Convert this quaternion into its inverse.
+                */
+                invert() {
+                    this.conjugate();
+                    this.normalize();
+                }
+                /**
+                * Set the values of this quaternion to the product of itself and the given quaternion.
+                *
+                * @param {Quaternion} q - The quaternion to multiply with.
+                */
+                multiply(q) {
+                    var newX = this.x * q.w + this.y * q.z - this.z * q.y + this.w * q.x;
+                    var newY = -this.x * q.z + this.y * q.w + this.z * q.x + this.w * q.y;
+                    var newZ = this.x * q.y - this.y * q.x + this.z * q.w + this.w * q.z;
+                    var newW = -this.x * q.x - this.y * q.y - this.z * q.z + this.w * q.w;
+                    this.x = newX;
+                    this.y = newY;
+                    this.z = newZ;
+                    this.w = newW;
+                }
+                /**
+                * Clone a copy of this quaternion.
+                *
+                * @returns {Quaternion} The cloned quaternion.
+                */
+                clone() {
+                    return new _Quaternion(this);
+                }
+                };
+
+                // subrepos/roslibjs/src/math/Vector3.js
+                var Vector3 = class _Vector3 {
+                /**
+                * @param {Object} [options]
+                * @param {number} [options.x=0] - The x value.
+                * @param {number} [options.y=0] - The y value.
+                * @param {number} [options.z=0] - The z value.
+                */
+                constructor(options) {
+                    options = options || {};
+                    this.x = options.x || 0;
+                    this.y = options.y || 0;
+                    this.z = options.z || 0;
+                }
+                /**
+                * Set the values of this vector to the sum of itself and the given vector.
+                *
+                * @param {Vector3} v - The vector to add with.
+                */
+                add(v) {
+                    this.x += v.x;
+                    this.y += v.y;
+                    this.z += v.z;
+                }
+                /**
+                * Set the values of this vector to the difference of itself and the given vector.
+                *
+                * @param {Vector3} v - The vector to subtract with.
+                */
+                subtract(v) {
+                    this.x -= v.x;
+                    this.y -= v.y;
+                    this.z -= v.z;
+                }
+                /**
+                * Multiply the given Quaternion with this vector.
+                *
+                * @param {Quaternion} q - The quaternion to multiply with.
+                */
+                multiplyQuaternion(q) {
+                    var ix = q.w * this.x + q.y * this.z - q.z * this.y;
+                    var iy = q.w * this.y + q.z * this.x - q.x * this.z;
+                    var iz = q.w * this.z + q.x * this.y - q.y * this.x;
+                    var iw = -q.x * this.x - q.y * this.y - q.z * this.z;
+                    this.x = ix * q.w + iw * -q.x + iy * -q.z - iz * -q.y;
+                    this.y = iy * q.w + iw * -q.y + iz * -q.x - ix * -q.z;
+                    this.z = iz * q.w + iw * -q.z + ix * -q.y - iy * -q.x;
+                }
+                /**
+                * Clone a copy of this vector.
+                *
+                * @returns {Vector3} The cloned vector.
+                */
+                clone() {
+                    return new _Vector3(this);
+                }
+                };
+
+                // subrepos/roslibjs/src/math/Transform.js
+                var Transform = class _Transform {
+                /**
+                * @param {Object} options
+                * @param {Vector3} options.translation - The ROSLIB.Vector3 describing the translation.
+                * @param {Quaternion} options.rotation - The ROSLIB.Quaternion describing the rotation.
+                */
+                constructor(options) {
+                    this.translation = new Vector3(options.translation);
+                    this.rotation = new Quaternion(options.rotation);
+                }
+                /**
+                * Clone a copy of this transform.
+                *
+                * @returns {Transform} The cloned transform.
+                */
+                clone() {
+                    return new _Transform(this);
+                }
+                };
+
+                // subrepos/roslibjs/src/tf/TFClient.js
+                var TFClient = class extends export_EventEmitter {
+                /** @type {Goal|false} */
+                currentGoal = false;
+                /** @type {Topic|false} */
+                currentTopic = false;
+                frameInfos = {};
+                republisherUpdateRequested = false;
+                /** @type {((tf: any) => any) | undefined} */
+                _subscribeCB = void 0;
+                _isDisposed = false;
+                /**
+                * @param {Object} options
+                * @param {Ros} options.ros - The ROSLIB.Ros connection handle.
+                * @param {string} [options.fixedFrame=base_link] - The fixed frame.
+                * @param {number} [options.angularThres=2.0] - The angular threshold for the TF republisher.
+                * @param {number} [options.transThres=0.01] - The translation threshold for the TF republisher.
+                * @param {number} [options.rate=10.0] - The rate for the TF republisher.
+                * @param {number} [options.updateDelay=50] - The time (in ms) to wait after a new subscription
+                *     to update the TF republisher's list of TFs.
+                * @param {number} [options.topicTimeout=2.0] - The timeout parameter for the TF republisher.
+                * @param {string} [options.serverName="/tf2_web_republisher"] - The name of the tf2_web_republisher server.
+                * @param {string} [options.repubServiceName="/republish_tfs"] - The name of the republish_tfs service (non groovy compatibility mode only).
+                */
+                constructor(options) {
+                    super();
+                    this.ros = options.ros;
+                    this.fixedFrame = options.fixedFrame || "base_link";
+                    this.angularThres = options.angularThres || 2;
+                    this.transThres = options.transThres || 0.01;
+                    this.rate = options.rate || 10;
+                    this.updateDelay = options.updateDelay || 50;
+                    var seconds = options.topicTimeout || 2;
+                    var secs = Math.floor(seconds);
+                    var nsecs = Math.floor((seconds - secs) * 1e9);
+                    this.topicTimeout = {
+                    secs,
+                    nsecs
+                    };
+                    this.serverName = options.serverName || "/tf2_web_republisher";
+                    this.repubServiceName = options.repubServiceName || "/republish_tfs";
+                    this.actionClient = new ActionClient({
+                    ros: options.ros,
+                    serverName: this.serverName,
+                    actionName: "tf2_web_republisher/TFSubscriptionAction",
+                    omitStatus: true,
+                    omitResult: true
+                    });
+                    this.serviceClient = new Service({
+                    ros: options.ros,
+                    name: this.repubServiceName,
+                    serviceType: "tf2_web_republisher/RepublishTFs"
+                    });
+                }
+                /**
+                * Process the incoming TF message and send them out using the callback
+                * functions.
+                *
+                * @param {Object} tf - The TF message from the server.
+                */
+                processTFArray(tf) {
+                    tf.transforms.forEach((transform) => {
+                    var frameID = transform.child_frame_id;
+                    if (frameID[0] === "/") {
+                        frameID = frameID.substring(1);
+                    }
+                    var info = this.frameInfos[frameID];
+                    if (info) {
+                        info.transform = new Transform({
+                        translation: transform.transform.translation,
+                        rotation: transform.transform.rotation
+                        });
+                        info.cbs.forEach((cb) => {
+                        cb(info.transform);
+                        });
+                    }
+                    }, this);
+                }
+                /**
+                * Create and send a new goal (or service request) to the tf2_web_republisher
+                * based on the current list of TFs.
+                */
+                updateGoal() {
+                    var goalMessage = {
+                    source_frames: Object.keys(this.frameInfos),
+                    target_frame: this.fixedFrame,
+                    angular_thres: this.angularThres,
+                    trans_thres: this.transThres,
+                    rate: this.rate
+                    };
+                    if (this.ros.groovyCompatibility) {
+                    if (this.currentGoal) {
+                        this.currentGoal.cancel();
+                    }
+                    this.currentGoal = new Goal({
+                        actionClient: this.actionClient,
+                        goalMessage
+                    });
+                    this.currentGoal.on("feedback", this.processTFArray.bind(this));
+                    this.currentGoal.send();
+                    } else {
+                    goalMessage.timeout = this.topicTimeout;
+                    this.serviceClient.callService(goalMessage, this.processResponse.bind(this));
+                    }
+                    this.republisherUpdateRequested = false;
+                }
+                /**
+                * Process the service response and subscribe to the tf republisher
+                * topic.
+                *
+                * @param {Object} response - The service response containing the topic name.
+                */
+                processResponse(response) {
+                    if (this._isDisposed) {
+                    return;
+                    }
+                    if (this.currentTopic) {
+                    this.currentTopic.unsubscribe(this._subscribeCB);
+                    }
+                    this.currentTopic = new Topic({
+                    ros: this.ros,
+                    name: response.topic_name,
+                    messageType: "tf2_web_republisher/TFArray"
+                    });
+                    this._subscribeCB = this.processTFArray.bind(this);
+                    this.currentTopic.subscribe(this._subscribeCB);
+                }
+                /**
+                * @callback subscribeCallback
+                * @param {Transform} callback.transform - The transform data.
+                */
+                /**
+                * Subscribe to the given TF frame.
+                *
+                * @param {string} frameID - The TF frame to subscribe to.
+                * @param {subscribeCallback} callback - Function with the following params:
+                */
+                subscribe(frameID, callback) {
+                    if (frameID[0] === "/") {
+                    frameID = frameID.substring(1);
+                    }
+                    if (!this.frameInfos[frameID]) {
+                    this.frameInfos[frameID] = {
+                        cbs: []
+                    };
+                    if (!this.republisherUpdateRequested) {
+                        setTimeout(this.updateGoal.bind(this), this.updateDelay);
+                        this.republisherUpdateRequested = true;
+                    }
+                    } else if (this.frameInfos[frameID].transform) {
+                    callback(this.frameInfos[frameID].transform);
+                    }
+                    this.frameInfos[frameID].cbs.push(callback);
+                }
+                /**
+                * Unsubscribe from the given TF frame.
+                *
+                * @param {string} frameID - The TF frame to unsubscribe from.
+                * @param {function} callback - The callback function to remove.
+                */
+                unsubscribe(frameID, callback) {
+                    if (frameID[0] === "/") {
+                    frameID = frameID.substring(1);
+                    }
+                    var info = this.frameInfos[frameID];
+                    for (var cbs = info && info.cbs || [], idx = cbs.length; idx--; ) {
+                    if (cbs[idx] === callback) {
+                        cbs.splice(idx, 1);
+                    }
+                    }
+                    if (!callback || cbs.length === 0) {
+                    delete this.frameInfos[frameID];
+                    }
+                }
+                /**
+                * Unsubscribe and unadvertise all topics associated with this TFClient.
+                */
+                dispose() {
+                    this._isDisposed = true;
+                    this.actionClient.dispose();
+                    if (this.currentTopic) {
+                    this.currentTopic.unsubscribe(this._subscribeCB);
+                    }
+                }
+                };
+
+                // subrepos/roslibjs/src/actionlib/SimpleActionServer.js
+                var SimpleActionServer = class extends export_EventEmitter {
+                // needed for handling preemption prompted by a new goal being received
+                /** @type {{goal_id: {id: any, stamp: any}, goal: any} | null} */
+                currentGoal = null;
+                // currently tracked goal
+                /** @type {{goal_id: {id: any, stamp: any}, goal: any} | null} */
+                nextGoal = null;
+                // the one this'll be preempting
+                /**
+                * @param {Object} options
+                * @param {Ros} options.ros - The ROSLIB.Ros connection handle.
+                * @param {string} options.serverName - The action server name, like '/fibonacci'.
+                * @param {string} options.actionName - The action message name, like 'actionlib_tutorials/FibonacciAction'.
+                */
+                constructor(options) {
+                    super();
+                    this.ros = options.ros;
+                    this.serverName = options.serverName;
+                    this.actionName = options.actionName;
+                    this.feedbackPublisher = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/feedback",
+                    messageType: this.actionName + "Feedback"
+                    });
+                    this.feedbackPublisher.advertise();
+                    var statusPublisher = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/status",
+                    messageType: "actionlib_msgs/GoalStatusArray"
+                    });
+                    statusPublisher.advertise();
+                    this.resultPublisher = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/result",
+                    messageType: this.actionName + "Result"
+                    });
+                    this.resultPublisher.advertise();
+                    var goalListener = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/goal",
+                    messageType: this.actionName + "Goal"
+                    });
+                    var cancelListener = new Topic({
+                    ros: this.ros,
+                    name: this.serverName + "/cancel",
+                    messageType: "actionlib_msgs/GoalID"
+                    });
+                    this.statusMessage = {
+                    header: {
+                        stamp: { secs: 0, nsecs: 100 },
+                        frame_id: ""
+                    },
+                    /** @type {{goal_id: any, status: number}[]} */
+                    status_list: []
+                    };
+                    goalListener.subscribe((goalMessage) => {
+                    if (this.currentGoal) {
+                        this.nextGoal = goalMessage;
+                        this.emit("cancel");
+                    } else {
+                        this.statusMessage.status_list = [{ goal_id: goalMessage.goal_id, status: 1 }];
+                        this.currentGoal = goalMessage;
+                        this.emit("goal", goalMessage.goal);
+                    }
+                    });
+                    var isEarlier = function(t1, t2) {
+                    if (t1.secs > t2.secs) {
+                        return false;
+                    } else if (t1.secs < t2.secs) {
+                        return true;
+                    } else if (t1.nsecs < t2.nsecs) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                    };
+                    cancelListener.subscribe((cancelMessage) => {
+                    if (cancelMessage.stamp.secs === 0 && cancelMessage.stamp.secs === 0 && cancelMessage.id === "") {
+                        this.nextGoal = null;
+                        if (this.currentGoal) {
+                        this.emit("cancel");
+                        }
+                    } else {
+                        if (this.currentGoal && cancelMessage.id === this.currentGoal.goal_id.id) {
+                        this.emit("cancel");
+                        } else if (this.nextGoal && cancelMessage.id === this.nextGoal.goal_id.id) {
+                        this.nextGoal = null;
+                        }
+                        if (this.nextGoal && isEarlier(this.nextGoal.goal_id.stamp, cancelMessage.stamp)) {
+                        this.nextGoal = null;
+                        }
+                        if (this.currentGoal && isEarlier(this.currentGoal.goal_id.stamp, cancelMessage.stamp)) {
+                        this.emit("cancel");
+                        }
+                    }
+                    });
+                    setInterval(() => {
+                    var currentTime = /* @__PURE__ */ new Date();
+                    var secs = Math.floor(currentTime.getTime() / 1e3);
+                    var nsecs = Math.round(
+                        1e9 * (currentTime.getTime() / 1e3 - secs)
+                    );
+                    this.statusMessage.header.stamp.secs = secs;
+                    this.statusMessage.header.stamp.nsecs = nsecs;
+                    statusPublisher.publish(this.statusMessage);
+                    }, 500);
+                }
+                /**
+                * Set action state to succeeded and return to client.
+                *
+                * @param {Object} result - The result to return to the client.
+                */
+                setSucceeded(result) {
+                    if (this.currentGoal !== null) {
+                    var resultMessage = {
+                        status: { goal_id: this.currentGoal.goal_id, status: 3 },
+                        result
+                    };
+                    this.resultPublisher.publish(resultMessage);
+                    this.statusMessage.status_list = [];
+                    if (this.nextGoal) {
+                        this.currentGoal = this.nextGoal;
+                        this.nextGoal = null;
+                        this.emit("goal", this.currentGoal.goal);
+                    } else {
+                        this.currentGoal = null;
+                    }
+                    }
+                }
+                /**
+                * Set action state to aborted and return to client.
+                *
+                * @param {Object} result - The result to return to the client.
+                */
+                setAborted(result) {
+                    if (this.currentGoal !== null) {
+                    var resultMessage = {
+                        status: { goal_id: this.currentGoal.goal_id, status: 4 },
+                        result
+                    };
+                    this.resultPublisher.publish(resultMessage);
+                    this.statusMessage.status_list = [];
+                    if (this.nextGoal) {
+                        this.currentGoal = this.nextGoal;
+                        this.nextGoal = null;
+                        this.emit("goal", this.currentGoal.goal);
+                    } else {
+                        this.currentGoal = null;
+                    }
+                    }
+                }
+                /**
+                * Send a feedback message.
+                *
+                * @param {Object} feedback - The feedback to send to the client.
+                */
+                sendFeedback(feedback) {
+                    if (this.currentGoal !== null) {
+                    var feedbackMessage = {
+                        status: { goal_id: this.currentGoal.goal_id, status: 1 },
+                        feedback
+                    };
+                    this.feedbackPublisher.publish(feedbackMessage);
+                    }
+                }
+                /**
+                * Handle case where client requests preemption.
+                */
+                setPreempted() {
+                    if (this.currentGoal !== null) {
+                    this.statusMessage.status_list = [];
+                    var resultMessage = {
+                        status: { goal_id: this.currentGoal.goal_id, status: 2 }
+                    };
+                    this.resultPublisher.publish(resultMessage);
+                    if (this.nextGoal) {
+                        this.currentGoal = this.nextGoal;
+                        this.nextGoal = null;
+                        this.emit("goal", this.currentGoal.goal);
+                    } else {
+                        this.currentGoal = null;
+                    }
+                    }
+                }
+                };
+
+                // subrepos/roslibjs/src/core/Ros.js
+                var Ros = class extends export_EventEmitter {
+                /** @type {WebSocket | import("ws").WebSocket | null} */
+                socket = null;
+                idCounter = 0;
+                isConnected = false;
+                groovyCompatibility = true;
+                /**
+                * @param {Object} [options]
+                * @param {string} [options.url] - The WebSocket URL for rosbridge. Can be specified later with `connect`.
+                * @param {boolean} [options.groovyCompatibility=true] - Don't use interfaces that changed after the last groovy release or rosbridge_suite and related tools.
+                * @param {'websocket'|RTCPeerConnection} [options.transportLibrary='websocket'] - 'websocket', or an RTCPeerConnection instance controlling how the connection is created in `connect`.
+                * @param {Object} [options.transportOptions={}] - The options to use when creating a connection. Currently only used if `transportLibrary` is RTCPeerConnection.
+                */
+                constructor(options) {
+                    super();
+                    options = options || {};
+                    this.transportLibrary = options.transportLibrary || "websocket";
+                    this.transportOptions = options.transportOptions || {};
+                    this.groovyCompatibility = options.groovyCompatibility ?? true;
+                    if (options.url) {
+                    this.connect(options.url);
+                    }
+                }
+                /**
+                * Connect to the specified WebSocket.
+                *
+                * @param {string} url - WebSocket URL or RTCDataChannel label for rosbridge.
+                */
+                connect(url) {
+                    if (this.transportLibrary.constructor.name === "RTCPeerConnection") {
+                    this.socket = Object.assign(
+                        // @ts-expect-error -- this is kinda wild. `this.transportLibrary` can either be a string or an RTCDataChannel. This needs fixing.
+                        this.transportLibrary.createDataChannel(url, this.transportOptions),
+                        SocketAdapter(this)
+                    );
+                    } else if (this.transportLibrary === "websocket") {
+                    if (typeof WebSocket === "function") {
+                        if (!this.socket || this.socket.readyState === WebSocket.CLOSED) {
+                        const sock = new WebSocket(url);
+                        sock.binaryType = "arraybuffer";
+                        this.socket = Object.assign(sock, SocketAdapter(this));
+                        }
+                    } else {
+                        import(
+                        /* @vite-ignore */
+                        Math.random() || `ws`
+                        ).then((ws) => {
+                        if (!this.socket || this.socket.readyState === ws.WebSocket.CLOSED) {
+                            const sock = new ws.WebSocket(url);
+                            sock.binaryType = "arraybuffer";
+                            this.socket = Object.assign(sock, SocketAdapter(this));
+                        }
+                        });
+                    }
+                    } else {
+                    throw "Unknown transportLibrary: " + this.transportLibrary.toString();
+                    }
+                }
+                /**
+                * Disconnect from the WebSocket server.
+                */
+                close() {
+                    if (this.socket) {
+                    this.socket.close();
+                    }
+                }
+                /**
+                * Send an authorization request to the server.
+                *
+                * @param {string} mac - MAC (hash) string given by the trusted source.
+                * @param {string} client - IP of the client.
+                * @param {string} dest - IP of the destination.
+                * @param {string} rand - Random string given by the trusted source.
+                * @param {Object} t - Time of the authorization request.
+                * @param {string} level - User level as a string given by the client.
+                * @param {Object} end - End time of the client's session.
+                */
+                authenticate(mac, client, dest, rand, t, level, end) {
+                    var auth = {
+                    op: "auth",
+                    mac,
+                    client,
+                    dest,
+                    rand,
+                    t,
+                    level,
+                    end
+                    };
+                    this.callOnConnection(auth);
+                }
+                /**
+                * Send an encoded message over the WebSocket.
+                *
+                * @param {Object} messageEncoded - The encoded message to be sent.
+                */
+                sendEncodedMessage(messageEncoded) {
+                    if (!this.isConnected) {
+                    this.once("connection", () => {
+                        if (this.socket !== null) {
+                        this.socket.send(messageEncoded);
+                        }
+                    });
+                    } else {
+                    if (this.socket !== null) {
+                        this.socket.send(messageEncoded);
+                    }
+                    }
+                }
+                /**
+                * Send the message over the WebSocket, but queue the message up if not yet
+                * connected.
+                *
+                * @param {Object} message - The message to be sent.
+                */
+                callOnConnection(message) {
+                    if (this.transportOptions.encoder) {
+                    this.transportOptions.encoder(message, this.sendEncodedMessage);
+                    } else {
+                    this.sendEncodedMessage(JSON.stringify(message));
+                    }
+                }
+                /**
+                * Send a set_level request to the server.
+                *
+                * @param {string} level - Status level (none, error, warning, info).
+                * @param {number} [id] - Operation ID to change status level on.
+                */
+                setStatusLevel(level, id) {
+                    var levelMsg = {
+                    op: "set_level",
+                    level,
+                    id
+                    };
+                    this.callOnConnection(levelMsg);
+                }
+                /**
+                * @callback getActionServersCallback
+                * @param {string[]} actionservers - Array of action server names.
+                */
+                /**
+                * @callback getActionServersFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of action servers in ROS as an array of string.
+                *
+                * @param {getActionServersCallback} callback - Function with the following params:
+                * @param {getActionServersFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getActionServers(callback, failedCallback) {
+                    var getActionServers = new Service({
+                    ros: this,
+                    name: "rosapi/action_servers",
+                    serviceType: "rosapi/GetActionServers"
+                    });
+                    var request = {};
+                    if (typeof failedCallback === "function") {
+                    getActionServers.callService(
+                        request,
+                        function(result) {
+                        callback(result.action_servers);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    getActionServers.callService(request, function(result) {
+                        callback(result.action_servers);
+                    });
+                    }
+                }
+                /**
+                * @callback getTopicsCallback
+                * @param {Object} result - The result object with the following params:
+                * @param {string[]} result.topics - Array of topic names.
+                * @param {string[]} result.types - Array of message type names.
+                */
+                /**
+                * @callback getTopicsFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of topics in ROS as an array.
+                *
+                * @param {getTopicsCallback} callback - Function with the following params:
+                * @param {getTopicsFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getTopics(callback, failedCallback) {
+                    var topicsClient = new Service({
+                    ros: this,
+                    name: "rosapi/topics",
+                    serviceType: "rosapi/Topics"
+                    });
+                    var request = {};
+                    if (typeof failedCallback === "function") {
+                    topicsClient.callService(
+                        request,
+                        function(result) {
+                        callback(result);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    topicsClient.callService(request, function(result) {
+                        callback(result);
+                    });
+                    }
+                }
+                /**
+                * @callback getTopicsForTypeCallback
+                * @param {string[]} topics - Array of topic names.
+                */
+                /**
+                * @callback getTopicsForTypeFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of topics in ROS as an array of a specific type.
+                *
+                * @param {string} topicType - The topic type to find.
+                * @param {getTopicsForTypeCallback} callback - Function with the following params:
+                * @param {getTopicsForTypeFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getTopicsForType(topicType, callback, failedCallback) {
+                    var topicsForTypeClient = new Service({
+                    ros: this,
+                    name: "rosapi/topics_for_type",
+                    serviceType: "rosapi/TopicsForType"
+                    });
+                    var request = {
+                    type: topicType
+                    };
+                    if (typeof failedCallback === "function") {
+                    topicsForTypeClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.topics);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    topicsForTypeClient.callService(request, function(result) {
+                        callback(result.topics);
+                    });
+                    }
+                }
+                /**
+                * @callback getServicesCallback
+                * @param {string[]} services - Array of service names.
+                */
+                /**
+                * @callback getServicesFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of active service names in ROS.
+                *
+                * @param {getServicesCallback} callback - Function with the following params:
+                * @param {getServicesFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getServices(callback, failedCallback) {
+                    var servicesClient = new Service({
+                    ros: this,
+                    name: "rosapi/services",
+                    serviceType: "rosapi/Services"
+                    });
+                    var request = {};
+                    if (typeof failedCallback === "function") {
+                    servicesClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.services);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    servicesClient.callService(request, function(result) {
+                        callback(result.services);
+                    });
+                    }
+                }
+                /**
+                * @callback getServicesForTypeCallback
+                * @param {string[]} topics - Array of service names.
+                */
+                /**
+                * @callback getServicesForTypeFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of services in ROS as an array as specific type.
+                *
+                * @param {string} serviceType - The service type to find.
+                * @param {getServicesForTypeCallback} callback - Function with the following params:
+                * @param {getServicesForTypeFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getServicesForType(serviceType, callback, failedCallback) {
+                    var servicesForTypeClient = new Service({
+                    ros: this,
+                    name: "rosapi/services_for_type",
+                    serviceType: "rosapi/ServicesForType"
+                    });
+                    var request = {
+                    type: serviceType
+                    };
+                    if (typeof failedCallback === "function") {
+                    servicesForTypeClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.services);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    servicesForTypeClient.callService(request, function(result) {
+                        callback(result.services);
+                    });
+                    }
+                }
+                /**
+                * @callback getServiceRequestDetailsCallback
+                * @param {Object} result - The result object with the following params:
+                * @param {string[]} result.typedefs - An array containing the details of the service request.
+                */
+                /**
+                * @callback getServiceRequestDetailsFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve the details of a ROS service request.
+                *
+                * @param {string} type - The type of the service.
+                * @param {getServiceRequestDetailsCallback} callback - Function with the following params:
+                * @param {getServiceRequestDetailsFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getServiceRequestDetails(type, callback, failedCallback) {
+                    var serviceTypeClient = new Service({
+                    ros: this,
+                    name: "rosapi/service_request_details",
+                    serviceType: "rosapi/ServiceRequestDetails"
+                    });
+                    var request = {
+                    type
+                    };
+                    if (typeof failedCallback === "function") {
+                    serviceTypeClient.callService(
+                        request,
+                        function(result) {
+                        callback(result);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    serviceTypeClient.callService(request, function(result) {
+                        callback(result);
+                    });
+                    }
+                }
+                /**
+                * @callback getServiceResponseDetailsCallback
+                * @param {{typedefs: string[]}} result - The result object with the following params:
+                */
+                /**
+                * @callback getServiceResponseDetailsFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve the details of a ROS service response.
+                *
+                * @param {string} type - The type of the service.
+                * @param {getServiceResponseDetailsCallback} callback - Function with the following params:
+                * @param {getServiceResponseDetailsFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getServiceResponseDetails(type, callback, failedCallback) {
+                    var serviceTypeClient = new Service({
+                    ros: this,
+                    name: "rosapi/service_response_details",
+                    serviceType: "rosapi/ServiceResponseDetails"
+                    });
+                    var request = {
+                    type
+                    };
+                    if (typeof failedCallback === "function") {
+                    serviceTypeClient.callService(
+                        request,
+                        function(result) {
+                        callback(result);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    serviceTypeClient.callService(request, function(result) {
+                        callback(result);
+                    });
+                    }
+                }
+                /**
+                * @callback getNodesCallback
+                * @param {string[]} nodes - Array of node names.
+                */
+                /**
+                * @callback getNodesFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of active node names in ROS.
+                *
+                * @param {getNodesCallback} callback - Function with the following params:
+                * @param {getNodesFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getNodes(callback, failedCallback) {
+                    var nodesClient = new Service({
+                    ros: this,
+                    name: "rosapi/nodes",
+                    serviceType: "rosapi/Nodes"
+                    });
+                    var request = {};
+                    if (typeof failedCallback === "function") {
+                    nodesClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.nodes);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    nodesClient.callService(request, function(result) {
+                        callback(result.nodes);
+                    });
+                    }
+                }
+                /**
+                * @callback getNodeDetailsCallback
+                * @param {string[]} subscriptions - Array of subscribed topic names.
+                * @param {string[]} publications - Array of published topic names.
+                * @param {string[]} services - Array of service names hosted.
+                */
+                /**
+                * @callback getNodeDetailsFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * @callback getNodeDetailsLegacyCallback
+                * @param {Object} result - The result object with the following params:
+                * @param {string[]} result.subscribing - Array of subscribed topic names.
+                * @param {string[]} result.publishing - Array of published topic names.
+                * @param {string[]} result.services - Array of service names hosted.
+                */
+                /**
+                * Retrieve a list of subscribed topics, publishing topics and services of a specific node.
+                * <br>
+                * These are the parameters if failedCallback is <strong>defined</strong>.
+                *
+                * @param {string} node - Name of the node.
+                * @param {getNodeDetailsCallback} callback - Function with the following params:
+                * @param {getNodeDetailsFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                *
+                * @also
+                *
+                * Retrieve a list of subscribed topics, publishing topics and services of a specific node.
+                * <br>
+                * These are the parameters if failedCallback is <strong>undefined</strong>.
+                *
+                * @param {string} node - Name of the node.
+                * @param {getNodeDetailsLegacyCallback} callback - Function with the following params:
+                * @param {getNodeDetailsFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getNodeDetails(node, callback, failedCallback) {
+                    var nodesClient = new Service({
+                    ros: this,
+                    name: "rosapi/node_details",
+                    serviceType: "rosapi/NodeDetails"
+                    });
+                    var request = {
+                    node
+                    };
+                    if (typeof failedCallback === "function") {
+                    nodesClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.subscribing, result.publishing, result.services);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    nodesClient.callService(request, function(result) {
+                        callback(result);
+                    });
+                    }
+                }
+                /**
+                * @callback getParamsCallback
+                * @param {string[]} params - Array of param names.
+                */
+                /**
+                * @callback getParamsFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of parameter names from the ROS Parameter Server.
+                *
+                * @param {getParamsCallback} callback - Function with the following params:
+                * @param {getParamsFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getParams(callback, failedCallback) {
+                    var paramsClient = new Service({
+                    ros: this,
+                    name: "rosapi/get_param_names",
+                    serviceType: "rosapi/GetParamNames"
+                    });
+                    var request = {};
+                    if (typeof failedCallback === "function") {
+                    paramsClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.names);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    paramsClient.callService(request, function(result) {
+                        callback(result.names);
+                    });
+                    }
+                }
+                /**
+                * @callback getTopicTypeCallback
+                * @param {string} type - The type of the topic.
+                */
+                /**
+                * @callback getTopicTypeFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve the type of a ROS topic.
+                *
+                * @param {string} topic - Name of the topic.
+                * @param {getTopicTypeCallback} callback - Function with the following params:
+                * @param {getTopicTypeFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getTopicType(topic, callback, failedCallback) {
+                    var topicTypeClient = new Service({
+                    ros: this,
+                    name: "rosapi/topic_type",
+                    serviceType: "rosapi/TopicType"
+                    });
+                    var request = {
+                    topic
+                    };
+                    if (typeof failedCallback === "function") {
+                    topicTypeClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.type);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    topicTypeClient.callService(request, function(result) {
+                        callback(result.type);
+                    });
+                    }
+                }
+                /**
+                * @callback getServiceTypeCallback
+                * @param {string} type - The type of the service.
+                */
+                /**
+                * @callback getServiceTypeFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve the type of a ROS service.
+                *
+                * @param {string} service - Name of the service.
+                * @param {getServiceTypeCallback} callback - Function with the following params:
+                * @param {getServiceTypeFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getServiceType(service, callback, failedCallback) {
+                    var serviceTypeClient = new Service({
+                    ros: this,
+                    name: "rosapi/service_type",
+                    serviceType: "rosapi/ServiceType"
+                    });
+                    var request = {
+                    service
+                    };
+                    if (typeof failedCallback === "function") {
+                    serviceTypeClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.type);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    serviceTypeClient.callService(request, function(result) {
+                        callback(result.type);
+                    });
+                    }
+                }
+                /**
+                * @callback getMessageDetailsCallback
+                * @param {string} details - An array of the message details.
+                */
+                /**
+                * @callback getMessageDetailsFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve the details of a ROS message.
+                *
+                * @param {string} message - The name of the message type.
+                * @param {getMessageDetailsCallback} callback - Function with the following params:
+                * @param {getMessageDetailsFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getMessageDetails(message, callback, failedCallback) {
+                    var messageDetailClient = new Service({
+                    ros: this,
+                    name: "rosapi/message_details",
+                    serviceType: "rosapi/MessageDetails"
+                    });
+                    var request = {
+                    type: message
+                    };
+                    if (typeof failedCallback === "function") {
+                    messageDetailClient.callService(
+                        request,
+                        function(result) {
+                        callback(result.typedefs);
+                        },
+                        function(message2) {
+                        failedCallback(message2);
+                        }
+                    );
+                    } else {
+                    messageDetailClient.callService(request, function(result) {
+                        callback(result.typedefs);
+                    });
+                    }
+                }
+                /**
+                * Decode a typedef array into a dictionary like `rosmsg show foo/bar`.
+                *
+                * @param {Object[]} defs - Array of type_def dictionary.
+                */
+                decodeTypeDefs(defs) {
+                    var decodeTypeDefsRec = (theType, hints) => {
+                    var typeDefDict = {};
+                    for (var i = 0; i < theType.fieldnames.length; i++) {
+                        var arrayLen = theType.fieldarraylen[i];
+                        var fieldName = theType.fieldnames[i];
+                        var fieldType = theType.fieldtypes[i];
+                        if (fieldType.indexOf("/") === -1) {
+                        if (arrayLen === -1) {
+                            typeDefDict[fieldName] = fieldType;
+                        } else {
+                            typeDefDict[fieldName] = [fieldType];
+                        }
+                        } else {
+                        var sub = false;
+                        for (var j = 0; j < hints.length; j++) {
+                            if (hints[j].type.toString() === fieldType.toString()) {
+                            sub = hints[j];
+                            break;
+                            }
+                        }
+                        if (sub) {
+                            var subResult = decodeTypeDefsRec(sub, hints);
+                            if (arrayLen === -1) {
+                            typeDefDict[fieldName] = subResult;
+                            } else {
+                            typeDefDict[fieldName] = [subResult];
+                            }
+                        } else {
+                            this.emit(
+                            "error",
+                            "Cannot find " + fieldType + " in decodeTypeDefs"
+                            );
+                        }
+                        }
+                    }
+                    return typeDefDict;
+                    };
+                    return decodeTypeDefsRec(defs[0], defs);
+                }
+                /**
+                * @callback getTopicsAndRawTypesCallback
+                * @param {Object} result - The result object with the following params:
+                * @param {string[]} result.topics - Array of topic names.
+                * @param {string[]} result.types - Array of message type names.
+                * @param {string[]} result.typedefs_full_text - Array of full definitions of message types, similar to `gendeps --cat`.
+                */
+                /**
+                * @callback getTopicsAndRawTypesFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Retrieve a list of topics and their associated type definitions.
+                *
+                * @param {getTopicsAndRawTypesCallback} callback - Function with the following params:
+                * @param {getTopicsAndRawTypesFailedCallback} [failedCallback] - The callback function when the service call failed with params:
+                */
+                getTopicsAndRawTypes(callback, failedCallback) {
+                    var topicsAndRawTypesClient = new Service({
+                    ros: this,
+                    name: "rosapi/topics_and_raw_types",
+                    serviceType: "rosapi/TopicsAndRawTypes"
+                    });
+                    var request = {};
+                    if (typeof failedCallback === "function") {
+                    topicsAndRawTypesClient.callService(
+                        request,
+                        function(result) {
+                        callback(result);
+                        },
+                        function(message) {
+                        failedCallback(message);
+                        }
+                    );
+                    } else {
+                    topicsAndRawTypesClient.callService(request, function(result) {
+                        callback(result);
+                    });
+                    }
+                }
+                Topic(options) {
+                    return new Topic({ ros: this, ...options });
+                }
+                Param(options) {
+                    return new Param({ ros: this, ...options });
+                }
+                Service(options) {
+                    return new Service({ ros: this, ...options });
+                }
+                TFClient(options) {
+                    return new TFClient({ ros: this, ...options });
+                }
+                ActionClient(options) {
+                    return new ActionClient({ ros: this, ...options });
+                }
+                SimpleActionServer(options) {
+                    return new SimpleActionServer({ ros: this, ...options });
+                }
+                };
+
+                // subrepos/roslibjs/src/core/GoalStatus.js
+                var GoalStatus = {
+                STATUS_UNKNOWN: 0,
+                STATUS_ACCEPTED: 1,
+                STATUS_EXECUTING: 2,
+                STATUS_CANCELING: 3,
+                STATUS_SUCCEEDED: 4,
+                STATUS_CANCELED: 5,
+                STATUS_ABORTED: 6
+                };
+
+                // subrepos/roslibjs/src/core/Action.js
+                var Action = class extends export_EventEmitter {
+                isAdvertised = false;
+                /**
+                * @callback advertiseActionCallback
+                * @param {TGoal} goal - The action goal.
+                * @param {string} id - The ID of the action goal to execute.
+                */
+                /**
+                * @private
+                * @type {advertiseActionCallback | null}
+                */
+                _actionCallback = null;
+                /**
+                * @callback advertiseCancelCallback
+                * @param {string} id - The ID of the action goal to cancel.
+                */
+                /**
+                * @private
+                * @type {advertiseCancelCallback | null}
+                */
+                _cancelCallback = null;
+                /**
+                * @param {Object} options
+                * @param {Ros} options.ros - The ROSLIB.Ros connection handle.
+                * @param {string} options.name - The action name, like '/fibonacci'.
+                * @param {string} options.actionType - The action type, like 'action_tutorials_interfaces/Fibonacci'.
+                */
+                constructor(options) {
+                    super();
+                    this.ros = options.ros;
+                    this.name = options.name;
+                    this.actionType = options.actionType;
+                }
+                /**
+                * @callback sendGoalResultCallback
+                * @param {TResult} result - The result from the action.
+                */
+                /**
+                * @callback sendGoalFeedbackCallback
+                * @param {TFeedback} feedback - The feedback from the action.
+                */
+                /**
+                * @callback sendGoalFailedCallback
+                * @param {string} error - The error message reported by ROS.
+                */
+                /**
+                * Sends an action goal. Returns the feedback in the feedback callback while the action is running
+                * and the result in the result callback when the action is completed.
+                * Does nothing if this action is currently advertised.
+                *
+                * @param {TGoal} goal - The action goal to send.
+                * @param {sendGoalResultCallback} resultCallback - The callback function when the action is completed.
+                * @param {sendGoalFeedbackCallback} [feedbackCallback] - The callback function when the action pulishes feedback.
+                * @param {sendGoalFailedCallback} [failedCallback] - The callback function when the action failed.
+                */
+                sendGoal(goal, resultCallback, feedbackCallback, failedCallback) {
+                    if (this.isAdvertised) {
+                    return;
+                    }
+                    var actionGoalId = "send_action_goal:" + this.name + ":" + ++this.ros.idCounter;
+                    if (resultCallback || failedCallback) {
+                    this.ros.on(actionGoalId, function(message) {
+                        if (message.result !== void 0 && message.result === false) {
+                        if (typeof failedCallback === "function") {
+                            failedCallback(message.values);
+                        }
+                        } else if (message.op === "action_feedback" && typeof feedbackCallback === "function") {
+                        feedbackCallback(message.values);
+                        } else if (message.op === "action_result" && typeof resultCallback === "function") {
+                        resultCallback(message.values);
+                        }
+                    });
+                    }
+                    var call = {
+                    op: "send_action_goal",
+                    id: actionGoalId,
+                    action: this.name,
+                    action_type: this.actionType,
+                    args: goal,
+                    feedback: true
+                    };
+                    this.ros.callOnConnection(call);
+                    return actionGoalId;
+                }
+                /**
+                * Cancels an action goal.
+                *
+                * @param {string} id - The ID of the action goal to cancel.
+                */
+                cancelGoal(id) {
+                    var call = {
+                    op: "cancel_action_goal",
+                    id,
+                    action: this.name
+                    };
+                    this.ros.callOnConnection(call);
+                }
+                /**
+                * Advertise the action. This turns the Action object from a client
+                * into a server. The callback will be called with every goal sent to this action.
+                *
+                * @param {advertiseActionCallback} actionCallback - This works similarly to the callback for a C++ action.
+                * @param {advertiseCancelCallback} cancelCallback - A callback function to execute when the action is canceled.
+                */
+                advertise(actionCallback, cancelCallback) {
+                    if (this.isAdvertised || typeof actionCallback !== "function") {
+                    return;
+                    }
+                    this._actionCallback = actionCallback;
+                    this._cancelCallback = cancelCallback;
+                    this.ros.on(this.name, this._executeAction.bind(this));
+                    this.ros.callOnConnection({
+                    op: "advertise_action",
+                    type: this.actionType,
+                    action: this.name
+                    });
+                    this.isAdvertised = true;
+                }
+                /**
+                * Unadvertise a previously advertised action.
+                */
+                unadvertise() {
+                    if (!this.isAdvertised) {
+                    return;
+                    }
+                    this.ros.callOnConnection({
+                    op: "unadvertise_action",
+                    action: this.name
+                    });
+                    this.isAdvertised = false;
+                }
+                /**
+                * Helper function that executes an action by calling the provided
+                * action callback with the auto-generated ID as a user-accessible input.
+                * Should not be called manually.
+                *
+                * @param {Object} rosbridgeRequest - The rosbridge request containing the action goal to send and its ID.
+                * @param {string} rosbridgeRequest.id - The ID of the action goal.
+                * @param {TGoal} rosbridgeRequest.args - The arguments of the action goal.
+                */
+                _executeAction(rosbridgeRequest) {
+                    var id = rosbridgeRequest.id;
+                    if (typeof id === "string") {
+                    this.ros.on(id, (message) => {
+                        if (message.op === "cancel_action_goal" && typeof this._cancelCallback === "function") {
+                        this._cancelCallback(id);
+                        }
+                    });
+                    }
+                    if (typeof this._actionCallback === "function") {
+                    this._actionCallback(rosbridgeRequest.args, id);
+                    }
+                }
+                /**
+                * Helper function to send action feedback inside an action handler.
+                *
+                * @param {string} id - The action goal ID.
+                * @param {TFeedback} feedback - The feedback to send.
+                */
+                sendFeedback(id, feedback) {
+                    var call = {
+                    op: "action_feedback",
+                    id,
+                    action: this.name,
+                    values: feedback
+                    };
+                    this.ros.callOnConnection(call);
+                }
+                /**
+                * Helper function to set an action as succeeded.
+                *
+                * @param {string} id - The action goal ID.
+                * @param {TResult} result - The result to set.
+                */
+                setSucceeded(id, result) {
+                    var call = {
+                    op: "action_result",
+                    id,
+                    action: this.name,
+                    values: result,
+                    status: GoalStatus.STATUS_SUCCEEDED,
+                    result: true
+                    };
+                    this.ros.callOnConnection(call);
+                }
+                /**
+                * Helper function to set an action as canceled.
+                *
+                * @param {string} id - The action goal ID.
+                * @param {TResult} result - The result to set.
+                */
+                setCanceled(id, result) {
+                    var call = {
+                    op: "action_result",
+                    id,
+                    action: this.name,
+                    values: result,
+                    status: GoalStatus.STATUS_CANCELED,
+                    result: true
+                    };
+                    this.ros.callOnConnection(call);
+                }
+                /**
+                * Helper function to set an action as failed.
+                *
+                * @param {string} id - The action goal ID.
+                */
+                setFailed(id) {
+                    var call = {
+                    op: "action_result",
+                    id,
+                    action: this.name,
+                    status: GoalStatus.STATUS_ABORTED,
+                    result: false
+                    };
+                    this.ros.callOnConnection(call);
+                }
+                };
+                globalThis.ROSLIB = {
+                Action,
+                Param,
+                Ros,
+                Service,
+                Topic
+                };
+            </script>
+        
+        <script>
+            // Connecting to ROS
+            // -----------------
+            var ros = new ROSLIB.Ros()
+
+            // If there is an error on the backend, an 'error' emit will be emitted.
+            ros.on("error", function (error) {
+                document.getElementById("connecting").style.display = "none"
+                document.getElementById("connected").style.display = "none"
+                document.getElementById("closed").style.display = "none"
+                document.getElementById("error").style.display = "inline"
+                console.log(error)
+            })
+
+            // Find out exactly when we made a connection.
+            ros.on("connection", function () {
+                console.log("Connection made!")
+                document.getElementById("connecting").style.display = "none"
+                document.getElementById("error").style.display = "none"
+                document.getElementById("closed").style.display = "none"
+                document.getElementById("connected").style.display = "inline"
+            })
+
+            ros.on("close", function () {
+                console.log("Connection closed.")
+                document.getElementById("connecting").style.display = "none"
+                document.getElementById("connected").style.display = "none"
+                document.getElementById("closed").style.display = "inline"
+            })
+
+            // Create a connection to the rosbridge WebSocket server.
+            ros.connect("ws://127.0.0.1:9093")
+
+            // Like when publishing a topic, we first create a Topic object with details of the topic's name
+            // and message type. Note that we can call publish or subscribe on the same topic object.
+            var listener = new ROSLIB.Topic({
+                ros: ros,
+                name: "/spot/status/feedback",
+                messageType: "spot_msgs/Feedback",
+            })
+
+            // Then we add a callback to be called every time a message is published on this topic.
+            listener.subscribe(function (...args) {
+                console.debug(`args is:`,args)
+
+                // If desired, we can unsubscribe from the topic as well.
+                listener.unsubscribe()
+            })
+        </script>
+    </head>
+
+    <body>
+        <h1>Simple roslib Example</h1>
+        <p>Run the following commands in the terminal then refresh this page. Check the JavaScript console for the output.</p>
+        <ol>
+            <li><tt>roscore</tt></li>
+            <li><tt>rostopic pub /listener std_msgs/String "Hello, World"</tt></li>
+            <li><tt>rostopic echo /cmd_vel</tt></li>
+            <li><tt>rosrun rospy_tutorials add_two_ints_server</tt></li>
+            <li><tt>roslaunch rosbridge_server rosbridge_websocket.launch</tt></li>
+        </ol>
+        <div id="statusIndicator">
+            <p id="connecting">Connecting to rosbridge...</p>
+            <p id="connected" style="color: #00d600; display: none">Connected</p>
+            <p id="error" style="color: #ff0000; display: none">Error in the backend!</p>
+            <p id="closed" style="display: none">Connection closed.</p>
+        </div>
+    </body>
+</html>
