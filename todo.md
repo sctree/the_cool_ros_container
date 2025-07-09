@@ -1,6 +1,6 @@
 right now-ish
 - using the rosbag file:
-    - run the ./rosbagAsBackend.js file
+    - run the ./rosbagAsBackend.ps1 file
     - open the html file in the browser
     - edit the html
     - refresh the browser 
