@@ -1,3 +1,15 @@
+right now-ish
+- using the rosbag file:
+    - run the ./rosbagAsBackend.js file
+    - open the html file in the browser
+    - edit the html
+    - refresh the browser 
+    - keep editing the html until it shows the duration spot has been sitting/standing for
+- then try to get the html into docker
+- serve the html on docker (there will need to be a port number)
+- open the webpage in the Ubuntu (not docker) browser 
+- try to get the webpage to connect to ros (e.g. don't need to run the ./rosbagAsBackend.js, use the real data being published live by spot)
+
 Learning tasks:
 - ## Understanding bash/linux
     - Explain to me how to find and kill a running process
