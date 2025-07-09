@@ -22,6 +22,7 @@ const argsInfo = parseArgs({
         [["--address"], initialValue(`127.0.0.1`), (str)=>str],
         [["--list-topics"], flag, ],
         [["--playback-speed", "-s"], initialValue(1), (str)=>parseFloat(str)],
+        [["--no-repeat-on-end", ], flag, initialValue(false)],
         [["--dummy-wss"], flag, ],
     ],
     namedArgsStopper: "--",
@@ -49,6 +50,11 @@ Options:
     
     --list-topics
         List all the topics in the rosbag file, then exit
+    
+    --no-repeat-on-end
+        By default, the rosbag file will be repeated when it reaches the end
+        (i.e. when the rosbag file is over, it will start from the beginning)
+        This flag will disable that behavior
 
     --playback-speed, -s
         The relative speed to play back the rosbag file at
@@ -133,49 +139,59 @@ let subscribers = []
     const playbackSpeed = args.playbackSpeed
     let prevFakeTime = null
     let prevRealTime = 0
-    // TODO: to be more efficient, there should be some batching+lookahead here
-    for await (const item of bag.messageIterator({ topics: topicNames })) {
-        const { topic, connectionId, timestamp, data, message } = item
-        const { sec, nsec } = timestamp
-        if (prevFakeTime == null) {
-            prevFakeTime = sec * 1000 + nsec / 1000000
-            prevRealTime = performance.now()
-        } else {
-            const realTimeGap = performance.now() - prevRealTime
-            prevRealTime = performance.now()
-            const fakeTime = sec * 1000 + nsec / 1000000
-            const desiredTimeGap = (fakeTime - prevFakeTime) / playbackSpeed
-            prevFakeTime = sec * 1000 + nsec / 1000000
-            if (prevFakeTime >= 2) {
-                // 2ms is the smallest realistic amount of time
-                await new Promise((r) => setTimeout(r, desiredTimeGap))
+    while (1) {
+        // TODO: to be more efficient, there should be some batching+lookahead here
+        for await (const item of bag.messageIterator({ topics: topicNames })) {
+            const { topic, connectionId, timestamp, data, message } = item
+            const { sec, nsec } = timestamp
+            if (prevFakeTime == null) {
+                prevFakeTime = sec * 1000 + nsec / 1000000
+                prevRealTime = performance.now()
+            } else {
+                const realTimeGap = performance.now() - prevRealTime
+                prevRealTime = performance.now()
+                const fakeTime = sec * 1000 + nsec / 1000000
+                const desiredTimeGap = (fakeTime - prevFakeTime) / playbackSpeed
+                prevFakeTime = sec * 1000 + nsec / 1000000
+                if (prevFakeTime >= 2) {
+                    // 2ms is the smallest realistic amount of time
+                    await new Promise((r) => setTimeout(r, desiredTimeGap))
+                }
             }
-        }
-        
-        // console.log(`sending message of ${topic}`)
-        for (const each of subscribers) {
-            console.debug(`publishing item.topic is:`,item.topic)
-            // FIXME: ensure these are always encoded correctly (how are services handled?)
-            each.send(
-                rosEncode({
-                    op: "publish",
-                    topic: item.topic,
-                    timestamp,
-                    msg: item.message,
-                })
-            )
-        }
+            
+            // console.log(`sending message of ${topic}`)
+            for (const each of subscribers) {
+                console.debug(`publishing item.topic is:`,item.topic)
+                // FIXME: ensure these are always encoded correctly (how are services handled?)
+                each.send(
+                    rosEncode({
+                        op: "publish",
+                        topic: item.topic,
+                        timestamp,
+                        msg: item.message,
+                    })
+                )
+            }
 
-        // {
-        //     topic: "/clock",
-        //     connectionId: 0,
-        //     timestamp: { sec: 1720510809, nsec: 899027777 },
-        //     data: Uint8Array(8) [
-        //         65,  86, 237, 101,
-        //         232, 242,  86,  50
-        //     ],
-        //     message: Record { clock: { sec: 1710052929, nsec: 844559080 } }
-        // }
+            // {
+            //     topic: "/clock",
+            //     connectionId: 0,
+            //     timestamp: { sec: 1720510809, nsec: 899027777 },
+            //     data: Uint8Array(8) [
+            //         65,  86, 237, 101,
+            //         232, 242,  86,  50
+            //     ],
+            //     message: Record { clock: { sec: 1710052929, nsec: 844559080 } }
+            // }
+        }
+        console.log(`#`)
+        console.log(`# reached end of rosbag file`)
+        console.log(`#`)
+        if (args.noRepeatOnEnd) {
+            break
+        } else {
+            console.log(`# repeating from the beginning, use --no-repeat-on-end to disable this behavior`)
+        }
     }
 })()
 
