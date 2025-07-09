@@ -1,67 +1,122 @@
 FROM ubuntu:20.04
 
 # 
+# setup timezone/keys etc
 # 
-# ROS setup
-# 
-# 
-
-# setup timezone
 RUN echo 'Etc/UTC' > /etc/timezone && \
     ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
     apt-get update && \
     apt-get install -q -y --no-install-recommends tzdata && \
     rm -rf /var/lib/apt/lists/* && \
-# ping
     apt update && apt install iputils-ping -y && \
-# install packages
     apt-get update && apt-get install -q -y --no-install-recommends \
-    dirmngr \
-    gnupg2 \
-    && rm -rf /var/lib/apt/lists/*
+        dirmngr \
+        gnupg2 \
+    && rm -rf /var/lib/apt/lists/* \
+    && set -eux; \
+    key='C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654'; \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+    mkdir -p /usr/share/keyrings; \
+    gpg --batch --export "$key" > /usr/share/keyrings/ros1-latest-archive-keyring.gpg; \
+    gpgconf --kill all; \
+    rm -rf "$GNUPGHOME"
 
-# setup keys
-RUN set -eux; \
-        key='C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654'; \
-        export GNUPGHOME="$(mktemp -d)"; \
-        gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
-        mkdir -p /usr/share/keyrings; \
-        gpg --batch --export "$key" > /usr/share/keyrings/ros1-latest-archive-keyring.gpg; \
-        gpgconf --kill all; \
-        rm -rf "$GNUPGHOME"
-
-# setup sources.list
-RUN echo "deb [ signed-by=/usr/share/keyrings/ros1-latest-archive-keyring.gpg ] http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros1-latest.list
 
 # setup environment
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-ENV ROS_DISTRO=noetic
+ENV USERS_NAME=myuser
+ENV USERS_PASS=mypassword
 
-# install bootstrap tools
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    build-essential \
-    python3-rosdep \
-    python3-rosinstall \
-    python3-vcstools \
+# 
+# create user, install systemd, setup ssh
+#
+RUN mkdir /var/run/sshd && \
+    useradd -m -s /bin/bash "${USERS_NAME}" && \
+    echo "${USERS_NAME}:${USERS_PASS}" | chpasswd && \
+    apt-get update && \
+    apt-get install -y sudo systemd systemd-sysv openssh-server && \
+    usermod -aG sudo "${USERS_NAME}" && \
+    sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    systemctl enable ssh
+
+
+# 
+# basics (vim, nano, curl, git, unzip, ca-certificates)
+# 
+RUN apt-get update && \
+    apt-get install -y vim nano curl unzip ca-certificates git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# 
+# setup VNC
+# 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV USER=root
+
+ENV VNC_PASSWORD=password
+ENV VNC_RESOLUTION=1280x800
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ubuntu-desktop && \
+    apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && \
+    apt-get install -y tightvncserver && \
+    mkdir /root/.vnc && \
+    apt-get update && \
+    apt-get install -y ubuntu-session yaru-theme-gtk yaru-theme-icon yaru-theme-sound gnome-shell-extension-appindicator && \
+    apt-get install -y xfonts-75dpi && \
+    apt-get install -y xfonts-100dpi && \
+    apt-get install -y light-themes
+
+ADD ./docker_scripts/xstartup.sh /root/.vnc/xstartup
+ADD ./docker_scripts/spawn-desktop.sh /usr/local/etc/spawn-desktop.sh
+
+
+RUN chmod 755 /root/.vnc/xstartup && chmod +x /usr/local/etc/spawn-desktop.sh
+RUN echo 'sh /usr/local/etc/spawn-desktop.sh;" --' > /root/.bashrc
+
+# TODO: make VNC password an env var
+# Expose ports.
+EXPOSE 5901/tcp/8765
+
+# 
+# 
+# ROS
+# 
+# 
+ENV ROS_DISTRO=noetic
+RUN echo "deb [ signed-by=/usr/share/keyrings/ros1-latest-archive-keyring.gpg ] http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros1-latest.list && \
+    apt-get update && apt-get install --no-install-recommends -y \
+        build-essential \
+        python3-rosdep \
+        python3-rosinstall \
+        python3-vcstools \
     && rm -rf /var/lib/apt/lists/* && \
-# bootstrap rosdep
     rosdep init && \
     rosdep update --rosdistro $ROS_DISTRO && \
-# install ros packages
     apt-get update && apt-get install -y --no-install-recommends \
-    ros-noetic-desktop-full=1.5.0-1* \
+        ros-noetic-desktop-full=1.5.0-1* \
     && rm -rf /var/lib/apt/lists/* && \
-#install python3, pip, Spot SDK dependencies
     apt-get update && apt-get install -y \
-    python3-pip \
-    python3-dev \
-    git \
-    sudo \
-    apt-transport-https \ 
-    && rm -rf /var/lib/apt/lists/*
+        python3-pip \
+        python3-dev \
+        git \
+        apt-transport-https \
+    && rm -rf /var/lib/apt/lists/* && \
+    echo '. "/opt/ros/$ROS_DISTRO/setup.bash" --' > /root/.bashrc
+
+# 
+# boston dynamics setup
+# 
 RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreography-client bosdyn-orbit bosdyn-choreography-protos bosdyn-api bosdyn-core
+
+# 
+# foxglove setup
+# 
 #RUN python3 -m pip install foxglove-websocket
 # foxglove bridge binary
 RUN apt-get update && \
@@ -69,7 +124,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 # 
 # 
-# novnc setup
+# novnc setup (attempt at web-based vnc)
 #
 #
 # disable it for now
@@ -214,42 +269,9 @@ RUN set -xe && echo '#!/bin/sh' > /usr/sbin/policy-rc.d && echo 'exit 101' >> /u
     echo 'Acquire::GzipIndexes "true"; Acquire::CompressionTypes::Order:: "gz";' > /etc/apt/apt.conf.d/docker-gzip-indexes && \
     rm -rf /var/lib/apt/lists/* && \
     sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
-	
-# Setup enviroment variables
-ENV DEBIAN_FRONTEND=noninteractive
 
-ENV USER=root
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ubuntu-desktop && \
-    apt-get install -y gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && \
-    apt-get install -y tightvncserver && \
-    apt-get install -y expect && \
-    mkdir /root/.vnc && \
-#Update the package manager and upgrade the system
-    apt-get update && \
-    apt-get upgrade -y && \
-    apt-get update && \ 
-    apt-get update && \
-    apt-get install -y ubuntu-session yaru-theme-gtk yaru-theme-icon yaru-theme-sound gnome-shell-extension-appindicator && \
-    apt-get install -y xfonts-75dpi && \
-    apt-get install -y xfonts-100dpi && \
-    apt-get install -y light-themes
-
-ADD ./docker_scripts/xstartup.sh /root/.vnc/xstartup
-ADD ./docker_scripts/spawn-desktop.sh /usr/local/etc/spawn-desktop.sh
-
-RUN chmod 755 /root/.vnc/xstartup && chmod +x /usr/local/etc/spawn-desktop.sh
-# CMD bash -C '/usr/local/etc/spawn-desktop.sh';'bash'
-RUN echo 'sh /usr/local/etc/spawn-desktop.sh;. "/opt/ros/$ROS_DISTRO/setup.bash" --' > /root/.bashrc
-
-# Expose ports.
-EXPOSE 5901/tcp/8765
 
 #CMD ["bash"]
-
-# install dependencies for systemd
-RUN apt-get update && apt-get install -y systemd systemd-sysv
 
 # install dependencies for Foxglove Studio
 RUN apt-get update && apt-get install -y \
@@ -282,12 +304,6 @@ RUN apt-get update && apt-get install -y \
 #EXPOSE 3000
 
 #CMD ["foxglove-studio", "--listen", "0.0.0.0"]
-
-# vim and nano
-RUN apt-get update && \
-    apt-get install -y vim nano && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 
 ENV container=docker
@@ -349,25 +365,12 @@ ENV PATH="${DENO_INSTALL}/bin:${PATH}"
 
 ARG CODE_SERVER_VERSION=4.22.1
 RUN cd /tmp && \
-    curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
-    tar -xzf code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz && \
-    mv code-server-${CODE_SERVER_VERSION}-linux-amd64/bin/code-server /usr/local/bin/code-server && \
+    curl -fOL "https://github.com/coder/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz" && \
+    tar -xzf "code-server-${CODE_SERVER_VERSION}-linux-amd64.tar.gz" && \
+    mv "code-server-${CODE_SERVER_VERSION}-linux-amd64/bin/code-server" /usr/local/bin/code-server && \
     chmod +x /usr/local/bin/code-server && \
-    rm -rf code-server-${CODE_SERVER_VERSION}*
-# Set up openssh server for ssh
-# Install ssh
-RUN apt-get update && \
-    apt-get install -y openssh-server && \
-    mkdir /var/run/sshd
-# Create user with password
-RUN useradd -m -s /bin/bash myuser && \
-    echo 'myuser:mypassword' | chpasswd && \
-    usermod -aG sudo myuser
-# Allow password authentication for sshd
-RUN sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
-    sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-# Enable sshd service in systemd
-RUN systemctl enable ssh
+    rm -rf code-server-"${CODE_SERVER_VERSION}"*
+
 # Expose ssh port
 EXPOSE 22
 

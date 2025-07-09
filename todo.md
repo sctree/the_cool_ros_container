@@ -49,7 +49,7 @@ Learning tasks:
     - Tell me the difference between EcmaScript (esm) imports and CommonJS imports. 
 
 # Actual Tasks:
-- get systemd installed on docker
+- DONE: get systemd installed on docker
 - get foxglove listener installed on docker
 - install Boston dynamics wrapper for ROS in docker
 - install deno in docker
