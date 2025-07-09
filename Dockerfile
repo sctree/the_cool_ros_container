@@ -388,23 +388,16 @@ CMD ["bash", "-c", "/sbin/init && bash"]
 # interestingly enough, for some reason tightvnvserver: 1 is no longer needed?
 
 
-
-# WIRED CONNECTION SETTINGS FOR SPOT
-# name: spot_connection
-# IPv4 Method: Manual
-# Address: 10.0.0.2
-# Network: 255.255.255.0
-# Gateway: 10.0.0.1
-
 # ROS SET UP INSTRUCTIONS
 # 1. run the python command:      python3 -m pip install -e ./src/spot_ros/spot_wrapper/
 # 2. delete build and devel from the catkin_ws folder
 # 3. run catkin_make 3 times
 # 4. source ./devel/setup.bash
-# 5. export PYTHONPATH="$PYTHONPATH:/root/catkin_ws/src/spot_ros"
 
-# Open file where spot_wrapper fails to import.
-# Above it, put
-# import sys
-# sys.path.append("/root/catkin_ws/src/spot_ros")
-# how to change python path while doing roslaunch thing (not v productive path to go down)
+
+# WIRED CONNECTION SETTINGS FOR SPOT
+# name: spot_connection
+# IPv4 Method: Manual
+# Address: 10.0.0.2
+# Netmask: 255.255.255.0
+# Gateway: 10.0.0.1
