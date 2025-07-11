@@ -2755,6 +2755,7 @@
                 };
             </script>
         
+        <script src="main.js"></script>
         <script>
             // Connecting to ROS
             // -----------------
@@ -2796,13 +2797,21 @@
                 messageType: "spot_msgs/Feedback",
             })
 
+            /*
             // Then we add a callback to be called every time a message is published on this topic.
             listener.subscribe(function (...args) {
                 console.debug(`args is:`,args)
 
                 // If desired, we can unsubscribe from the topic as well.
                 listener.unsubscribe()
-            })
+            })*/
+
+            // Then we add a callback to be called every time a message is published on this topic.
+            listener.subscribe(function (...args) {
+                whenStatusUpdateTopicGiven(...args);
+                //listener.unsubscribe();
+                //console.log('message putttt')
+            });
         </script>
     </head>
 
