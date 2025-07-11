@@ -3,22 +3,35 @@ let previousMessage = null
 let timelapsed = 0
 let count = 0;
 
+function convertROSTimeToMillis(ts) {
+    return ts.sec * 1000 + ts.nsec / 1e6;
+}
+
 function whenStatusUpdateTopicGiven(message) {
     let data = message.data
-    let timestamp = message.timestamp
+    let timestamp = convertROSTimeToMillis(message.timestamp)
 
     let moving = data.moving
     let sitting = data.sitting
     let standing = data.standing
 
-    //let timelapsed = timelapsed + message.timestamp - previousMessage.timestamp
-
     console.debug(`message is:`, message)
     console.debug('count: ', count)
-    console.debug('time lapsed: ', timelapsed)
+
+    if (previousMessage !== null) {
+        let prevTimestamp = convertROSTimeToMillis(previousMessage.timestamp)
+        let delta = timestamp - prevTimestamp
+        timelapsed += delta
+        console.debug("time since last message: ", delta)
+    } else {
+        console.debug("first message, no time lapsed yet")
+    }
+
+    console.debug("time since first message: ", timelapsed)
+
     count++
-    timelapsed = timelapsed + message.timestamp.getTime()
-    //console.debug('timelapsed is:', timelapsed)
+    previousMessage = message
+
 
     return `moving: ${moving}`
 }
