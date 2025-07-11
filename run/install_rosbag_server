@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+deno install -n rosbagAsBackend -Afrg https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/rosbagAsBackend.js

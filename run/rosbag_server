@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+rosbagAsBackend --bag-file spot_data.bag
