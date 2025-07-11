@@ -11,9 +11,10 @@ function whenStatusUpdateTopicGiven(message) {
     let standing = data.standing
 
     let timelapsed = timelapsed + message.timestamp - previousMessage.timestamp
-    previousMessage = message
 
     console.debug(`message is:`, message)
+    previousMessage = message
+    console.debug('timelapsed is:', timelapsed)
 
     return `moving: ${moving}`
 }
