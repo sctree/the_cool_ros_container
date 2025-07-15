@@ -1,3 +1,4 @@
+
 let previousMessage = null
 //previousMessage.timestamp = 0
 let timelapsed = 0
@@ -50,6 +51,9 @@ function updateStatus(data, prevData, delta) {
 }
 
 function whenStatusUpdateTopicGiven(message) {
+    // clear page
+    document.getElementById('rosCanvas').innerHTML = '';
+
     let data = message.data
     let timestamp = convertROSTimeToMillis(message.timestamp)
 
