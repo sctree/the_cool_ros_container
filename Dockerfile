@@ -400,13 +400,6 @@ RUN sed -i 's|^root:x:0:0:root:/root:|root:x:0:0:root:/root/home:|' /etc/passwd
 COPY docker_scripts/setup_home.sh /tmp/setup_home.sh
 RUN chmod +x /tmp/setup_home.sh
 
-# 
-# setup ssh without systemd
-# 
-RUN apt-get update && apt-get install -y openssh-server \
-    && mkdir /var/run/sshd \
-    && echo 'root:password' | chpasswd \
-    && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 CMD ["bash", "-c", "/sbin/init && sh /tmp/setup_home.sh; cd; bash"]
 # CMD ["/bin/bash", "-c", "/sbin/init && foxglove-studio --listen 0.0.0.0"] start foxglove
