@@ -22,7 +22,7 @@ function logToPage(...args) {
             return JSON.stringify(arg, null, 2)
         }
         return arg
-    }).join(' ')
+    }, 2000).join(' ')
 
     logE1.innerHTML += message + '\n'
 
