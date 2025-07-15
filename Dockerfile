@@ -385,23 +385,60 @@ COPY ros_packages/ /root/catkin_ws/src/
 RUN cd /root/catkin_ws && \
     python3 -m pip install -e ./src/spot_ros/spot_wrapper/ && \
     rm -rf build devel; \
-    bash -c 'cd;. .bashrc; export PATH="/opt/ros/noetic/bin:/root/.deno/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"; export PYTHONPATH="$PYTHONPATH:/opt/ros/noetic/lib/python3/dist-packages"; cd /root/catkin_ws; sleep 5; /opt/ros/noetic/bin/catkin_make; sleep 5; /opt/ros/noetic/bin/catkin_make; sleep 5; /opt/ros/noetic/bin/catkin_make; cd /root/catkin_ws; ls -l ./devel; . ./devel/setup.bash; python3 -m pip install transforms3d; sleep 10;'; \
-    echo "echo 'pick one of the IP addresses to connect to spot 192.168.50.3 192.168.80.3'" >> "$HOME/.bashrc" && \
-    echo "echo roslaunch spot_driver driver.launch username:= password:= hostname:=10.0.0.3 # 192.168.50.3 192.168.80.3" >> "$HOME/.bashrc" 
+    bash -c 'cd;. .bashrc; export PATH="/opt/ros/noetic/bin:/root/.deno/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"; export PYTHONPATH="$PYTHONPATH:/opt/ros/noetic/lib/python3/dist-packages"; cd /root/catkin_ws; /opt/ros/noetic/bin/catkin_make; /opt/ros/noetic/bin/catkin_make; /opt/ros/noetic/bin/catkin_make; cd /root/catkin_ws; ls -l ./devel; . ./devel/setup.bash; python3 -m pip install transforms3d;'; 
 
+# 
+# add helper setup to bashrc
+# 
+RUN echo '' >> "$HOME/.bashrc" && \
+    echo 'echo' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'INSTRUCTIONS'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'- make sure you are connected to spot either by ethernet or wifi'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'- find the IP address of your spot by trying to ping each of the following IP addresses:'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'    - 10.0.0.3'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'    - 192.168.50.3'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'    - 192.168.80.3'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'- if NONE of those show up, then you will likely need to change the'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'  networking settings of your host computer. Make sure the connection to '"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'  spot has the following settings:'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'    - IPv4 Method: Manual'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'    - Address: 10.0.0.2'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'    - Netmask: 255.255.255.0'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'    - Gateway: 10.0.0.1'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'- if you did all that and still cant ping any of the above IP addresses, then IDK man'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'  go read the spot docs '"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'- once you can ping spot, put your username and password in the following command:'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo '"'"'  roslaunch spot_driver driver.launch username:=YOUR_USERNAME_HERE password:=YOUR_PASSWORD_HERE hostname:=YOUR_IP_ADDRESS_HERE'"'"'' >> "$HOME/.bashrc" && \
+    echo 'echo' >> "$HOME/.bashrc" && \
+    echo '' >> "$HOME/.bashrc"
 
 # 
 # setup home to be synced extenerally
 # 
+RUN echo ''                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       >> "/etc/bash.bashrc" && \
+    echo 'if ! [ -f "/root/home/.ignore.init" ]'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  >> "/etc/bash.bashrc" && \
+    echo 'then'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   >> "/etc/bash.bashrc" && \
+    echo '    echo "setting up home for the first time (checked for .ignore.init file)"'                                                                                                                                                                                                                                                                                                                                                                                                                                                          >> "/etc/bash.bashrc" && \
+    echo '    # this loop is so stupidly complicated because of many inherent-to-shell reasons, for example: https://stackoverflow.com/questions/13726764/while-loop-subshell-dilemma-in-bash'                                                                                                                                                                                                                                                                                                                                                    >> "/etc/bash.bashrc" && \
+    echo '    for_each_item_in="/root"; [ -z "$__NESTED_WHILE_COUNTER" ] && __NESTED_WHILE_COUNTER=0;__NESTED_WHILE_COUNTER="$((__NESTED_WHILE_COUNTER + 1))"; trap '"'"'rm -rf "$__temp_var__temp_folder"'"'"' EXIT; __temp_var__temp_folder="$(mktemp -d)"; mkfifo "$__temp_var__temp_folder/pipe_for_while_$__NESTED_WHILE_COUNTER"; (find "$for_each_item_in" -maxdepth 1 ! -path "$for_each_item_in" -print0 2>/dev/null | sort -z > "$__temp_var__temp_folder/pipe_for_while_$__NESTED_WHILE_COUNTER" &); while read -d $'"'"'\0'"'"' each' >> "/etc/bash.bashrc" && \
+    echo '    do'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 >> "/etc/bash.bashrc" && \
+    echo '        if ! [ "$each" = "/root/home" ]'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                >> "/etc/bash.bashrc" && \
+    echo '        then'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           >> "/etc/bash.bashrc" && \
+    echo '            if ! [ "$(dirname "$each")" = "/root/home" ]'                                                                                                                                                                                                                                                                                                                                                                                                                                                                               >> "/etc/bash.bashrc" && \
+    echo '            then'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       >> "/etc/bash.bashrc" && \
+    echo '                cp -r "$each" /root/home/'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              >> "/etc/bash.bashrc" && \
+    echo '            fi'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         >> "/etc/bash.bashrc" && \
+    echo '        fi'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             >> "/etc/bash.bashrc" && \
+    echo '    done < "$__temp_var__temp_folder/pipe_for_while_$__NESTED_WHILE_COUNTER";__NESTED_WHILE_COUNTER="$((__NESTED_WHILE_COUNTER - 1))"'                                                                                                                                                                                                                                                                                                                                                                                                  >> "/etc/bash.bashrc" && \
+    echo '    touch /root/home/.ignore.init'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      >> "/etc/bash.bashrc" && \
+    echo 'fi'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     >> "/etc/bash.bashrc" && \
+    echo ''                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       >> "/etc/bash.bashrc" 
+
 VOLUME [ "/root/home" ]
 
 RUN sed -i 's|^root:x:0:0:root:/root:|root:x:0:0:root:/root/home:|' /etc/passwd
 
-COPY docker_scripts/setup_home.sh /tmp/setup_home.sh
-RUN chmod +x /tmp/setup_home.sh
-
-
-CMD ["bash", "-c", "/sbin/init && sh /tmp/setup_home.sh; cd; bash"]
+CMD ["bash", "-c", "/sbin/init && bash"]
 # CMD ["/bin/bash", "-c", "/sbin/init && foxglove-studio --listen 0.0.0.0"] start foxglove
 
 # bash -c runs string as a command in a new bash shell
