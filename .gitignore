@@ -1,8 +1,24 @@
 # 
 # custom
 # 
+
+#
+# for the docker home container
+#
 **/catkin_ws/build
 **/catkin_ws/devel
+.bash_history
+.node_repl_history
+.python_history
+.zsh_history
+.irb_history
+.byebug_history
+.repl_history
+.ssh/
+.vsce
+.npmrc
+.Xauthority
+kaggle.json
 
 # 
 # standard
