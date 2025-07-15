@@ -379,7 +379,36 @@ EXPOSE 22
 
 COPY ros_packages/ /root/catkin_ws/src/
 
-CMD ["bash", "-c", "/sbin/init && bash"]
+# 
+# setup spot_ros
+# 
+RUN cd /root/catkin_ws && \
+    python3 -m pip install -e ./src/spot_ros/spot_wrapper/ && \
+    rm -rf build devel; \
+    bash -c 'cd;. .bashrc; export PATH="/opt/ros/noetic/bin:/root/.deno/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"; export PYTHONPATH="$PYTHONPATH:/opt/ros/noetic/lib/python3/dist-packages"; cd /root/catkin_ws; sleep 5; /opt/ros/noetic/bin/catkin_make; sleep 5; /opt/ros/noetic/bin/catkin_make; sleep 5; /opt/ros/noetic/bin/catkin_make; cd /root/catkin_ws; ls -l ./devel; . ./devel/setup.bash; python3 -m pip install transforms3d; sleep 10;'; \
+    echo "echo 'pick one of the IP addresses to connect to spot 192.168.50.3 192.168.80.3'" >> "$HOME/.bashrc" && \
+    echo "echo roslaunch spot_driver driver.launch username:= password:= hostname:=10.0.0.3 # 192.168.50.3 192.168.80.3" >> "$HOME/.bashrc" 
+
+
+# 
+# setup home to be synced extenerally
+# 
+VOLUME [ "/root/home" ]
+
+RUN sed -i 's|^root:x:0:0:root:/root:|root:x:0:0:root:/root/home:|' /etc/passwd
+
+COPY docker_scripts/setup_home.sh /tmp/setup_home.sh
+RUN chmod +x /tmp/setup_home.sh
+
+# 
+# setup ssh without systemd
+# 
+RUN apt-get update && apt-get install -y openssh-server \
+    && mkdir /var/run/sshd \
+    && echo 'root:password' | chpasswd \
+    && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+CMD ["bash", "-c", "/sbin/init && sh /tmp/setup_home.sh; cd; bash"]
 # CMD ["/bin/bash", "-c", "/sbin/init && foxglove-studio --listen 0.0.0.0"] start foxglove
 
 # bash -c runs string as a command in a new bash shell

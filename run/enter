@@ -17,21 +17,28 @@
 # also, expose ports
 #docker run --privileged --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw -d --name ubuntu-systemd -p 5901:5901 crc /bin/bash -c "tightvncserver :1 && /sbin/init"
 
-docker run --privileged --cgroupns=host \
-  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
-  -d --name ubuntu-systemd \
-  -p 5901:5901 -p 2222:22 -p 8765:8765 \
-  crc /sbin/init && \
+container_name="quick_ros_docker"
 
-#docker exec -it ubuntu-systemd bash -c "foxglove-studio --listen 0.0.0.0 & exec bash" && \
+docker stop "$container_name" &>/dev/null
+docker rm "$container_name" &>/dev/null
+
+docker run --privileged --cgroupns=host \
+    -v $PWD/docker_home:/root/home:rw \
+    -d --name "$container_name" \
+    -p 5901:5901 -p 2222:22 -p 8765:8765 \
+    crc bash -c "while true; do sleep 1000; done"
+
+docker exec -it "$container_name" bash
+
+#docker exec -it "$container_name" bash -c "foxglove-studio --listen 0.0.0.0 & exec bash" && \
 #docker exec -it my-container bash -c "source /opt/ros/noetic/setup.bash && foxglove-websocket --port 8765"
-docker exec -it ubuntu-systemd bash -c "foxglove-studio --listen 0.0.0.0 --port 8765 & exec bash"
-#docker exec -it ubuntu-systemd bash systemctl status foxglove.service & exec bash
+# docker exec -it "$container_name" bash -c "foxglove-studio --listen 0.0.0.0 --port 8765 & exec bash"
+#docker exec -it "$container_name" bash systemctl status foxglove.service & exec bash
 
 
 # ^ this works but run this in terminal:
 
-#docker exec -it ubuntu-systemd bash
+#docker exec -it "$container_name" bash
 #tightvncserver :1
 
 # docker exec into it and then start the VNC manually
