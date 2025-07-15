@@ -11,6 +11,19 @@ let movingStatusTime = 0;
 let sittingStatusTime = 0;
 let standingStatusTime = 0;
 
+function logToPage(...args) {
+    const logE1 = document.getElementById('debugLog');
+    const message = args.map(arg => {
+        if (typeof arg === 'object') {
+            return JSON.stringify(arg, null, 2)
+        }
+        return arg
+    }).join(' ')
+
+    logE1.innerHTML += message + '\n'
+    console.debug(...args)
+}
+
 function convertROSTimeToMillis(ts) {
     return ts.sec * 1000 + ts.nsec / 1e6;
 }
@@ -63,6 +76,7 @@ function whenStatusUpdateTopicGiven(message) {
 
     console.debug(`message is:`, message)
     console.debug('count: ', count)
+    logToPage("testing:::: ", count)
 
     if (previousMessage !== null) {
         let prevTimestamp = convertROSTimeToMillis(previousMessage.timestamp)
