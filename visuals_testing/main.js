@@ -1,3 +1,7 @@
+const canvas = document.getElementById('rosCanvas');
+const ctx = canvas.getContext('2d');
+ctx.fillStyle = 'black'
+ctx.font = '30px Arial'
 
 let previousMessage = null
 //previousMessage.timestamp = 0
@@ -21,7 +25,9 @@ function logToPage(...args) {
     }).join(' ')
 
     logE1.innerHTML += message + '\n'
-    console.debug(...args)
+
+
+    //console.debug(...args)
 }
 
 function convertROSTimeToMillis(ts) {
@@ -77,6 +83,11 @@ function whenStatusUpdateTopicGiven(message) {
     console.debug(`message is:`, message)
     console.debug('count: ', count)
     logToPage("testing:::: ", count)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.fillText('moving statussss: ' + data.moving, canvas.width / 2 - 300, canvas.height / 2 + 100)
+    ctx.fillText('sit statuss: ' + data.moving, canvas.width / 2 - 300, canvas.height / 2)
+    ctx.fillText('stando: ' + data.moving, canvas.width / 2 - 300, canvas.height / 2 - 100)
+    ctx.fillText('tIMESTAMP: ' + timestamp, canvas.width / 2 - 300, canvas.height / 2 - 200)
 
     if (previousMessage !== null) {
         let prevTimestamp = convertROSTimeToMillis(previousMessage.timestamp)
