@@ -1,0 +1,2 @@
+container_name="quick_ros_docker"
+docker exec -it "$container_name" bash

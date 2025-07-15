@@ -1,0 +1,4 @@
+container_name="quick_ros_docker"
+echo "NOTE: this command might not be working yet"
+echo "VNC address is: $(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container_name"):5901"
+echo "VNC password is: cbd109"
