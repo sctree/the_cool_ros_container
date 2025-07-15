@@ -1,0 +1,29 @@
+local_costmap:
+   # The global frame for the costmap to operate in
+   global_frame: odom
+   # The name of the frame for the base link of the robot.
+   robot_base_frame: base_link
+   # Specifies the delay in transform (tf) data that is tolerable in seconds. 
+   transform_tolerance: 20.0
+   # The frequency in Hz for the map to be updated.
+   update_frequency: 2.0
+   # The frequency in Hz for the map to be publish display information
+   publish_frequency: 1.0
+   # Whether or not to use a rolling window version of the costmap
+   rolling_window: true
+   # indicates whether the system uses or not a static map. NON NE SONO SICURA
+   static_map: false
+   # The width of the map in meters.
+   width: 4.5
+   # The height of the map in meters.
+   height: 4.5
+   # The resolution of the map in meters/cell
+   resolution: 0.15
+   # The x origin of the map in the global frame in meters
+   origin_x: 0
+   # The y origin of the map in the global frame in meters
+   origin_y: 0
+   # inflation_layer:
+   #     inflation_radius: 1.5
+
+   #     cost_scaling_factor: 30

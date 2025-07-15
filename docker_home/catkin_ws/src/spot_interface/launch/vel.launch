@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+<!-- node that reads from the spot sensors and publishes them on the rostopic /points2-->
+      <node pkg="spot_interface" type="vel2.py" respawn="false" name="velodyne">
+  </node>
+
+<!-- node that reads the /points2 topic and trasnforms the p[ointcloud with the correct transformation matrix and publishes it on /tfpoints2-->
+      <node pkg="spot_interface" type="pointcloudconv" respawn="false" name="pointconv">
+  </node>
+ <!-- launch file that reads the points2 and transforms them for mapping. I don't think I use it anymore--> 
+<!--<include file="$(find simpcl)/launch/mapping.launch"></include>-->
+
+<!-- node to reads from the spot robot directly if any fiducial is detected and publishes it on a ros topic /fiducial-->
+    <node pkg="spot_interface" type="fiducial_detection.py" respawn="false" name="fiducial" output="screen">
+  </node>
+
+</launch>

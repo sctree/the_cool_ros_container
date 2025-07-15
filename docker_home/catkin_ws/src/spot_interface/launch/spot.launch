@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+<include file="$(find spot_driver)/launch/driver.launch"></include>
+
+<include file="$(find spot_viz)/launch/view_robot.launch"></include>
+
+
+</launch>
