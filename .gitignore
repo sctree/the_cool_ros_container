@@ -1,7 +1,7 @@
 # 
 # custom
 # 
-
+docker_home/.deno/bin/deno
 #
 # for the docker home container
 #

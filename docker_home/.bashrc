@@ -1,8 +1,8 @@
 sh /usr/local/etc/spawn-desktop.sh;. "/opt/ros/$ROS_DISTRO/setup.bash" --
 source /opt/ros/noetic/setup.bash
 source ~/catkin_ws/devel/setup.bash
-source ~/.bashrc.ignore
 
+source ~/.bashrc.ignore
 echo
 echo 'INSTRUCTIONS'
 echo '- make sure you are connected to spot either by ethernet or wifi'
@@ -21,13 +21,5 @@ echo '- if you did all that and still cant ping any of the above IP addresses, t
 echo '  go read the spot docs '
 echo '- once you can ping spot, put your username and password in the following command:'
 echo '  roslaunch spot_driver driver.launch username:=YOUR_USERNAME_HERE password:=YOUR_PASSWORD_HERE hostname:=YOUR_IP_ADDRESS_HERE'
-echo ''
-cd
-cd catkin_ws
-source devel/setup.bash
-cd
+echo
 
-#
-# cli helpers 
-# 
-alias ll="ls -l1"
