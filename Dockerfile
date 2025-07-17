@@ -67,6 +67,9 @@ RUN python3 -m pip install --upgrade bosdyn-client bosdyn-mission bosdyn-choreog
 RUN apt-get update && \
     apt-get install -y ros-noetic-foxglove-bridge && \
     rm -rf /var/lib/apt/lists/*
+
+
+RUN apt-get update && apt-get install -y firefox
 # 
 # 
 # novnc setup
