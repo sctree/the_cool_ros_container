@@ -5,6 +5,7 @@ docker_home/.deno/bin/deno
 #
 # for the docker home container
 #
+.mozilla
 **/catkin_ws/build
 **/catkin_ws/devel
 .ros
