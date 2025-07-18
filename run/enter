@@ -29,12 +29,13 @@ docker rm "$container_name" &>/dev/null
 # -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
 mkdir -p "$PWD/docker_home"
 docker run --privileged --cgroupns=host \
-    -v $PWD/docker_home:/root/home:rw \
-    -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+    -v "$PWD"/docker_home:/home/user1:rw \
     -d --name "$container_name" \
-    -p "$external_vnc_port":5901 \
+    -p "$external_vnc_port":5900 \
     -p "$external_ssh_port":22 \
     -p "$external_foxglove_port":8765 \
+    -e VNC_PASSWORD=cbd109 \
+    -e VNC_RESOLUTION=1280x800 \
     -P \
     crc bash -c "while true; do sleep 1000; done"
 
