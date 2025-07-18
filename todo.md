@@ -53,7 +53,7 @@ right now-ish
    - install zsh (dont make it the default shell, just install it)
    - add docker_home/startup_scripts
       - put Jeff's_git_shortcuts (file in old discord message) inside that folder
-      - add "source docker_home/startup_scripts/Jeff's_git_shortcuts" to the bottom of docker_home/.bashrc
+      - add "source docker_home/startup_scripts/jeffs_git_shortcuts" to the bottom of docker_home/.bashrc
     - I know you probably want to add starship terminal, but I think the switch from bash to zsh might be too time consuming (and that is needed for startship terimal to work)
       
 - Make some real visuals: try to visualize spot on a canvas with spot at the center, and a trail of where spot has been
