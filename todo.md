@@ -31,7 +31,7 @@ right now-ish
 - get the fake backend working in docker
   - add docker_home/run/serve_rosbag
     - make it an executable shell script
-    - have it just call `rosbagAsBackend "$@" &;_pid=$?;echo "to stop the server do:"; echo "   kill $_pid"`
+    - have it just call `rosbagAsBackend "$@" &;_pid=$!;echo "to stop the server do:"; echo "   kill $_pid"`
   - put that test rosbag file youve got into docker_home/visualizer/test.rosbag
   - `run/serve_rosbag --rosbag-file ./visualizer/test.rosbag`
   - `run/viz`
