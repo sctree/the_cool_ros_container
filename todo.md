@@ -55,6 +55,28 @@ right now-ish
       - put Jeff's_git_shortcuts (file in old discord message) inside that folder
       - add "source docker_home/startup_scripts/Jeff's_git_shortcuts" to the bottom of docker_home/.bashrc
     - I know you probably want to add starship terminal, but I think the switch from bash to zsh might be too time consuming (and that is needed for startship terimal to work)
+      
+- Make some real visuals: try to visualize spot on a canvas with spot at the center, and a trail of where spot has been
+    - record a 1min rosbag with spot walking around the room
+    - use the rosbag to test the visuals locally on your Mac (e.g. find a way to send yourself the rosbag, dont use docker at all just open the HTML and use the fake rosbag server thing)
+    - find the topic that has Spot's position, figure out what the data looks like
+    - install Cursor (the AI editor) or Amazon Q (vs code extension) on your Mac 
+    - "hey here's my ros callback, here's what the x,y data from ros looks like, help me visualize it on my canvas element with spot at the center (blah blah blah)"
+    - Be ready to explain to me  everything in the code
+      - Ask it lots of questions
+      - tell it to make helper functions for redundant things
+      - tell it "write example usage jsdoc comments for [helper functions ]"
+      - etc
+    - check if it actually works
+    - eventually test it on spot running live
+    - If that works great, next step is repeat the process:
+    - display spots battery level
+    - render obstacles from Spots obstacle avoidance
+    - add a plotly.js graph of Spot's speed over the last minute
+    - etc
+
+
+
 
 Learning tasks:
 - ## Understanding bash/linux
