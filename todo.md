@@ -21,7 +21,7 @@ right now-ish
         - put the HTML and js in there
         - name the html file `index.html`
     - create docker_home/run/viz
-        - make an executable shell script
+        - make it an executable shell script
         - have it do:
             - `cd "$HOME/visualizer"; archy .`
     - run/viz # in docker
