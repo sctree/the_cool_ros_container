@@ -1,14 +1,60 @@
 right now-ish
-- using the rosbag file:
-    - run the ./rosbagAsBackend.ps1 file
-    - open the html file in the browser
-    - edit the html
-    - refresh the browser 
-    - keep editing the html until it shows the duration spot has been sitting/standing for
-- then try to get the html into docker
-- serve the html on docker (there will need to be a port number)
-- open the webpage in the Ubuntu (not docker) browser 
-- try to get the webpage to connect to ros (e.g. don't need to run the ./rosbagAsBackend.js, use the real data being published live by spot)
+- fix up and test the workspace:
+    - use Jeff's dockerfile and run/enter (e.g. overwrite those file with the ones from discord)
+    - move your docker_home/catkin_ws folder to your desktop (Linux or macos doesnt matter)
+    - look for docker_home/run/build if its there, move it to your desktop too
+    - delete the docker_home
+    - run/build
+    - run/enter
+    - put the catkin_ws back into the docker_home
+    - put the run/build from your desktop into docker_home/run/build
+    - run/enter (again)
+    - test that vnc still works
+    - turn Spot on
+    - follow/test the instructions
+    - make a rosbag to check that we can still read data from Spot
+    - commit/push everything as "cleaned and working"
+- get frontend of HTML visualizer thing working:
+    - dont install Firefox or use vnc for this
+    - install those two deno commands again (rosbagAsBackend and archy)
+    - create docker_home/visualizer/
+        - put the HTML and js in there
+        - name the html file `index.html`
+    - create docker_home/run/viz
+        - make an executable shell script
+        - have it do:
+            - `cd "$HOME/visualizer"; archy .`
+    - run/viz # in docker
+    - that command should print out a port number, add that to run/enter (follow the pattern of the vnc port)
+    - in the browser (outside of docker) open the url printed by the run/viz
+    - if it works, that means the frontend is functional
+- get the fake backend working in docker
+  - add docker_home/run/serve_rosbag
+    - make it an executable shell script
+    - have it just call `rosbagAsBackend "$@" &;_pid=$?;echo "to stop the server do:"; echo "   kill $_pid"`
+  - put that test rosbag file youve got into docker_home/visualizer/test.rosbag
+  - `run/serve_rosbag --rosbag-file ./visualizer/test.rosbag`
+  - `run/viz`
+  - check the website see if its successfully connecting to the backend. if yes, great fake backend is done.
+- get real backend working
+  - google roslibjs tutorial
+  - look for the "ros bridge" part of the tutorial
+  - understand how it's supposed to work (install steps, etc), and be ready to tell me about it
+  - follow the steps, probably install a ros package
+  - try to follow the workspace patters (make file under run/that makes sense)
+  - turn spot on
+  - start the rosbridge or whatever
+  - run/viz
+  - see if its visualizing the live ros data, if yes fantastic we can actually visuzlize stuff
+ 
+- make docker a bit more user friendly
+   - dont do this until after rosbridge/visuals are working
+   - install Firefox in the dockerfile (and gitingore the Mozilla files)
+   - install zsh (dont make it the default shell, just install it)
+   - add docker_home/startup_scripts
+      - put Jeff's_git_shortcuts (file in old discord message) inside that folder
+      - add "source docker_home/startup_scripts/Jeff's_git_shortcuts" to the bottom of docker_home/.bashrc
+    - I know you probably want to add starship terminal, but I think the switch from bash to zsh might be too time consuming (and that is needed for startship terimal to work)
 
 Learning tasks:
 - ## Understanding bash/linux
