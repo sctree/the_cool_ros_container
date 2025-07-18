@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-cd ~/catkin_ws
-source ./devel/setup.bash 
-cd -
-roslaunch spot_driver driver.launch username:="$SPOT_USERNAME" password:="$SPOT_PASSWORD" hostname:=10.0.0.3

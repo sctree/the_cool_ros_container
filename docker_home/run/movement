@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-cd ~/catkin_ws
-source ./devel/setup.bash 
-cd -
-rosrun spot_navigation VelGotopoint.py
