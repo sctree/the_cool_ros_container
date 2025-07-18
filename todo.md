@@ -1,6 +1,6 @@
 right now-ish
 - fix up and test the workspace:
-    - use Jeff's dockerfile and run/enter (e.g. overwrite those file with the ones from discord)
+    - use Jeff's dockerfile and Jeff's run/enter (e.g. overwrite those file with the ones from discord)
     - move your docker_home/catkin_ws folder to your desktop (Linux or macos doesnt matter)
     - look for docker_home/run/build if its there, move it to your desktop too
     - delete the docker_home
