@@ -11,8 +11,8 @@ right now-ish
     - run/enter (again)
     - test that vnc still works
     - turn Spot on
-    - follow/test the instructions
-    - make a rosbag to check that we can still read data from Spot
+    - follow the instructions printed out after run/enter (make sure they work)
+    - record a rosbag to check that we can still read data from Spot
     - commit/push everything as "cleaned and working"
 - get frontend of HTML visualizer thing working:
     - dont install Firefox or use vnc for this
