@@ -1,0 +1,89 @@
+18/07/25 23:58:19 Xvnc version TightVNC-1.3.10
+18/07/25 23:58:19 Copyright (C) 2000-2009 TightVNC Group
+18/07/25 23:58:19 Copyright (C) 1999 AT&T Laboratories Cambridge
+18/07/25 23:58:19 All Rights Reserved.
+18/07/25 23:58:19 See http://www.tightvnc.com/ for information on TightVNC
+18/07/25 23:58:19 Desktop name 'X' (4d0299535e47:0)
+18/07/25 23:58:19 Protocol versions supported: 3.3, 3.7, 3.8, 3.7t, 3.8t
+18/07/25 23:58:19 Listening for VNC connections on TCP port 5900
+Font directory '/usr/share/fonts/X11/Type1/' not found - ignoring
+/home/user1/.vnc/xstartup: 10: vncconfig: not found
+/home/user1/.vnc/xstartup: 16: gnome-settings-daemon: not found
+/home/user1/.vnc/xstartup: 27: vncconfig: not found
+/home/user1/.vnc/xstartup: 33: gnome-settings-daemon: not found
+/home/user1/.vnc/xstartup: 44: vncconfig: not found
+/home/user1/.vnc/xstartup: 50: gnome-settings-daemon: not found
+gnome-session-binary[67]: DEBUG(+): Enabling debugging
+gnome-session-binary[67]: DEBUG(+): hardware acceleration check is disabled
+gnome-session-binary[75]: DEBUG(+): Enabling debugging
+gnome-session-binary[75]: DEBUG(+): hardware acceleration check is disabled
+gnome-session-binary[83]: DEBUG(+): Enabling debugging
+gnome-session-binary[83]: DEBUG(+): hardware acceleration check is disabled
+gnome-session-binary[67]: DEBUG(+): Could not make systemd aware of GNOME_DESKTOP_SESSION_ID=this-is-deprecated environment variable: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+gnome-session-binary[75]: DEBUG(+): Could not make systemd aware of GNOME_DESKTOP_SESSION_ID=this-is-deprecated environment variable: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+gnome-session-binary[67]: DEBUG(+): Could not make systemd aware of XDG_MENU_PREFIX=gnome- environment variable: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+gnome-session-binary[75]: DEBUG(+): Could not make systemd aware of XDG_MENU_PREFIX=gnome- environment variable: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+gnome-session-binary[67]: ERROR: Failed to connect to system bus: Could not connect: No such file or directory
+aborting...
+gnome-session-binary[75]: ERROR: Failed to connect to system bus: Could not connect: No such file or directory
+aborting...
+gnome-session-binary[83]: DEBUG(+): Could not make systemd aware of GNOME_DESKTOP_SESSION_ID=this-is-deprecated environment variable: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+gnome-session-binary[83]: DEBUG(+): Could not make systemd aware of XDG_MENU_PREFIX=gnome- environment variable: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+gnome-session-binary[83]: ERROR: Failed to connect to system bus: Could not connect: No such file or directory
+aborting...
+metacity-Message: 23:58:20.719: could not find XKB extension.
+metacity-Message: 23:58:20.720: could not find XKB extension.
+
+(metacity:72): metacity-WARNING **: 23:58:20.722: Screen 0 on display ":0" already has a window manager; try using the --replace option to replace the current window manager.
+
+(metacity:80): metacity-WARNING **: 23:58:20.724: Failed to create compositor: Missing composite extension required for compositing
+metacity-Message: 23:58:20.724: could not find XKB extension.
+
+(metacity:88): metacity-WARNING **: 23:58:20.726: Screen 0 on display ":0" already has a window manager; try using the --replace option to replace the current window manager.
+
+(gnome-panel:86): gnome-panel-WARNING **: 23:58:20.790: Failed to register client: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.gnome.SessionManager was not provided by any .service files
+
+** (gnome-panel:86): WARNING **: 23:58:20.791: Error opening directory “/usr/share/gnome-panel/applets”: No such file or directory
+
+** (org.gnome.Nautilus:68): WARNING **: 23:58:20.931: Unable to get contents of the bookmarks file: Error opening file /home/user1/.gtk-bookmarks: No such file or directory
+
+** (org.gnome.Nautilus:68): WARNING **: 23:58:20.931: Unable to get contents of the bookmarks file: Error opening file /home/user1/.gtk-bookmarks: No such file or directory
+
+(gnome-panel:86): menu-WARNING **: 23:58:21.025: Failed to look up menu_file for "gnome-flashback-applications.menu"
+
+
+(gnome-panel:78): gnome-panel-WARNING **: 23:58:23.600: Failed to acquire bus name!
+
+(gnome-panel:70): gnome-panel-WARNING **: 23:58:23.600: Failed to acquire bus name!
+
+18/07/25 23:58:25 Got connection from client 172.17.0.1
+18/07/25 23:58:25 Using protocol version 3.8
+18/07/25 23:58:28 rfbVncAuthProcessResponse: authentication failed from 172.17.0.1
+18/07/25 23:58:28 Client 172.17.0.1 gone
+18/07/25 23:58:28 Statistics:
+18/07/25 23:58:28   framebuffer updates 0, rectangles 0, bytes 0
+
+18/07/25 23:58:30 Got connection from client 172.17.0.1
+18/07/25 23:58:30 Using protocol version 3.8
+18/07/25 23:58:34 rfbVncAuthProcessResponse: authentication failed from 172.17.0.1
+18/07/25 23:58:34 Client 172.17.0.1 gone
+18/07/25 23:58:34 Statistics:
+18/07/25 23:58:34   framebuffer updates 0, rectangles 0, bytes 0
+
+18/07/25 23:58:36 Got connection from client 172.17.0.1
+18/07/25 23:58:36 Using protocol version 3.8
+18/07/25 23:58:41 Full-control authentication passed by 172.17.0.1
+18/07/25 23:58:41 Pixel format for client 172.17.0.1:
+18/07/25 23:58:41   32 bpp, depth 24, little endian
+18/07/25 23:58:41   true colour: max r 255 g 255 b 255, shift r 16 g 8 b 0
+18/07/25 23:58:41   no translation needed
+18/07/25 23:58:41 Using zlib encoding for client 172.17.0.1
+18/07/25 23:58:41 Using compression level 1 for client 172.17.0.1
+18/07/25 23:58:41 Enabling X-style cursor updates for client 172.17.0.1
+18/07/25 23:58:41 Enabling cursor position updates for client 172.17.0.1
+18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -131072
+18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -223
+18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -131071
+18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -131070
+18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -131069
+18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -309
