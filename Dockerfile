@@ -358,6 +358,7 @@ RUN :                            && \
     echo 'if [ "$(whoami)" != "root" ] && [ "$SHLVL" = "1" ] || [ "$SHLVL" = "2" ]; then'                                                                                    >> "$_setup_vnc_script_location" && \
     echo '        mkdir -p "$HOME/.vnc"'                                                                                                                                     >> "$_setup_vnc_script_location" && \
     echo '        # setup vnc'                                                                                                                                               >> "$_setup_vnc_script_location" && \
+    echo '        rm -f "$HOME"/.vnc/xstartup'                                                                                                                                               >> "$_setup_vnc_script_location" && \
     echo '        echo '"'"'unset SESSION_MANAGER'"'"'                                                                             >> "$HOME/.vnc/xstartup" && \'            >> "$_setup_vnc_script_location" && \
     echo '        echo '"'"'unset DBUS_SESSION_BUS_ADDRESS'"'"'                                                                    >> "$HOME/.vnc/xstartup" && \'            >> "$_setup_vnc_script_location" && \
     echo '        echo '"'"'export XKL_XMODMAP_DISABLE=1'"'"'                                                                      >> "$HOME/.vnc/xstartup" && \'            >> "$_setup_vnc_script_location" && \
