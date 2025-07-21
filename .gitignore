@@ -7,7 +7,9 @@ docker_home/.vnc/*.log
 docker_home/.logs/*
 docker_home/.dbus/*
 *.bag
-!docker_home/.cache/deno
+*.cache/*
+**/*.cache/*
+!/docker_home/.cache/deno
 #
 # for the docker home container
 #
@@ -89,8 +91,6 @@ Temporary Items
 # 
 
 # visual studio projects
-*.cache/*
-**/*.cache/*
 \.idea
 
 # Windows thumbnail cache files
@@ -290,9 +290,6 @@ typings/
 #.env
 #.env.test
 
-# parcel-bundler cache (https://parceljs.org/)
-.cache/*
-
 # next.js build output
 .next
 
@@ -358,7 +355,6 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
-.cache/*
 nosetests.xml
 coverage.xml
 *.cover
@@ -626,26 +622,3 @@ dkms.conf
 # Executables
 *.out
 
-#
-# home folder files
-#
-# ignore files in folder foo
-settings/.cache/*
-# but keep the folder
-settings/home/*
-!settings/.cache/.keep
-!settings/home/.zshrc
-!settings/home/.zshenv
-settings/home/Library/Caches
-settings/home/.pnpm-store
-# dont remove these next one unless you want passwords to be public
-# these are redundant, but kept as a fail-safe
-settings/home/Library/Keychains
-settings/home/.gnupg
-settings/home/.gnupg_pre_2.1
-settings/home/.npmrc
-settings/home/.vsce
-settings/home/.gitconfig
-settings/home/.mongorc.js
-settings/home/.ungitrc
-settings/home/.vuerc

@@ -1,0 +1,81 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { repeat } from "./utils.ts";
+
+export class Mark {
+  constructor(
+    public name: string,
+    public buffer: string,
+    public position: number,
+    public line: number,
+    public column: number,
+  ) {}
+
+  public getSnippet(indent = 4, maxLength = 75): string | null {
+    if (!this.buffer) return null;
+
+    let head = "";
+    let start = this.position;
+
+    while (
+      start > 0 &&
+      "\x00\r\n\x85\u2028\u2029".indexOf(this.buffer.charAt(start - 1)) === -1
+    ) {
+      start -= 1;
+      if (this.position - start > maxLength / 2 - 1) {
+        head = " ... ";
+        start += 5;
+        break;
+      }
+    }
+
+    let tail = "";
+    let end = this.position;
+
+    while (
+      end < this.buffer.length &&
+      "\x00\r\n\x85\u2028\u2029".indexOf(this.buffer.charAt(end)) === -1
+    ) {
+      end += 1;
+      if (end - this.position > maxLength / 2 - 1) {
+        tail = " ... ";
+        end -= 5;
+        break;
+      }
+    }
+
+    const snippet = this.buffer.slice(start, end);
+    return `${repeat(" ", indent)}${head}${snippet}${tail}\n${
+      repeat(
+        " ",
+        indent + this.position - start + head.length,
+      )
+    }^`;
+  }
+
+  public toString(compact?: boolean): string {
+    let snippet,
+      where = "";
+
+    if (this.name) {
+      where += `in "${this.name}" `;
+    }
+
+    where += `at line ${this.line + 1}, column ${this.column + 1}`;
+
+    if (!compact) {
+      snippet = this.getSnippet();
+
+      if (snippet) {
+        where += `:\n${snippet}`;
+      }
+    }
+
+    return where;
+  }
+}
+
+// denoCacheMetadata={"headers":{"referrer-policy":"strict-origin-when-cross-origin","content-type":"application/typescript; charset=utf-8","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","cross-origin-embedder-policy":"same-origin","cross-origin-opener-policy":"same-origin","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","etag":"\"afe59cead777de5ac2b948b2268c9229\"","server-timing":"fetchSource;dur=8","x-amz-cf-id":"FhI4AEV6Zmy4-xSux7VQ-ATHm7VxUOenvXK1PeWFhiUomBZIaj7h1Q==","x-amz-cf-pop":"IAD12-P5","via":"http/2 edgeproxy-h","x-amz-replication-status":"COMPLETED","access-control-allow-origin":"*","server":"deno/gcp-us-east4","accept-ranges":"bytes","x-frame-options":"DENY","content-length":"1800","strict-transport-security":"max-age=63072000; includeSubDomains; preload","vary":"Accept-Encoding, Origin","x-amz-server-side-encryption":"AES256","x-amz-version-id":"YGEqxgkNN.PP.butd1ViV7YzNWPLwh80","age":"33939","cross-origin-resource-policy":"same-origin","date":"Mon, 21 Jul 2025 12:24:52 GMT","cache-control":"public, max-age=31536000, immutable","x-cache":"Hit from cloudfront","x-content-type-options":"nosniff"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/mark.ts","time":1753134630}

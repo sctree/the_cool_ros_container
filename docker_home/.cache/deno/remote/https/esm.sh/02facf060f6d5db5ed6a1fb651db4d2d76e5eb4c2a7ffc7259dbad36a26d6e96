@@ -1,0 +1,5 @@
+/* esm.sh - heap@0.2.7 */
+export * from "/heap@0.2.7/denonext/heap.mjs";
+export { default } from "/heap@0.2.7/denonext/heap.mjs";
+
+// denoCacheMetadata={"headers":{"vary":"User-Agent","date":"Mon, 21 Jul 2025 21:50:30 GMT","access-control-expose-headers":"X-ESM-Path, X-TypeScript-Types","cf-cache-status":"DYNAMIC","x-esm-path":"/heap@0.2.7/denonext/heap.mjs","content-type":"application/javascript; charset=utf-8","server":"cloudflare","alt-svc":"h3=\":443\"; ma=86400","x-typescript-types":"https://esm.sh/@types/heap@~0.2.34/index.d.ts","cache-control":"public, max-age=31536000, immutable","cf-ray":"962dea0e589ef0be-DFW","access-control-allow-origin":"*"},"url":"https://esm.sh/heap@0.2.7","time":1753134630}

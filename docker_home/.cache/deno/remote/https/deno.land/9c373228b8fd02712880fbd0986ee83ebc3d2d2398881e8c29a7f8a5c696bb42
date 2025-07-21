@@ -1,0 +1,64 @@
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+/**
+ * {@linkcode parse} and {@linkcode stringify} for handling
+ * [YAML](https://yaml.org/) encoded data.
+ *
+ * Ported from
+ * [js-yaml v3.13.1](https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da)
+ *
+ * If your YAML contains multiple documents in it, you can use {@linkcode parseAll} for
+ * handling it.
+ *
+ * To handle `regexp`, and `undefined` types, use {@linkcode EXTENDED_SCHEMA}.
+ * You can also use custom types by extending schemas.
+ *
+ * ## :warning: Limitations
+ * - `binary` type is currently not stable.
+ *
+ * For further examples see https://github.com/nodeca/js-yaml/tree/master/examples.
+ * @example
+ * ```ts
+ * import {
+ *   parse,
+ *   stringify,
+ * } from "https://deno.land/std@$STD_VERSION/encoding/yaml.ts";
+ *
+ * const data = parse(`
+ * foo: bar
+ * baz:
+ *   - qux
+ *   - quux
+ * `);
+ * console.log(data);
+ * // => { foo: "bar", baz: [ "qux", "quux" ] }
+ *
+ * const yaml = stringify({ foo: "bar", baz: ["qux", "quux"] });
+ * console.log(yaml);
+ * // =>
+ * // foo: bar
+ * // baz:
+ * //   - qux
+ * //   - quux
+ * ```
+ *
+ * @module
+ */
+
+export type { ParseOptions } from "./_yaml/parse.ts";
+export { parse, parseAll } from "./_yaml/parse.ts";
+export type { DumpOptions as StringifyOptions } from "./_yaml/stringify.ts";
+export { stringify } from "./_yaml/stringify.ts";
+export type { SchemaDefinition } from "./_yaml/schema.ts";
+export { Type } from "./_yaml/type.ts";
+export type { KindType, RepresentFn, StyleVariant } from "./_yaml/type.ts";
+export {
+  CORE_SCHEMA,
+  DEFAULT_SCHEMA,
+  EXTENDED_SCHEMA,
+  FAILSAFE_SCHEMA,
+  JSON_SCHEMA,
+} from "./_yaml/schema/mod.ts";
+
+// denoCacheMetadata={"headers":{"cross-origin-opener-policy":"same-origin","x-cache":"Hit from cloudfront","cross-origin-resource-policy":"same-origin","content-type":"application/typescript; charset=utf-8","cross-origin-embedder-policy":"same-origin","age":"33938","x-amz-server-side-encryption":"AES256","referrer-policy":"strict-origin-when-cross-origin","last-modified":"Wed, 14 Dec 2022 22:35:44 GMT","via":"http/2 edgeproxy-h","accept-ranges":"bytes","cache-control":"public, max-age=31536000, immutable","content-length":"1774","x-amz-cf-pop":"IAD12-P5","server":"deno/gcp-us-east4","access-control-allow-origin":"*","date":"Mon, 21 Jul 2025 12:24:52 GMT","etag":"\"8c657491dce12224d0071222aeb40247\"","server-timing":"fetchSource;dur=4","strict-transport-security":"max-age=63072000; includeSubDomains; preload","vary":"Accept-Encoding, Origin","x-frame-options":"DENY","x-amz-cf-id":"yr5k2fGXRhokBSKsbElwdtZLYT0QWsUSZczKhMqGlDJ61cf3geIdew==","x-amz-replication-status":"COMPLETED","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-amz-version-id":"jgTJVgWBy2CykqOOrHA3GodFDQDrYina","x-content-type-options":"nosniff"},"url":"https://deno.land/std@0.168.0/encoding/yaml.ts","time":1753134629}

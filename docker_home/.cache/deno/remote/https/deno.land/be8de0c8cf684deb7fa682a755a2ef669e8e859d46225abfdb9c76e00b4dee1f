@@ -1,0 +1,67 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+import * as path from "../path/mod.ts";
+import { ensureDir, ensureDirSync } from "./ensure_dir.ts";
+import { getFileInfoType } from "./_util.ts";
+
+/**
+ * Ensures that the file exists.
+ * If the file that is requested to be created is in directories that do not
+ * exist.
+ * these directories are created. If the file already exists,
+ * it is NOTMODIFIED.
+ * Requires the `--allow-read` and `--allow-write` flag.
+ */
+export async function ensureFile(filePath: string) {
+  try {
+    // if file exists
+    const stat = await Deno.lstat(filePath);
+    if (!stat.isFile) {
+      throw new Error(
+        `Ensure path exists, expected 'file', got '${getFileInfoType(stat)}'`,
+      );
+    }
+  } catch (err) {
+    // if file not exists
+    if (err instanceof Deno.errors.NotFound) {
+      // ensure dir exists
+      await ensureDir(path.dirname(filePath));
+      // create file
+      await Deno.writeFile(filePath, new Uint8Array());
+      return;
+    }
+
+    throw err;
+  }
+}
+
+/**
+ * Ensures that the file exists.
+ * If the file that is requested to be created is in directories that do not
+ * exist,
+ * these directories are created. If the file already exists,
+ * it is NOT MODIFIED.
+ * Requires the `--allow-read` and `--allow-write` flag.
+ */
+export function ensureFileSync(filePath: string): void {
+  try {
+    // if file exists
+    const stat = Deno.lstatSync(filePath);
+    if (!stat.isFile) {
+      throw new Error(
+        `Ensure path exists, expected 'file', got '${getFileInfoType(stat)}'`,
+      );
+    }
+  } catch (err) {
+    // if file not exists
+    if (err instanceof Deno.errors.NotFound) {
+      // ensure dir exists
+      ensureDirSync(path.dirname(filePath));
+      // create file
+      Deno.writeFileSync(filePath, new Uint8Array());
+      return;
+    }
+    throw err;
+  }
+}
+
+// denoCacheMetadata={"headers":{"date":"Mon, 21 Jul 2025 06:26:36 GMT","etag":"\"efb1502eff03e2f42459e0de66dd02a5\"","age":"55434","last-modified":"Thu, 31 Mar 2022 15:56:34 GMT","referrer-policy":"strict-origin-when-cross-origin","server":"deno/gcp-us-east4","server-timing":"fetchSource;dur=20","strict-transport-security":"max-age=63072000; includeSubDomains; preload","vary":"Accept-Encoding, Origin","via":"http/2 edgeproxy-h","x-amz-cf-id":"E5wpVrtkaadFSYojX5Dwjo9S6JtNexZdEhgwy0lh0TeeE0ATYMcF0w==","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-frame-options":"DENY","x-cache":"Hit from cloudfront","x-content-type-options":"nosniff","x-amz-replication-status":"COMPLETED","x-amz-version-id":"ierOsetQXGW8mmDj9xclFd1pSfEu7.LO","x-amz-cf-pop":"IAD12-P5","accept-ranges":"bytes","content-length":"1865","cross-origin-resource-policy":"same-origin","access-control-allow-origin":"*","cache-control":"public, max-age=31536000, immutable","content-type":"application/typescript; charset=utf-8","cross-origin-embedder-policy":"same-origin","cross-origin-opener-policy":"same-origin"},"url":"https://deno.land/std@0.133.0/fs/ensure_file.ts","time":1753134630}

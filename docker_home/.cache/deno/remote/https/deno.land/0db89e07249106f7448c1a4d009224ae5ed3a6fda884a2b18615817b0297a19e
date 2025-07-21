@@ -1,0 +1,37 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+// Copyright the Browserify authors. MIT License.
+// Ported mostly from https://github.com/browserify/path-browserify/
+// This module is browser compatible.
+
+import { isWindows } from "../_util/os.ts";
+import * as _win32 from "./win32.ts";
+import * as _posix from "./posix.ts";
+
+const path = isWindows ? _win32 : _posix;
+
+export const win32 = _win32;
+export const posix = _posix;
+export const {
+  basename,
+  delimiter,
+  dirname,
+  extname,
+  format,
+  fromFileUrl,
+  isAbsolute,
+  join,
+  normalize,
+  parse,
+  relative,
+  resolve,
+  sep,
+  toFileUrl,
+  toNamespacedPath,
+} = path;
+
+export * from "./common.ts";
+export { SEP, SEP_PATTERN } from "./separator.ts";
+export * from "./_interface.ts";
+export * from "./glob.ts";
+
+// denoCacheMetadata={"headers":{"last-modified":"Thu, 31 Mar 2022 15:56:36 GMT","x-amz-cf-id":"Nf6MSiHJK-Hk7NTyGDLtVwpY7v7e_arLFDEdfn6NjCSjFwOQyK4X4A==","x-amz-replication-status":"COMPLETED","x-cache":"Hit from cloudfront","accept-ranges":"bytes","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","referrer-policy":"strict-origin-when-cross-origin","vary":"Accept-Encoding, Origin","via":"http/2 edgeproxy-h","cross-origin-embedder-policy":"same-origin","age":"383838","x-amz-cf-pop":"IAD12-P5","date":"Thu, 17 Jul 2025 11:13:13 GMT","x-amz-version-id":"6RLIj3XlNM3zhrjsVQHGKhZITDhEAKwM","content-type":"application/typescript; charset=utf-8","cross-origin-opener-policy":"same-origin","x-content-type-options":"nosniff","server":"deno/gcp-us-east4","strict-transport-security":"max-age=63072000; includeSubDomains; preload","cross-origin-resource-policy":"same-origin","content-length":"800","cache-control":"public, max-age=31536000, immutable","etag":"\"08f89a7f3c97fea64130e79ae4b3aea9\"","access-control-allow-origin":"*","x-frame-options":"DENY","server-timing":"fetchSource;dur=12"},"url":"https://deno.land/std@0.133.0/path/mod.ts","time":1753134630}

@@ -1,0 +1,43 @@
+// Ported and adapted from js-yaml-js-types v1.0.0:
+// https://github.com/nodeca/js-yaml-js-types/tree/ac537e7bbdd3c2cbbd9882ca3919c520c2dc022b
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { Type } from "../type.ts";
+import type { Any } from "../utils.ts";
+
+// Note: original implementation used Esprima to handle functions
+// To avoid dependencies, we'll just try to check if we can construct a function from given string
+function reconstructFunction(code: string) {
+  const func = new Function(`return ${code}`)();
+  if (!(func instanceof Function)) {
+    throw new TypeError(`Expected function but got ${typeof func}: ${code}`);
+  }
+  return func;
+}
+
+export const func = new Type("tag:yaml.org,2002:js/function", {
+  kind: "scalar",
+  resolve(data: Any) {
+    if (data === null) {
+      return false;
+    }
+    try {
+      reconstructFunction(`${data}`);
+      return true;
+    } catch (_err) {
+      return false;
+    }
+  },
+  construct(data: string) {
+    return reconstructFunction(data);
+  },
+  predicate(object: unknown) {
+    return object instanceof Function;
+  },
+  represent(object: (...args: Any[]) => Any) {
+    return object.toString();
+  },
+});
+
+// denoCacheMetadata={"headers":{"accept-ranges":"bytes","x-frame-options":"DENY","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","access-control-allow-origin":"*","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","referrer-policy":"strict-origin-when-cross-origin","server":"deno/gcp-us-east4","age":"33939","cache-control":"public, max-age=31536000, immutable","content-type":"application/typescript; charset=utf-8","cross-origin-embedder-policy":"same-origin","server-timing":"fetchSource;dur=14","strict-transport-security":"max-age=63072000; includeSubDomains; preload","vary":"Accept-Encoding, Origin","via":"http/2 edgeproxy-h","x-amz-cf-id":"7aDGH5HEB9BtVaH6eN9c6Kyi93-aBFKvFEdwGdWhr_tYCk3f5gUSfA==","x-amz-server-side-encryption":"AES256","etag":"\"b6967efd5a3e0800e1c928ea53ad4a65\"","content-length":"1274","date":"Mon, 21 Jul 2025 12:24:52 GMT","x-amz-version-id":"xyZC0AbXSUCKCC3IvwloJNIOwfUVqQBE","x-content-type-options":"nosniff","cross-origin-opener-policy":"same-origin","x-cache":"Hit from cloudfront","cross-origin-resource-policy":"same-origin","x-amz-cf-pop":"IAD12-P5","x-amz-replication-status":"COMPLETED"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/type/function.ts","time":1753134630}

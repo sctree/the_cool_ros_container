@@ -1,0 +1,50 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { type Reader } from "./types.d.ts";
+import { BufReader } from "./buf_reader.ts";
+import { concat } from "../bytes/concat.ts";
+
+/**
+ * Read strings line-by-line from a Reader.
+ *
+ *  @example
+ * ```ts
+ * import { readLines } from "https://deno.land/std@$STD_VERSION/io/read_lines.ts";
+ * import * as path from "https://deno.land/std@$STD_VERSION/path/mod.ts";
+ *
+ * const filename = path.join(Deno.cwd(), "std/io/README.md");
+ * let fileReader = await Deno.open(filename);
+ *
+ * for await (let line of readLines(fileReader)) {
+ *   console.log(line);
+ * }
+ * ```
+ */
+export async function* readLines(
+  reader: Reader,
+  decoderOpts?: {
+    encoding?: string;
+    fatal?: boolean;
+    ignoreBOM?: boolean;
+  },
+): AsyncIterableIterator<string> {
+  const bufReader = new BufReader(reader);
+  let chunks: Uint8Array[] = [];
+  const decoder = new TextDecoder(decoderOpts?.encoding, decoderOpts);
+  while (true) {
+    const res = await bufReader.readLine();
+    if (!res) {
+      if (chunks.length > 0) {
+        yield decoder.decode(concat(...chunks));
+      }
+      break;
+    }
+    chunks.push(res.line);
+    if (!res.more) {
+      yield decoder.decode(concat(...chunks));
+      chunks = [];
+    }
+  }
+}
+
+// denoCacheMetadata={"headers":{"age":"47946","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","via":"http/2 edgeproxy-h","x-frame-options":"DENY","x-amz-version-id":"RMAPViaJB4XGCuiA_71BkhzQuh7tGZB7","content-type":"application/typescript; charset=utf-8","vary":"Accept-Encoding, Origin","etag":"\"d87ea9794469acc9b3ba8367aaf1d04d\"","x-amz-replication-status":"COMPLETED","cross-origin-resource-policy":"same-origin","x-amz-cf-id":"bOPpliEy5TVf4eURPdB9trmTzO_wPYkJpmNXsA_V2fT1Yyeq2pJqXQ==","cross-origin-embedder-policy":"same-origin","x-content-type-options":"nosniff","content-length":"1286","access-control-allow-origin":"*","cross-origin-opener-policy":"same-origin","last-modified":"Wed, 14 Dec 2022 22:35:44 GMT","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-server-side-encryption":"AES256","accept-ranges":"bytes","server":"deno/gcp-us-east4","x-amz-cf-pop":"IAD12-P5","cache-control":"public, max-age=31536000, immutable","referrer-policy":"strict-origin-when-cross-origin","date":"Mon, 21 Jul 2025 08:31:25 GMT","server-timing":"fetchSource;dur=2","x-cache":"Hit from cloudfront"},"url":"https://deno.land/std@0.168.0/io/read_lines.ts","time":1753134630}

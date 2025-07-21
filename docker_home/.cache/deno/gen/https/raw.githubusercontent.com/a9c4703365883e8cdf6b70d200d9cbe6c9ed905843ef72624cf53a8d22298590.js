@@ -1,0 +1,45 @@
+// Copyright 2018-2020 Cruise LLC
+// Copyright 2021 Foxglove Technologies Inc
+//
+// This source code is licensed under the Apache License, Version 2.0,
+// found in the LICENSE file in the root directory of this source tree.
+// You may not use this file except in compliance with the License.
+import * as fs from "node:fs/promises";
+// reader using nodejs fs api
+export default class FileReader {
+  _filename;
+  _file;
+  _size;
+  constructor(filename){
+    this._filename = filename;
+    this._file = undefined;
+    this._size = 0;
+  }
+  // open a file for reading
+  async _open() {
+    this._file = await fs.open(this._filename, "r");
+    this._size = (await this._file.stat()).size;
+  }
+  async close() {
+    await this._file?.close();
+  }
+  // read length (bytes) starting from offset (bytes)
+  async read(offset, length) {
+    if (this._file == null) {
+      await this._open();
+      return await this.read(offset, length);
+    }
+    const buffer = new Uint8Array(length);
+    const { bytesRead } = await this._file.read(buffer, 0, length, offset);
+    if (bytesRead < length) {
+      throw new Error(`Attempted to read ${length} bytes at offset ${offset} but only ${bytesRead} were available`);
+    }
+    return buffer;
+  }
+  // return the size of the file
+  size() {
+    return this._size;
+  }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9qZWZmLWh5a2luL3JhcGlkX3Jvc19zZXJ2ZXIvZGV2L3N1YnJlcG9zL2ZveGdsb3ZlX3Jvc2JhZy9zcmMvbm9kZS9GaWxlUmVhZGVyLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIENvcHlyaWdodCAyMDE4LTIwMjAgQ3J1aXNlIExMQ1xuLy8gQ29weXJpZ2h0IDIwMjEgRm94Z2xvdmUgVGVjaG5vbG9naWVzIEluY1xuLy9cbi8vIFRoaXMgc291cmNlIGNvZGUgaXMgbGljZW5zZWQgdW5kZXIgdGhlIEFwYWNoZSBMaWNlbnNlLCBWZXJzaW9uIDIuMCxcbi8vIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgaW4gdGhlIHJvb3QgZGlyZWN0b3J5IG9mIHRoaXMgc291cmNlIHRyZWUuXG4vLyBZb3UgbWF5IG5vdCB1c2UgdGhpcyBmaWxlIGV4Y2VwdCBpbiBjb21wbGlhbmNlIHdpdGggdGhlIExpY2Vuc2UuXG5cbmltcG9ydCAqIGFzIGZzIGZyb20gXCJub2RlOmZzL3Byb21pc2VzXCI7XG5cblxuaW1wb3J0IHsgRmlsZWxpa2UgfSBmcm9tIFwiLi4vdHlwZXMudHNcIjtcblxuLy8gcmVhZGVyIHVzaW5nIG5vZGVqcyBmcyBhcGlcbmV4cG9ydCBkZWZhdWx0IGNsYXNzIEZpbGVSZWFkZXIgaW1wbGVtZW50cyBGaWxlbGlrZSB7XG4gIF9maWxlbmFtZTogc3RyaW5nO1xuICBfZmlsZT86IGZzLkZpbGVIYW5kbGU7XG4gIF9zaXplOiBudW1iZXI7XG5cbiAgY29uc3RydWN0b3IoZmlsZW5hbWU6IHN0cmluZykge1xuICAgIHRoaXMuX2ZpbGVuYW1lID0gZmlsZW5hbWU7XG4gICAgdGhpcy5fZmlsZSA9IHVuZGVmaW5lZDtcbiAgICB0aGlzLl9zaXplID0gMDtcbiAgfVxuXG4gIC8vIG9wZW4gYSBmaWxlIGZvciByZWFkaW5nXG4gIHByaXZhdGUgYXN5bmMgX29wZW4oKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgdGhpcy5fZmlsZSA9IGF3YWl0IGZzLm9wZW4odGhpcy5fZmlsZW5hbWUsIFwiclwiKTtcbiAgICB0aGlzLl9zaXplID0gKGF3YWl0IHRoaXMuX2ZpbGUuc3RhdCgpKS5zaXplO1xuICB9XG5cbiAgYXN5bmMgY2xvc2UoKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgYXdhaXQgdGhpcy5fZmlsZT8uY2xvc2UoKTtcbiAgfVxuXG4gIC8vIHJlYWQgbGVuZ3RoIChieXRlcykgc3RhcnRpbmcgZnJvbSBvZmZzZXQgKGJ5dGVzKVxuICBhc3luYyByZWFkKG9mZnNldDogbnVtYmVyLCBsZW5ndGg6IG51bWJlcik6IFByb21pc2U8VWludDhBcnJheT4ge1xuICAgIGlmICh0aGlzLl9maWxlID09IG51bGwpIHtcbiAgICAgIGF3YWl0IHRoaXMuX29wZW4oKTtcbiAgICAgIHJldHVybiBhd2FpdCB0aGlzLnJlYWQob2Zmc2V0LCBsZW5ndGgpO1xuICAgIH1cblxuICAgIGNvbnN0IGJ1ZmZlciA9IG5ldyBVaW50OEFycmF5KGxlbmd0aCk7XG4gICAgY29uc3QgeyBieXRlc1JlYWQgfSA9IGF3YWl0IHRoaXMuX2ZpbGUucmVhZChidWZmZXIsIDAsIGxlbmd0aCwgb2Zmc2V0KTtcbiAgICBpZiAoYnl0ZXNSZWFkIDwgbGVuZ3RoKSB7XG4gICAgICB0aHJvdyBuZXcgRXJyb3IoXG4gICAgICAgIGBBdHRlbXB0ZWQgdG8gcmVhZCAke2xlbmd0aH0gYnl0ZXMgYXQgb2Zmc2V0ICR7b2Zmc2V0fSBidXQgb25seSAke2J5dGVzUmVhZH0gd2VyZSBhdmFpbGFibGVgLFxuICAgICAgKTtcbiAgICB9XG4gICAgcmV0dXJuIGJ1ZmZlcjtcbiAgfVxuXG4gIC8vIHJldHVybiB0aGUgc2l6ZSBvZiB0aGUgZmlsZVxuICBzaXplKCk6IG51bWJlciB7XG4gICAgcmV0dXJuIHRoaXMuX3NpemU7XG4gIH1cbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxpQ0FBaUM7QUFDakMsMkNBQTJDO0FBQzNDLEVBQUU7QUFDRixzRUFBc0U7QUFDdEUsdUVBQXVFO0FBQ3ZFLG1FQUFtRTtBQUVuRSxZQUFZLFFBQVEsbUJBQW1CO0FBS3ZDLDZCQUE2QjtBQUM3QixlQUFlLE1BQU07RUFDbkIsVUFBa0I7RUFDbEIsTUFBc0I7RUFDdEIsTUFBYztFQUVkLFlBQVksUUFBZ0IsQ0FBRTtJQUM1QixJQUFJLENBQUMsU0FBUyxHQUFHO0lBQ2pCLElBQUksQ0FBQyxLQUFLLEdBQUc7SUFDYixJQUFJLENBQUMsS0FBSyxHQUFHO0VBQ2Y7RUFFQSwwQkFBMEI7RUFDMUIsTUFBYyxRQUF1QjtJQUNuQyxJQUFJLENBQUMsS0FBSyxHQUFHLE1BQU0sR0FBRyxJQUFJLENBQUMsSUFBSSxDQUFDLFNBQVMsRUFBRTtJQUMzQyxJQUFJLENBQUMsS0FBSyxHQUFHLENBQUMsTUFBTSxJQUFJLENBQUMsS0FBSyxDQUFDLElBQUksRUFBRSxFQUFFLElBQUk7RUFDN0M7RUFFQSxNQUFNLFFBQXVCO0lBQzNCLE1BQU0sSUFBSSxDQUFDLEtBQUssRUFBRTtFQUNwQjtFQUVBLG1EQUFtRDtFQUNuRCxNQUFNLEtBQUssTUFBYyxFQUFFLE1BQWMsRUFBdUI7SUFDOUQsSUFBSSxJQUFJLENBQUMsS0FBSyxJQUFJLE1BQU07TUFDdEIsTUFBTSxJQUFJLENBQUMsS0FBSztNQUNoQixPQUFPLE1BQU0sSUFBSSxDQUFDLElBQUksQ0FBQyxRQUFRO0lBQ2pDO0lBRUEsTUFBTSxTQUFTLElBQUksV0FBVztJQUM5QixNQUFNLEVBQUUsU0FBUyxFQUFFLEdBQUcsTUFBTSxJQUFJLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxRQUFRLEdBQUcsUUFBUTtJQUMvRCxJQUFJLFlBQVksUUFBUTtNQUN0QixNQUFNLElBQUksTUFDUixDQUFDLGtCQUFrQixFQUFFLE9BQU8saUJBQWlCLEVBQUUsT0FBTyxVQUFVLEVBQUUsVUFBVSxlQUFlLENBQUM7SUFFaEc7SUFDQSxPQUFPO0VBQ1Q7RUFFQSw4QkFBOEI7RUFDOUIsT0FBZTtJQUNiLE9BQU8sSUFBSSxDQUFDLEtBQUs7RUFDbkI7QUFDRiJ9
+// denoCacheMetadata=4163269958331439222,17943746845062945245

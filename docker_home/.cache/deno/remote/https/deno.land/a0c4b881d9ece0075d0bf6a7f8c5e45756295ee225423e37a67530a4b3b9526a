@@ -1,0 +1,41 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { Type } from "../type.ts";
+import { isBoolean } from "../utils.ts";
+
+function resolveYamlBoolean(data: string): boolean {
+  const max = data.length;
+
+  return (
+    (max === 4 && (data === "true" || data === "True" || data === "TRUE")) ||
+    (max === 5 && (data === "false" || data === "False" || data === "FALSE"))
+  );
+}
+
+function constructYamlBoolean(data: string): boolean {
+  return data === "true" || data === "True" || data === "TRUE";
+}
+
+export const bool = new Type("tag:yaml.org,2002:bool", {
+  construct: constructYamlBoolean,
+  defaultStyle: "lowercase",
+  kind: "scalar",
+  predicate: isBoolean,
+  represent: {
+    lowercase(object: boolean): string {
+      return object ? "true" : "false";
+    },
+    uppercase(object: boolean): string {
+      return object ? "TRUE" : "FALSE";
+    },
+    camelcase(object: boolean): string {
+      return object ? "True" : "False";
+    },
+  },
+  resolve: resolveYamlBoolean,
+});
+
+// denoCacheMetadata={"headers":{"x-amz-cf-id":"6U6daw51QOkAi-BLP3uCroOBkukWMcnI9NKTxG1wE-Yh-ZVOLe6zOA==","age":"33939","etag":"\"ad4f54fc2ab695b839797fa6049080cc\"","x-amz-cf-pop":"IAD12-P5","server-timing":"fetchSource;dur=14","date":"Mon, 21 Jul 2025 12:24:52 GMT","x-content-type-options":"nosniff","cross-origin-resource-policy":"same-origin","x-frame-options":"DENY","access-control-allow-origin":"*","vary":"Accept-Encoding, Origin","cross-origin-embedder-policy":"same-origin","referrer-policy":"strict-origin-when-cross-origin","via":"http/2 edgeproxy-h","x-amz-replication-status":"COMPLETED","accept-ranges":"bytes","content-length":"1205","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-cache":"Hit from cloudfront","cross-origin-opener-policy":"same-origin","x-amz-version-id":"bwnn6QvxbnDSNE3x4qDKL_Q5TqXgBiBO","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","server":"deno/gcp-us-east4","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","x-amz-server-side-encryption":"AES256","cache-control":"public, max-age=31536000, immutable","content-type":"application/typescript; charset=utf-8"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/type/bool.ts","time":1753134630}

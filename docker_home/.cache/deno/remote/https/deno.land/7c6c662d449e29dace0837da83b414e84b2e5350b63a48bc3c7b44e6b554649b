@@ -1,0 +1,23 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+export { binary } from "./binary.ts";
+export { bool } from "./bool.ts";
+export { float } from "./float.ts";
+export { func } from "./function.ts";
+export { int } from "./int.ts";
+export { map } from "./map.ts";
+export { merge } from "./merge.ts";
+export { nil } from "./nil.ts";
+export { omap } from "./omap.ts";
+export { pairs } from "./pairs.ts";
+export { regexp } from "./regexp.ts";
+export { seq } from "./seq.ts";
+export { set } from "./set.ts";
+export { str } from "./str.ts";
+export { timestamp } from "./timestamp.ts";
+export { undefinedType } from "./undefined.ts";
+
+// denoCacheMetadata={"headers":{"server":"deno/gcp-us-east4","server-timing":"fetchSource;dur=6","via":"http/2 edgeproxy-h","x-content-type-options":"nosniff","content-length":"842","x-cache":"Hit from cloudfront","cross-origin-opener-policy":"same-origin","accept-ranges":"bytes","strict-transport-security":"max-age=63072000; includeSubDomains; preload","content-type":"application/typescript; charset=utf-8","etag":"\"5744bcaca5ed538f1efd949ffb3ee5f1\"","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","age":"33939","x-amz-cf-pop":"IAD12-P5","x-amz-replication-status":"COMPLETED","vary":"Accept-Encoding, Origin","x-amz-version-id":"DeH88IKYHbXzNbjQqCmHqjdgbgye.r6g","x-frame-options":"DENY","date":"Mon, 21 Jul 2025 12:24:52 GMT","referrer-policy":"strict-origin-when-cross-origin","access-control-allow-origin":"*","cache-control":"public, max-age=31536000, immutable","x-amz-cf-id":"8xJ_1GiQU___IhYBzh0eh7L3nGZInJA9Ak0OtdHj8E7RkkGs69Kdiw==","x-amz-server-side-encryption":"AES256","cross-origin-resource-policy":"same-origin","cross-origin-embedder-policy":"same-origin"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/type/mod.ts","time":1753134630}

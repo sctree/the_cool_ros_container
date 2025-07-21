@@ -1,0 +1,55 @@
+// Copyright 2018-2020 Cruise LLC
+// Copyright 2021 Foxglove Technologies Inc
+//
+// This source code is licensed under the Apache License, Version 2.0,
+// found in the LICENSE file in the root directory of this source tree.
+// You may not use this file except in compliance with the License.
+
+import { Time } from "https://esm.sh/@foxglove/rostime";
+
+// represents a result passed to the callback from the high-level call:
+// bag.readMessages({ opts: any }, callback: (ReadResult) => void) => Promise<void>
+export default class ReadResult<T> {
+  topic: string;
+  message: T;
+  timestamp: Time;
+  data: Uint8Array;
+  chunkOffset: number;
+  totalChunks: number;
+
+  constructor(
+    topic: string,
+    message: T,
+    timestamp: Time,
+    data: Uint8Array,
+    chunkOffset: number,
+    totalChunks: number,
+    // eslint-disable-next-line @foxglove/no-boolean-parameters
+    freeze?: boolean,
+  ) {
+    // string: the topic the message was on
+    this.topic = topic;
+
+    // any: the parsed body of the message based on connection.messageDefinition
+    this.message = message;
+
+    // time: the timestamp of the message
+    this.timestamp = timestamp;
+
+    // buffer: raw buffer data of the message
+    this.data = data;
+
+    // the offset of the currently read chunk
+    this.chunkOffset = chunkOffset;
+
+    // the total number of chunks in the read operation
+    this.totalChunks = totalChunks;
+
+    if (freeze === true) {
+      Object.freeze(timestamp);
+      Object.freeze(this);
+    }
+  }
+}
+
+// denoCacheMetadata={"headers":{"x-served-by":"cache-iah17227-IAH","expires":"Mon, 21 Jul 2025 21:55:29 GMT","via":"1.1 varnish","content-type":"text/plain; charset=utf-8","accept-ranges":"bytes","x-cache":"MISS","vary":"Authorization,Accept-Encoding","strict-transport-security":"max-age=31536000","x-content-type-options":"nosniff","access-control-allow-origin":"*","date":"Mon, 21 Jul 2025 21:50:29 GMT","etag":"W/\"206e3c46f01eb8caf456b34ac01bab4565f6d988f1b798de6377ca26bde5cbb4\"","x-xss-protection":"1; mode=block","cross-origin-resource-policy":"cross-origin","x-timer":"S1753134630.594228,VS0,VE88","x-cache-hits":"0","source-age":"0","x-frame-options":"deny","x-github-request-id":"835B:2BFCFF:5D0DA:765EE:687EB624","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-fastly-request-id":"ec92bf4b640cdef973bd38945db1a9df80358b6c","cache-control":"max-age=300"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/subrepos/foxglove_rosbag/src/ReadResult.ts","time":1753134629}

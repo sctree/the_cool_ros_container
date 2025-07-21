@@ -1,0 +1,51 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { Type } from "../type.ts";
+import type { Any } from "../utils.ts";
+
+const _toString = Object.prototype.toString;
+
+function resolveYamlPairs(data: Any[][]): boolean {
+  const result = Array.from({ length: data.length });
+
+  for (let index = 0; index < data.length; index++) {
+    const pair = data[index];
+
+    if (_toString.call(pair) !== "[object Object]") return false;
+
+    const keys = Object.keys(pair);
+
+    if (keys.length !== 1) return false;
+
+    result[index] = [keys[0], pair[keys[0] as Any]];
+  }
+
+  return true;
+}
+
+function constructYamlPairs(data: string): Any[] {
+  if (data === null) return [];
+
+  const result = Array.from({ length: data.length });
+
+  for (let index = 0; index < data.length; index += 1) {
+    const pair = data[index];
+
+    const keys = Object.keys(pair);
+
+    result[index] = [keys[0], pair[keys[0] as Any]];
+  }
+
+  return result;
+}
+
+export const pairs = new Type("tag:yaml.org,2002:pairs", {
+  construct: constructYamlPairs,
+  kind: "sequence",
+  resolve: resolveYamlPairs,
+});
+
+// denoCacheMetadata={"headers":{"content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","vary":"Accept-Encoding, Origin","cross-origin-opener-policy":"same-origin","via":"http/2 edgeproxy-h","x-cache":"Hit from cloudfront","cross-origin-resource-policy":"same-origin","x-content-type-options":"nosniff","accept-ranges":"bytes","referrer-policy":"strict-origin-when-cross-origin","server":"deno/gcp-us-east4","content-type":"application/typescript; charset=utf-8","x-amz-cf-id":"X4jkY9RH7Yc79afJt2_JNVdMNJUBgLkTJ3T7W6uTnf8hBjS-X8Iz3A==","access-control-allow-origin":"*","cross-origin-embedder-policy":"same-origin","age":"33938","x-amz-cf-pop":"IAD12-P5","x-amz-replication-status":"COMPLETED","x-amz-server-side-encryption":"AES256","date":"Mon, 21 Jul 2025 12:24:52 GMT","x-amz-version-id":"xrl_s3IWGZvdg8LSRU762.KgqcJRTM.a","x-frame-options":"DENY","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","server-timing":"fetchSource;dur=14","strict-transport-security":"max-age=63072000; includeSubDomains; preload","etag":"\"a0ee534f9eb356826e274e3ec96f80f1\"","cache-control":"public, max-age=31536000, immutable","content-length":"1291"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/type/pairs.ts","time":1753134630}

@@ -1,0 +1,76 @@
+// Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
+// Copyright the Browserify authors. MIT License.
+// Ported from https://github.com/browserify/path-browserify/
+// This module is browser compatible.
+
+import { CHAR_DOT, CHAR_FORWARD_SLASH } from "./constants.ts";
+
+// Resolves . and .. elements in a path with directory names
+export function normalizeString(
+  path: string,
+  allowAboveRoot: boolean,
+  separator: string,
+  isPathSeparator: (code: number) => boolean,
+): string {
+  let res = "";
+  let lastSegmentLength = 0;
+  let lastSlash = -1;
+  let dots = 0;
+  let code: number | undefined;
+  for (let i = 0, len = path.length; i <= len; ++i) {
+    if (i < len) code = path.charCodeAt(i);
+    else if (isPathSeparator(code!)) break;
+    else code = CHAR_FORWARD_SLASH;
+
+    if (isPathSeparator(code!)) {
+      if (lastSlash === i - 1 || dots === 1) {
+        // NOOP
+      } else if (lastSlash !== i - 1 && dots === 2) {
+        if (
+          res.length < 2 ||
+          lastSegmentLength !== 2 ||
+          res.charCodeAt(res.length - 1) !== CHAR_DOT ||
+          res.charCodeAt(res.length - 2) !== CHAR_DOT
+        ) {
+          if (res.length > 2) {
+            const lastSlashIndex = res.lastIndexOf(separator);
+            if (lastSlashIndex === -1) {
+              res = "";
+              lastSegmentLength = 0;
+            } else {
+              res = res.slice(0, lastSlashIndex);
+              lastSegmentLength = res.length - 1 - res.lastIndexOf(separator);
+            }
+            lastSlash = i;
+            dots = 0;
+            continue;
+          } else if (res.length === 2 || res.length === 1) {
+            res = "";
+            lastSegmentLength = 0;
+            lastSlash = i;
+            dots = 0;
+            continue;
+          }
+        }
+        if (allowAboveRoot) {
+          if (res.length > 0) res += `${separator}..`;
+          else res = "..";
+          lastSegmentLength = 2;
+        }
+      } else {
+        if (res.length > 0) res += separator + path.slice(lastSlash + 1, i);
+        else res = path.slice(lastSlash + 1, i);
+        lastSegmentLength = i - lastSlash - 1;
+      }
+      lastSlash = i;
+      dots = 0;
+    } else if (code === CHAR_DOT && dots !== -1) {
+      ++dots;
+    } else {
+      dots = -1;
+    }
+  }
+  return res;
+}
+
+// denoCacheMetadata={"headers":{"via":"http/2 edgeproxy-h","server":"deno/gcp-us-east4","x-cache":"Hit from cloudfront","x-amz-cf-id":"njptxJ57fLsFqCz9miVhYm7RRu3_CoExUzZH9L0iv3fwE8DFvUId_Q==","cache-control":"public, max-age=31536000, immutable","content-type":"application/typescript; charset=utf-8","etag":"\"2590e1073a08f2e62c30593bd4ce6fab\"","x-frame-options":"DENY","access-control-allow-origin":"*","date":"Thu, 17 Jul 2025 11:24:00 GMT","cross-origin-resource-policy":"same-origin","x-amz-cf-pop":"IAD12-P5","x-amz-server-side-encryption":"AES256","accept-ranges":"bytes","x-amz-version-id":"BpjOvVQeww8B0hbEwBsIq4FINSoXJ7L3","content-length":"2304","strict-transport-security":"max-age=63072000; includeSubDomains; preload","cross-origin-embedder-policy":"same-origin","vary":"Accept-Encoding, Origin","cross-origin-opener-policy":"same-origin","x-amz-replication-status":"COMPLETED","x-content-type-options":"nosniff","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","last-modified":"Thu, 01 Feb 2024 05:38:47 GMT","referrer-policy":"strict-origin-when-cross-origin","age":"383191","server-timing":"fetchSource;dur=8"},"url":"https://deno.land/std@0.214.0/path/_common/normalize_string.ts","time":1753134630}

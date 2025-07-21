@@ -1,0 +1,28 @@
+// Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
+// This module is browser compatible.
+
+import { globToRegExp as _globToRegExp } from "./glob_to_regexp.ts";
+import { GlobOptions } from "../_common/glob_to_reg_exp.ts";
+import { normalize } from "./normalize.ts";
+import { SEPARATOR_PATTERN } from "./constants.ts";
+
+/** Like normalize(), but doesn't collapse "**\/.." when `globstar` is true. */
+export function normalizeGlob(
+  glob: string,
+  { globstar = false }: GlobOptions = {},
+): string {
+  if (glob.match(/\0/g)) {
+    throw new Error(`Glob contains invalid characters: "${glob}"`);
+  }
+  if (!globstar) {
+    return normalize(glob);
+  }
+  const s = SEPARATOR_PATTERN.source;
+  const badParentPattern = new RegExp(
+    `(?<=(${s}|^)\\*\\*${s})\\.\\.(?=${s}|$)`,
+    "g",
+  );
+  return normalize(glob.replace(badParentPattern, "\0")).replace(/\0/g, "..");
+}
+
+// denoCacheMetadata={"headers":{"x-amz-server-side-encryption":"AES256","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","last-modified":"Thu, 01 Feb 2024 05:38:47 GMT","cache-control":"public, max-age=31536000, immutable","cross-origin-opener-policy":"same-origin","server":"deno/gcp-us-east4","age":"383191","referrer-policy":"strict-origin-when-cross-origin","vary":"Accept-Encoding, Origin","via":"http/2 edgeproxy-h","content-type":"application/typescript; charset=utf-8","date":"Thu, 17 Jul 2025 11:24:00 GMT","etag":"\"d615405d12c226448ede1dc77b8342d2\"","x-amz-replication-status":"COMPLETED","x-amz-version-id":"JO9lUM1GQmfPMwWJdX2M3wSKzuboAxvE","content-length":"891","x-content-type-options":"nosniff","x-cache":"Hit from cloudfront","cross-origin-embedder-policy":"same-origin","accept-ranges":"bytes","access-control-allow-origin":"*","cross-origin-resource-policy":"same-origin","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-cf-id":"CA8-w4d6i1AU5PfvxMJOc6lpWM8F8BnR0JFqDszGNmUWYmcd1exa5A==","server-timing":"fetchSource;dur=14","x-amz-cf-pop":"IAD12-P5","x-frame-options":"DENY"},"url":"https://deno.land/std@0.214.0/path/windows/normalize_glob.ts","time":1753134630}

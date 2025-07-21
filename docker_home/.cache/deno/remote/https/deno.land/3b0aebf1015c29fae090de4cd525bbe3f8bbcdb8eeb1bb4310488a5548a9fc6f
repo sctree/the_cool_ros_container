@@ -1,0 +1,38 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { type Reader } from "./types.d.ts";
+import { readDelim } from "./read_delim.ts";
+
+/**
+ * Read Reader chunk by chunk, splitting based on delimiter.
+ *
+ * @example
+ * ```ts
+ * import { readStringDelim } from "https://deno.land/std@$STD_VERSION/io/read_string_delim.ts";
+ * import * as path from "https://deno.land/std@$STD_VERSION/path/mod.ts";
+ *
+ * const filename = path.join(Deno.cwd(), "std/io/README.md");
+ * let fileReader = await Deno.open(filename);
+ *
+ * for await (let line of readStringDelim(fileReader, "\n")) {
+ *   console.log(line);
+ * }
+ * ```
+ */
+export async function* readStringDelim(
+  reader: Reader,
+  delim: string,
+  decoderOpts?: {
+    encoding?: string;
+    fatal?: boolean;
+    ignoreBOM?: boolean;
+  },
+): AsyncIterableIterator<string> {
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder(decoderOpts?.encoding, decoderOpts);
+  for await (const chunk of readDelim(reader, encoder.encode(delim))) {
+    yield decoder.decode(chunk);
+  }
+}
+
+// denoCacheMetadata={"headers":{"vary":"Accept-Encoding, Origin","accept-ranges":"bytes","server-timing":"fetchSource;dur=10","x-content-type-options":"nosniff","referrer-policy":"strict-origin-when-cross-origin","last-modified":"Wed, 14 Dec 2022 22:35:44 GMT","content-length":"1067","strict-transport-security":"max-age=63072000; includeSubDomains; preload","content-type":"application/typescript; charset=utf-8","cross-origin-embedder-policy":"same-origin","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-amz-cf-pop":"IAD12-P5","x-frame-options":"DENY","x-amz-replication-status":"COMPLETED","etag":"\"5eeeaff91ff14cdbf10152df4e0ba030\"","access-control-allow-origin":"*","x-amz-cf-id":"3SdUHIiQxg2O1yICYQxaGyREzyt0v7bKOz2P2sr85woenZMyAHpI8A==","cache-control":"public, max-age=31536000, immutable","server":"deno/gcp-us-east4","via":"http/2 edgeproxy-h","date":"Thu, 17 Jul 2025 11:52:41 GMT","x-amz-server-side-encryption":"AES256","age":"381470","x-amz-version-id":"4N8VH24Cq._VzF.OPmwSsF1uVrIQSMIV","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","x-cache":"Hit from cloudfront"},"url":"https://deno.land/std@0.168.0/io/read_string_delim.ts","time":1753134630}

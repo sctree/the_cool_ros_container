@@ -1,0 +1,82 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+// deno-lint-ignore no-explicit-any
+export type Any = any;
+
+export function isNothing(subject: unknown): subject is never {
+  return typeof subject === "undefined" || subject === null;
+}
+
+export function isArray(value: unknown): value is Any[] {
+  return Array.isArray(value);
+}
+
+export function isBoolean(value: unknown): value is boolean {
+  return typeof value === "boolean" || value instanceof Boolean;
+}
+
+export function isNull(value: unknown): value is null {
+  return value === null;
+}
+
+export function isNumber(value: unknown): value is number {
+  return typeof value === "number" || value instanceof Number;
+}
+
+export function isString(value: unknown): value is string {
+  return typeof value === "string" || value instanceof String;
+}
+
+export function isSymbol(value: unknown): value is symbol {
+  return typeof value === "symbol";
+}
+
+export function isUndefined(value: unknown): value is undefined {
+  return value === undefined;
+}
+
+export function isObject(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object";
+}
+
+export function isError(e: unknown): boolean {
+  return e instanceof Error;
+}
+
+export function isFunction(value: unknown): value is () => void {
+  return typeof value === "function";
+}
+
+export function isRegExp(value: unknown): value is RegExp {
+  return value instanceof RegExp;
+}
+
+export function toArray<T>(sequence: T): T | [] | [T] {
+  if (isArray(sequence)) return sequence;
+  if (isNothing(sequence)) return [];
+
+  return [sequence];
+}
+
+export function repeat(str: string, count: number): string {
+  let result = "";
+
+  for (let cycle = 0; cycle < count; cycle++) {
+    result += str;
+  }
+
+  return result;
+}
+
+export function isNegativeZero(i: number): boolean {
+  return i === 0 && Number.NEGATIVE_INFINITY === 1 / i;
+}
+
+export interface ArrayObject<T = Any> {
+  [P: string]: T;
+}
+
+// denoCacheMetadata={"headers":{"x-amz-server-side-encryption":"AES256","x-amz-version-id":"DzKpOteNZf8SpI1E9AfVrJPdU0n6e.WC","access-control-allow-origin":"*","content-type":"application/typescript; charset=utf-8","vary":"Accept-Encoding, Origin","accept-ranges":"bytes","referrer-policy":"strict-origin-when-cross-origin","x-amz-cf-id":"OmobAskXyEUT0oO7c4PXrkuQvO3LxF39SDPdDoTsBl2ghNbtgzJm2Q==","cache-control":"public, max-age=31536000, immutable","cross-origin-resource-policy":"same-origin","x-amz-cf-pop":"IAD12-P5","date":"Mon, 21 Jul 2025 12:24:52 GMT","x-frame-options":"DENY","etag":"\"789879a003953fb93bb432e7ef56f9ae\"","x-amz-replication-status":"COMPLETED","cross-origin-embedder-policy":"same-origin","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-cache":"Hit from cloudfront","cross-origin-opener-policy":"same-origin","content-length":"2135","server-timing":"fetchSource;dur=6","x-content-type-options":"nosniff","age":"33939","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","via":"http/2 edgeproxy-h","server":"deno/gcp-us-east4"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/utils.ts","time":1753134630}

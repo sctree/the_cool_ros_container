@@ -1,0 +1,115 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { YAMLError } from "./error.ts";
+import type { KindType, Type } from "./type.ts";
+import type { Any, ArrayObject } from "./utils.ts";
+
+function compileList(
+  schema: Schema,
+  name: "implicit" | "explicit",
+  result: Type[],
+): Type[] {
+  const exclude: number[] = [];
+
+  for (const includedSchema of schema.include) {
+    result = compileList(includedSchema, name, result);
+  }
+
+  for (const currentType of schema[name]) {
+    for (
+      let previousIndex = 0;
+      previousIndex < result.length;
+      previousIndex++
+    ) {
+      const previousType = result[previousIndex];
+      if (
+        previousType.tag === currentType.tag &&
+        previousType.kind === currentType.kind
+      ) {
+        exclude.push(previousIndex);
+      }
+    }
+
+    result.push(currentType);
+  }
+
+  return result.filter((_type, index): unknown => !exclude.includes(index));
+}
+
+export type TypeMap = { [k in KindType | "fallback"]: ArrayObject<Type> };
+function compileMap(...typesList: Type[][]): TypeMap {
+  const result: TypeMap = {
+    fallback: {},
+    mapping: {},
+    scalar: {},
+    sequence: {},
+  };
+
+  for (const types of typesList) {
+    for (const type of types) {
+      if (type.kind !== null) {
+        result[type.kind][type.tag] = result["fallback"][type.tag] = type;
+      }
+    }
+  }
+  return result;
+}
+
+export class Schema implements SchemaDefinition {
+  public static SCHEMA_DEFAULT?: Schema;
+
+  public implicit: Type[];
+  public explicit: Type[];
+  public include: Schema[];
+
+  public compiledImplicit: Type[];
+  public compiledExplicit: Type[];
+  public compiledTypeMap: TypeMap;
+
+  constructor(definition: SchemaDefinition) {
+    this.explicit = definition.explicit || [];
+    this.implicit = definition.implicit || [];
+    this.include = definition.include || [];
+
+    for (const type of this.implicit) {
+      if (type.loadKind && type.loadKind !== "scalar") {
+        throw new YAMLError(
+          "There is a non-scalar type in the implicit list of a schema. Implicit resolving of such types is not supported.",
+        );
+      }
+    }
+
+    this.compiledImplicit = compileList(this, "implicit", []);
+    this.compiledExplicit = compileList(this, "explicit", []);
+    this.compiledTypeMap = compileMap(
+      this.compiledImplicit,
+      this.compiledExplicit,
+    );
+  }
+
+  /* Returns a new extended schema from current schema */
+  public extend(definition: SchemaDefinition) {
+    return new Schema({
+      implicit: [
+        ...new Set([...this.implicit, ...(definition?.implicit ?? [])]),
+      ],
+      explicit: [
+        ...new Set([...this.explicit, ...(definition?.explicit ?? [])]),
+      ],
+      include: [...new Set([...this.include, ...(definition?.include ?? [])])],
+    });
+  }
+
+  public static create() {}
+}
+
+export interface SchemaDefinition {
+  implicit?: Any[];
+  explicit?: Type[];
+  include?: Schema[];
+}
+
+// denoCacheMetadata={"headers":{"x-amz-replication-status":"COMPLETED","x-content-type-options":"nosniff","x-amz-cf-id":"kMAOetqWABMk7UHhg_3B96lMdLNb4tpchWV7vy2phnTnMJuBt21v7g==","strict-transport-security":"max-age=63072000; includeSubDomains; preload","cross-origin-resource-policy":"same-origin","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-cache":"Hit from cloudfront","age":"33939","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","content-type":"application/typescript; charset=utf-8","cross-origin-embedder-policy":"same-origin","content-length":"3118","access-control-allow-origin":"*","server-timing":"fetchSource;dur=8","vary":"Accept-Encoding, Origin","date":"Mon, 21 Jul 2025 12:24:52 GMT","cross-origin-opener-policy":"same-origin","etag":"\"dea6158bb4692d91799bec2255861c61\"","accept-ranges":"bytes","server":"deno/gcp-us-east4","cache-control":"public, max-age=31536000, immutable","via":"http/2 edgeproxy-h","x-amz-cf-pop":"IAD12-P5","x-amz-server-side-encryption":"AES256","x-frame-options":"DENY","referrer-policy":"strict-origin-when-cross-origin","x-amz-version-id":"a54uWSKuAk.1S2OMVL.YKsO0qlMPAlYM"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/schema.ts","time":1753134630}

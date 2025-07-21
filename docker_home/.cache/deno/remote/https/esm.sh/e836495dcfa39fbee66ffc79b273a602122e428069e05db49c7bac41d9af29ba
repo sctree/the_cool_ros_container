@@ -1,0 +1,4 @@
+/* esm.sh - github:jeff-hykin/good-js#f6d5bcb/source/flattened/common_prefix */
+function i(e){for(let l of e){for(let o of e){if(o!==l)return!1;l=o}break}return!0}function m(e){let l=Math.max(...e.map(a=>a.length));if(l===0||e.length==0)return"";let o=0,r,t=0;for(;o<=l;)r=Math.floor((o+l)/2),i(e.map(f=>f.slice(0,r)))?(t=r,o=r+1):l=r-1;return e[0].slice(0,t)}export{m as commonPrefix};
+//# sourceMappingURL=common_prefix.mjs.map
+// denoCacheMetadata={"headers":{"server":"cloudflare","last-modified":"Mon, 21 Jul 2025 21:50:30 GMT","date":"Mon, 21 Jul 2025 21:50:30 GMT","vary":"accept-encoding","access-control-allow-origin":"*","cache-control":"public, max-age=31536000, immutable","cf-cache-status":"MISS","content-type":"application/javascript; charset=utf-8","cf-ray":"962dea0e893bf0be-DFW","alt-svc":"h3=\":443\"; ma=86400"},"url":"https://esm.sh/gh/jeff-hykin/good-js@f6d5bcb/denonext/source/flattened/common_prefix.mjs","time":1753134630}

@@ -1,0 +1,77 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import type { YAMLError } from "../error.ts";
+import type { Schema, SchemaDefinition, TypeMap } from "../schema.ts";
+import { State } from "../state.ts";
+import type { Type } from "../type.ts";
+import type { Any, ArrayObject } from "../utils.ts";
+
+export interface LoaderStateOptions {
+  legacy?: boolean;
+  listener?: ((...args: Any[]) => void) | null;
+  /** string to be used as a file path in error/warning messages. */
+  filename?: string;
+  /** specifies a schema to use. */
+  schema?: SchemaDefinition;
+  /** compatibility with JSON.parse behaviour. */
+  json?: boolean;
+  /** function to call on warning messages. */
+  onWarning?(this: null, e?: YAMLError): void;
+}
+
+// deno-lint-ignore no-explicit-any
+export type ResultType = any[] | Record<string, any> | string;
+
+export class LoaderState extends State {
+  public documents: Any[] = [];
+  public length: number;
+  public lineIndent = 0;
+  public lineStart = 0;
+  public position = 0;
+  public line = 0;
+  public filename?: string;
+  public onWarning?: (...args: Any[]) => void;
+  public legacy: boolean;
+  public json: boolean;
+  public listener?: ((...args: Any[]) => void) | null;
+  public implicitTypes: Type[];
+  public typeMap: TypeMap;
+
+  public version?: string | null;
+  public checkLineBreaks?: boolean;
+  public tagMap?: ArrayObject;
+  public anchorMap?: ArrayObject;
+  public tag?: string | null;
+  public anchor?: string | null;
+  public kind?: string | null;
+  public result: ResultType | null = "";
+
+  constructor(
+    public input: string,
+    {
+      filename,
+      schema,
+      onWarning,
+      legacy = false,
+      json = false,
+      listener = null,
+    }: LoaderStateOptions,
+  ) {
+    super(schema);
+    this.filename = filename;
+    this.onWarning = onWarning;
+    this.legacy = legacy;
+    this.json = json;
+    this.listener = listener;
+
+    this.implicitTypes = (this.schema as Schema).compiledImplicit;
+    this.typeMap = (this.schema as Schema).compiledTypeMap;
+
+    this.length = input.length;
+  }
+}
+
+// denoCacheMetadata={"headers":{"x-content-type-options":"nosniff","etag":"\"4e53ab595e10741e95159386b00f91ac\"","strict-transport-security":"max-age=63072000; includeSubDomains; preload","cross-origin-resource-policy":"same-origin","cross-origin-opener-policy":"same-origin","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","date":"Mon, 21 Jul 2025 12:24:52 GMT","content-type":"application/typescript; charset=utf-8","referrer-policy":"strict-origin-when-cross-origin","accept-ranges":"bytes","server":"deno/gcp-us-east4","x-amz-cf-id":"JjKWSWayJ9unOQ1b231exIuqWsL27u967sCst7Pvq8ebISV6s8kgQA==","x-amz-cf-pop":"IAD12-P5","x-amz-replication-status":"COMPLETED","via":"http/2 edgeproxy-h","age":"33939","x-amz-server-side-encryption":"AES256","access-control-allow-origin":"*","cache-control":"public, max-age=31536000, immutable","server-timing":"fetchSource;dur=8","x-amz-version-id":"4uL7i_6p5borDC4uqEzJ_swlGph3ZHIX","x-frame-options":"DENY","content-length":"2260","cross-origin-embedder-policy":"same-origin","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","vary":"Accept-Encoding, Origin","x-cache":"Hit from cloudfront"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/loader/loader_state.ts","time":1753134630}

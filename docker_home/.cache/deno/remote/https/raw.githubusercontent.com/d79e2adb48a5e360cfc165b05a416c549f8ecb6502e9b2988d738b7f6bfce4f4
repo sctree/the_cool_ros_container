@@ -1,0 +1,38 @@
+// Copyright 2018-2020 Cruise LLC
+// Copyright 2021 Foxglove Technologies Inc
+//
+// This source code is licensed under the Apache License, Version 2.0,
+// found in the LICENSE file in the root directory of this source tree.
+// You may not use this file except in compliance with the License.
+
+import Heap from "https://esm.sh/heap" /* CHECKME: file(s) didn't exist, assuming npm */;
+
+function nmerge<T>(key: (a: T, b: T) => number, ...iterables: Array<Iterator<T>>): Iterator<T> {
+  const heap: Heap<{ i: number; value: T }> = new Heap((a, b) => {
+    return key(a.value, b.value);
+  });
+  for (let i = 0; i < iterables.length; i++) {
+    const result = iterables[i]!.next();
+    if (result.done !== true) {
+      heap.push({ i, value: result.value });
+    }
+  }
+
+  return {
+    next: () => {
+      if (heap.empty()) {
+        return { done: true, value: undefined };
+      }
+      const { i } = heap.front()!;
+      const next = iterables[i]!.next();
+      if (next.done === true) {
+        return { value: heap.pop()!.value, done: false };
+      }
+      return { value: heap.replace({ i, value: next.value }).value, done: false };
+    },
+  };
+}
+
+export default nmerge;
+
+// denoCacheMetadata={"headers":{"x-frame-options":"deny","via":"1.1 varnish","cache-control":"max-age=300","x-content-type-options":"nosniff","access-control-allow-origin":"*","expires":"Mon, 21 Jul 2025 21:55:30 GMT","x-timer":"S1753134630.925108,VS0,VE93","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-cache":"MISS","source-age":"0","cross-origin-resource-policy":"cross-origin","x-xss-protection":"1; mode=block","accept-ranges":"bytes","date":"Mon, 21 Jul 2025 21:50:30 GMT","etag":"W/\"b9ae629d3bbc0c4807ad0b016ae4437db1ae828e11ba34aa0da5b1714cfd0e43\"","x-github-request-id":"1F9D:26FB54:5DD79:76F5E:687EB625","x-served-by":"cache-iah17227-IAH","vary":"Authorization,Accept-Encoding","strict-transport-security":"max-age=31536000","x-cache-hits":"0","x-fastly-request-id":"43f1b362117ec1769a90caeac01b4e7a69637bf7","content-type":"text/plain; charset=utf-8"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/subrepos/foxglove_rosbag/src/nmerge.ts","time":1753134630}

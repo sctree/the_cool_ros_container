@@ -1,0 +1,54 @@
+// 
+// setup certificates
+// 
+export const certFileContents = `-----BEGIN CERTIFICATE-----
+MIIDLTCCAhWgAwIBAgIUR05MglaM1OsnvdpzczgYZcjAJAQwDQYJKoZIhvcNAQEL
+BQAwFDESMBAGA1UEAwwJbG9jYWxob3N0MCAXDTI1MDYxMDIzMTUyNloYDzMwMjQx
+MDExMjMxNTI2WjAUMRIwEAYDVQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQDvt/x6AooxqfAVx9+vX9PEOAkea9/TdBH1+pnioccP
+NzgEJGlOVPxLVrIsx5eeli22JwakCq8OatCc4UDynL7f13hzW6RjdcyMsq1xv4w6
+UCm0cpo+i4KaMbmlxUJcki675XHBcMXLLw8oRQUVZoYkFmRXmBQANupsPWIu+Ak5
+Fj67I3eIcBro4yEvMVhnkBAbFumJA78MpYhc4Qm2GnEEes1ISBsOERyK2+YXqbfJ
+mOp+4cRWMNOv74mZrVYW6qmb/pzqvh8EYzB+Lu/rqVAkw5gnguXrkYxnPf23c3Cz
+52AKGELnkBlxv53/vbrzkrAld+vJjtHGCjiKxCQx2eWjAgMBAAGjdTBzMB0GA1Ud
+DgQWBBS3a1erNtAyYrhS0yvvV/I6icAIjzAfBgNVHSMEGDAWgBS3a1erNtAyYrhS
+0yvvV/I6icAIjzAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIFoDATBgNVHSUE
+DDAKBggrBgEFBQcDATANBgkqhkiG9w0BAQsFAAOCAQEARZX3jwcR74zgy9M5TKUl
+KIJ3PAgFU8HLJv9jeDdSLDi7walNxsF8pdIDFmPtt20mmWq9fqaxUzyqihG+rw/p
+DNjsPSRbRjKMXbTz+v8ryGgCvlY+OMhkTLYDeQt94Jd6u492GQ3y5LDOe6+Pr43U
+w+as098J+cXNNIY1neE7BTjHUNipLyj1IZh88lGik8ICxGSdE0JfrsOA9q8QDe4g
+GfSSD9OSVvlIACTnWvYqWn5uEBiOpRU2aXrD51qQyDBetshWuY31iBhprVyuqliT
+EsiAKj6a+iT9m21qdIfHo5kWzV/0htn/q0lfaSxMy/hd9KAMfr1D96UrigCQz9pB
+Gw==
+-----END CERTIFICATE-----`
+
+export const keyFileContents = `-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDvt/x6AooxqfAV
+x9+vX9PEOAkea9/TdBH1+pnioccPNzgEJGlOVPxLVrIsx5eeli22JwakCq8OatCc
+4UDynL7f13hzW6RjdcyMsq1xv4w6UCm0cpo+i4KaMbmlxUJcki675XHBcMXLLw8o
+RQUVZoYkFmRXmBQANupsPWIu+Ak5Fj67I3eIcBro4yEvMVhnkBAbFumJA78MpYhc
+4Qm2GnEEes1ISBsOERyK2+YXqbfJmOp+4cRWMNOv74mZrVYW6qmb/pzqvh8EYzB+
+Lu/rqVAkw5gnguXrkYxnPf23c3Cz52AKGELnkBlxv53/vbrzkrAld+vJjtHGCjiK
+xCQx2eWjAgMBAAECggEAC9jNDp892CV8sCmKvvPelysTxvVFgFbopP49CQETbDI/
+lPN9ts7RZyHCOB9RuWx/ltRylLx9w+8jHysCAYYd6Bm8d1Wsl/O+56cpljOwCO5k
+Q+mJVj+hH+CxkDqMRInpla9JrL8s2eqZ9lSu4yIIIr7D4mZUJWHmukcFqVToaRyS
+rHLEep/s5r4enrYRCpcR6zJtfYHIycywFyYLsqEEaOH0jXzK4UvTwe8KAYlY2MsW
+ZH1pDDpiuStFqWxsh4llN8M/iTK9FJwZLncostYFIUCl3yuBP38PPgh4hNo44iy7
+OhhAXS0jAZzOZSA7g0ZXKxN9lLHF3rfWqzCTFhjkdQKBgQD36pnnttFwzdKFxXRu
+aREV8NCFaLJ0nYPgE2RmHLOOvAv0DaeJH0OUDac/tE9+603DouRgkVlIfc96k+M7
+305sv7C31AxggqdxPkahW3UupMeAfGCfLWtmLQa5nZr/5sdZUj0z2p4FYBnGge0y
+6hch1ZCKZexOUTBEdI8vUf9rNQKBgQD3iPUW4bmuYxHDl6H7DfdNjvVwQ6CIPMVs
+6ftNCSYKgmuMEDiMtYjbCi2HIni2+uKbCw+ea19/bXV5w9K4uTeBpzEI2H5stiZP
+gdpveJRaQYwAtVcEJpp94FfCxx+Vxi/Q2jobzuYF/j60wiYAyNNf71fKVzyqEY9E
+0x8bNXTQdwKBgCI9ETJSKky08D0vTuwssIJiNromAndehab9pqD/l8C/sbrr49Zp
+LfEVjaKbqVry7lN1fKrlh/od/fiE0h4jsfYM50AMFgWCJdPa8PA57E4bzb2t774s
+DKgY0dPys0RiP+fTFsbBi49cfVLQAM1GTRmMICEtAFy0k8DwhBHZ9jd9AoGAOSKU
+p7ZsXHMji4j5a3Baz70aq9IAQNH+I9iSF8Lv0+csmcS4uMnCEAT2Y0WypVGdcnoI
+HeHcxhXm0rc/cUHXLQcBS3BlJgSZLSrk12v2miqc/SDeN+gNKtbYiu3ZPYHkUYm9
+deO4tlNr998EVJQGLhOZqOuf5gVtk05D1Mzu7JsCgYAZFiOk2oOtoyiPDeFu477q
+HeaXOr1Jqgb3PbbGUUJFRWa7rMSHx8bcAf8HATtAWCabRzbsmzOaiNtlqHHjEtWu
+q+2yPnYdKFBcJZhwB477SXB71x0+9WPn3JKe1nVio1U/JtPIspxlzlS5DTrAOTnj
+4yXDrhEtNU5N8XkNZC2AmA==
+-----END PRIVATE KEY-----
+`
+// denoCacheMetadata={"headers":{"content-type":"text/plain; charset=utf-8","cache-control":"max-age=300","x-content-type-options":"nosniff","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","strict-transport-security":"max-age=31536000","x-github-request-id":"E230:3B3DB3:63723:7CC5A:687EB623","source-age":"0","date":"Mon, 21 Jul 2025 21:50:29 GMT","accept-ranges":"bytes","x-cache":"MISS","x-cache-hits":"0","vary":"Authorization,Accept-Encoding","access-control-allow-origin":"*","cross-origin-resource-policy":"cross-origin","x-fastly-request-id":"2b30932d1f0b9a0749d4dfe15e8257b4d6ec8a7b","x-frame-options":"deny","via":"1.1 varnish","x-served-by":"cache-iah17227-IAH","expires":"Mon, 21 Jul 2025 21:55:29 GMT","etag":"W/\"d2e11ebfa542a2cb615829ee6627de3ca502c600ed77034c1b65a19d78d1b772\"","x-xss-protection":"1; mode=block","x-timer":"S1753134629.468727,VS0,VE98"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/main/dummyCertFiles.js","time":1753134629}

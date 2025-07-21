@@ -1,0 +1,55 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+import * as path from "../path/mod.ts";
+import { ensureDir, ensureDirSync } from "./ensure_dir.ts";
+import { exists, existsSync } from "./exists.ts";
+import { getFileInfoType } from "./_util.ts";
+
+/**
+ * Ensures that the hard link exists.
+ * If the directory structure does not exist, it is created.
+ *
+ * @param src the source file path. Directory hard links are not allowed.
+ * @param dest the destination link path
+ */
+export async function ensureLink(src: string, dest: string) {
+  if (await exists(dest)) {
+    const destStatInfo = await Deno.lstat(dest);
+    const destFilePathType = getFileInfoType(destStatInfo);
+    if (destFilePathType !== "file") {
+      throw new Error(
+        `Ensure path exists, expected 'file', got '${destFilePathType}'`,
+      );
+    }
+    return;
+  }
+
+  await ensureDir(path.dirname(dest));
+
+  await Deno.link(src, dest);
+}
+
+/**
+ * Ensures that the hard link exists.
+ * If the directory structure does not exist, it is created.
+ *
+ * @param src the source file path. Directory hard links are not allowed.
+ * @param dest the destination link path
+ */
+export function ensureLinkSync(src: string, dest: string): void {
+  if (existsSync(dest)) {
+    const destStatInfo = Deno.lstatSync(dest);
+    const destFilePathType = getFileInfoType(destStatInfo);
+    if (destFilePathType !== "file") {
+      throw new Error(
+        `Ensure path exists, expected 'file', got '${destFilePathType}'`,
+      );
+    }
+    return;
+  }
+
+  ensureDirSync(path.dirname(dest));
+
+  Deno.linkSync(src, dest);
+}
+
+// denoCacheMetadata={"headers":{"cross-origin-resource-policy":"same-origin","server-timing":"fetchSource;dur=20","x-amz-cf-pop":"IAD12-P5","x-amz-cf-id":"p-7pVpEE4l0WGyPEZGqmHjdySce5m3ePEjRb86xh59FW2fhMwQzIRg==","access-control-allow-origin":"*","last-modified":"Thu, 31 Mar 2022 15:56:34 GMT","via":"http/2 edgeproxy-h","x-cache":"Hit from cloudfront","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","content-type":"application/typescript; charset=utf-8","etag":"\"8b088e3bb9dcb17586b7383742bbb3bc\"","referrer-policy":"strict-origin-when-cross-origin","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-frame-options":"DENY","content-length":"1597","vary":"Accept-Encoding, Origin","x-amz-version-id":"i2rTpvJAmG4DpJFo2RUxJDyN3kkFBe9e","date":"Thu, 17 Jul 2025 11:13:13 GMT","accept-ranges":"bytes","cache-control":"public, max-age=31536000, immutable","age":"383837","server":"deno/gcp-us-east4","cross-origin-embedder-policy":"same-origin","cross-origin-opener-policy":"same-origin","x-amz-replication-status":"COMPLETED","x-content-type-options":"nosniff"},"url":"https://deno.land/std@0.133.0/fs/ensure_link.ts","time":1753134630}

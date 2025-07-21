@@ -1,0 +1,4 @@
+/* esm.sh - gh/jeff-hykin/good-js@a7a5e64/source/flattened/escape_js_string */
+export * from "/gh/jeff-hykin/good-js@a7a5e64/denonext/source/flattened/escape_js_string.mjs";
+
+// denoCacheMetadata={"headers":{"last-modified":"Mon, 21 Jul 2025 21:50:30 GMT","access-control-expose-headers":"X-ESM-Path","cache-control":"public, max-age=31536000, immutable","cf-cache-status":"MISS","alt-svc":"h3=\":443\"; ma=86400","cf-ray":"962dea138a0df0be-DFW","server":"cloudflare","vary":"User-Agent, accept-encoding","date":"Mon, 21 Jul 2025 21:50:31 GMT","content-type":"application/javascript; charset=utf-8","access-control-allow-origin":"*","x-esm-path":"/gh/jeff-hykin/good-js@a7a5e64/denonext/source/flattened/escape_js_string.mjs"},"url":"https://esm.sh/gh/jeff-hykin/good-js@a7a5e64/source/flattened/escape_js_string.js","time":1753134631}

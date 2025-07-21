@@ -1,0 +1,57 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import type { Any, ArrayObject } from "./utils.ts";
+
+export type KindType = "sequence" | "scalar" | "mapping";
+export type StyleVariant = "lowercase" | "uppercase" | "camelcase" | "decimal";
+export type RepresentFn = (data: Any, style?: StyleVariant) => Any;
+
+const DEFAULT_RESOLVE = (): boolean => true;
+const DEFAULT_CONSTRUCT = (data: Any): Any => data;
+
+interface TypeOptions {
+  kind: KindType;
+  resolve?: (data: Any) => boolean;
+  construct?: (data: string) => Any;
+  instanceOf?: Any;
+  predicate?: (data: Record<string, unknown>) => boolean;
+  represent?: RepresentFn | ArrayObject<RepresentFn>;
+  defaultStyle?: StyleVariant;
+  styleAliases?: ArrayObject;
+}
+
+function checkTagFormat(tag: string): string {
+  return tag;
+}
+
+export class Type {
+  public tag: string;
+  public kind: KindType | null = null;
+  public instanceOf: Any;
+  public predicate?: (data: Record<string, unknown>) => boolean;
+  public represent?: RepresentFn | ArrayObject<RepresentFn>;
+  public defaultStyle?: StyleVariant;
+  public styleAliases?: ArrayObject;
+  public loadKind?: KindType;
+
+  constructor(tag: string, options?: TypeOptions) {
+    this.tag = checkTagFormat(tag);
+    if (options) {
+      this.kind = options.kind;
+      this.resolve = options.resolve || DEFAULT_RESOLVE;
+      this.construct = options.construct || DEFAULT_CONSTRUCT;
+      this.instanceOf = options.instanceOf;
+      this.predicate = options.predicate;
+      this.represent = options.represent;
+      this.defaultStyle = options.defaultStyle;
+      this.styleAliases = options.styleAliases;
+    }
+  }
+  public resolve: (data?: Any) => boolean = (): boolean => true;
+  public construct: (data?: Any) => Any = (data): Any => data;
+}
+
+// denoCacheMetadata={"headers":{"referrer-policy":"strict-origin-when-cross-origin","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-content-type-options":"nosniff","strict-transport-security":"max-age=63072000; includeSubDomains; preload","server-timing":"fetchSource;dur=8","x-amz-cf-pop":"IAD12-P5","x-amz-server-side-encryption":"AES256","x-frame-options":"DENY","vary":"Accept-Encoding, Origin","etag":"\"4b57592c81a860027da169949f0be74b\"","x-amz-version-id":"lJEp7MtDZCMXC5x69gfIyJSkX9TllTVV","cross-origin-embedder-policy":"same-origin","cross-origin-resource-policy":"same-origin","x-cache":"Hit from cloudfront","via":"http/2 edgeproxy-h","cross-origin-opener-policy":"same-origin","accept-ranges":"bytes","age":"33938","cache-control":"public, max-age=31536000, immutable","content-length":"1963","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","date":"Mon, 21 Jul 2025 12:24:52 GMT","server":"deno/gcp-us-east4","x-amz-replication-status":"COMPLETED","content-type":"application/typescript; charset=utf-8","x-amz-cf-id":"4Zb_kLBazGDDXRfayM1xlEpTyDkqcWIISMppAJ1bFA2fh73-ZMyk6w==","access-control-allow-origin":"*"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/type.ts","time":1753134629}

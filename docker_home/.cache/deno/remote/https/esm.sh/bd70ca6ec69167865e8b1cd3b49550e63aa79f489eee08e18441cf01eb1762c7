@@ -1,0 +1,5 @@
+/* esm.sh - github:jeff-hykin/good-js#a7a5e64/source/flattened/escape_js_string */
+var o=(n,s)=>{let i=-1,t=[...n];for(let e of t){i++;let f;if(s&&typeof(f=s(e,i+1,n))=="string"){t[i]=f;continue}if(e=="\\")t[i]="\\\\";else if(e=="`")t[i]="\\`";else if(e=="$")t[i+1]=="{"?t[i]="\\$":t[i]="$";else if(e=="\r")t[i]="\\r";else if(e=="\b"||e=="	"||e==`
+`||e=="\v"||e=="\f")t[i]=e;else if(e.codePointAt(0)<127)t[i]=e;else if(/\$|\p{ID_Continue}/u.test(e))t[i]=e;else{let l=JSON.stringify(e);l.length>4?t[i]=l.slice(1,-1):t[i]=e}}return"`"+t.join("")+"`"};export{o as escapeJsString};
+//# sourceMappingURL=escape_js_string.mjs.map
+// denoCacheMetadata={"headers":{"date":"Mon, 21 Jul 2025 21:50:31 GMT","server":"cloudflare","cf-cache-status":"MISS","alt-svc":"h3=\":443\"; ma=86400","cf-ray":"962dea142c43f0be-DFW","last-modified":"Mon, 21 Jul 2025 21:50:31 GMT","content-type":"application/javascript; charset=utf-8","access-control-allow-origin":"*","cache-control":"public, max-age=31536000, immutable","vary":"accept-encoding"},"url":"https://esm.sh/gh/jeff-hykin/good-js@a7a5e64/denonext/source/flattened/escape_js_string.mjs","time":1753134631}

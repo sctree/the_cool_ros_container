@@ -1,0 +1,33 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { Type } from "../type.ts";
+import type { Any } from "../utils.ts";
+
+const { hasOwn } = Object;
+
+function resolveYamlSet(data: Any): boolean {
+  if (data === null) return true;
+
+  for (const key in data) {
+    if (hasOwn(data, key)) {
+      if (data[key] !== null) return false;
+    }
+  }
+
+  return true;
+}
+
+function constructYamlSet(data: string): Any {
+  return data !== null ? data : {};
+}
+
+export const set = new Type("tag:yaml.org,2002:set", {
+  construct: constructYamlSet,
+  kind: "mapping",
+  resolve: resolveYamlSet,
+});
+
+// denoCacheMetadata={"headers":{"etag":"\"473c30a4711f89dcfb2954217f0c6c77\"","server":"deno/gcp-us-east4","via":"http/2 edgeproxy-h","cross-origin-embedder-policy":"same-origin","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","content-length":"805","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","vary":"Accept-Encoding, Origin","age":"33939","date":"Mon, 21 Jul 2025 12:24:52 GMT","x-amz-cf-id":"OBooK9HZ2a8ZDO3Rd9z2twM4lwrxF3S_IBKfYMzg3B3TnFSX0-ToKw==","access-control-allow-origin":"*","x-amz-cf-pop":"IAD12-P5","x-amz-replication-status":"COMPLETED","x-frame-options":"DENY","cache-control":"public, max-age=31536000, immutable","x-amz-server-side-encryption":"AES256","x-amz-version-id":"2LZRmGGPtZOt37yEbUAt.UltURv1.3n8","referrer-policy":"strict-origin-when-cross-origin","accept-ranges":"bytes","content-type":"application/typescript; charset=utf-8","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-cache":"Hit from cloudfront","server-timing":"fetchSource;dur=14","x-content-type-options":"nosniff"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/type/set.ts","time":1753134630}

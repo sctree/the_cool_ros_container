@@ -1,0 +1,20 @@
+import type { ChunkInfo, Record } from "./record.ts";
+import type { Decompress, Constructor, ChunkReadResult } from "./types.ts";
+
+export interface IBagReader {
+  /**
+   * reads a single chunk record && its index records given a chunkInfo
+   */
+  readChunk(chunkInfo: ChunkInfo, decompress: Decompress): Promise<ChunkReadResult>;
+
+  /**
+   * Read an individaul record from a buffer
+   */
+  readRecordFromBuffer<T extends Record>(
+    buffer: Uint8Array,
+    fileOffset: number,
+    cls: Constructor<T> & { opcode: number },
+  ): T;
+}
+
+// denoCacheMetadata={"headers":{"vary":"Authorization,Accept-Encoding","cross-origin-resource-policy":"cross-origin","x-cache-hits":"0","cache-control":"max-age=300","x-served-by":"cache-iah17227-IAH","source-age":"0","access-control-allow-origin":"*","x-timer":"S1753134630.131790,VS0,VE108","x-content-type-options":"nosniff","via":"1.1 varnish","x-cache":"MISS","content-type":"text/plain; charset=utf-8","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-xss-protection":"1; mode=block","etag":"W/\"038495172841480c171cb7d6b534645805b95eaab3210dfe84e77d8baf06b5b1\"","strict-transport-security":"max-age=31536000","x-fastly-request-id":"27bd2e70c90fba4558e1925e8de821ecc1db3086","date":"Mon, 21 Jul 2025 21:50:30 GMT","x-frame-options":"deny","accept-ranges":"bytes","expires":"Mon, 21 Jul 2025 21:55:30 GMT","x-github-request-id":"F08E:3595D3:661C1:7F700:687EB620"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/subrepos/foxglove_rosbag/src/IBagReader.ts","time":1753134630}

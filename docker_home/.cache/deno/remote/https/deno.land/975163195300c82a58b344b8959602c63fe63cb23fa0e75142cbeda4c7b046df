@@ -1,0 +1,37 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+/**
+ * Test whether or not the given path exists by checking with the file system
+ * @deprecated Checking the state of a file before using it causes a race condition. Perform the actual operation directly instead.
+ * @see https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use
+ */
+export async function exists(filePath: string): Promise<boolean> {
+  try {
+    await Deno.lstat(filePath);
+    return true;
+  } catch (err) {
+    if (err instanceof Deno.errors.NotFound) {
+      return false;
+    }
+
+    throw err;
+  }
+}
+
+/**
+ * Test whether or not the given path exists by checking with the file system
+ * @deprecated Checking the state of a file before using it causes a race condition. Perform the actual operation directly instead.
+ * @see https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use
+ */
+export function existsSync(filePath: string): boolean {
+  try {
+    Deno.lstatSync(filePath);
+    return true;
+  } catch (err) {
+    if (err instanceof Deno.errors.NotFound) {
+      return false;
+    }
+    throw err;
+  }
+}
+
+// denoCacheMetadata={"headers":{"x-amz-replication-status":"COMPLETED","etag":"\"53e6a4362081f0cf46ceaac5b47d1b26\"","last-modified":"Thu, 31 Mar 2022 15:56:34 GMT","cross-origin-embedder-policy":"same-origin","referrer-policy":"strict-origin-when-cross-origin","server":"deno/gcp-us-east4","cross-origin-resource-policy":"same-origin","strict-transport-security":"max-age=63072000; includeSubDomains; preload","content-length":"1106","access-control-allow-origin":"*","vary":"Accept-Encoding, Origin","x-frame-options":"DENY","accept-ranges":"bytes","server-timing":"fetchSource;dur=20","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-amz-cf-id":"pYOrclRuc0pDmzSFaB8ymnGTNmKX8IJ1YcPWGkawsJ2Ib6E3HNb6lw==","x-content-type-options":"nosniff","cross-origin-opener-policy":"same-origin","age":"55434","content-type":"application/typescript; charset=utf-8","x-amz-cf-pop":"IAD12-P5","x-amz-version-id":"TKp8q37zQi.v8GNCqSYXek7Dekfh3w1l","x-cache":"Hit from cloudfront","cache-control":"public, max-age=31536000, immutable","date":"Mon, 21 Jul 2025 06:26:36 GMT","via":"http/2 edgeproxy-h"},"url":"https://deno.land/std@0.133.0/fs/exists.ts","time":1753134630}

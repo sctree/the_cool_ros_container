@@ -1,0 +1,255 @@
+#!/usr/bin/env -S deno run --allow-all
+import Bag from "./subrepos/foxglove_rosbag/src/Bag.ts"
+import FileReader from "./subrepos/foxglove_rosbag/src/node/FileReader.ts"
+import { certFileContents, keyFileContents } from "./main/dummyCertFiles.js"
+// import ArrayReader from "./subrepos/foxglove_rosbag/src/web/ArrayReader.ts"
+import { FileSystem, glob } from "https://deno.land/x/quickr@0.8.1/main/file_system.js"
+
+import { parseArgs, flag, required, initialValue } from "https://esm.sh/gh/jeff-hykin/good-js@1.14.3.0/source/flattened/parse_args.js"
+import { didYouMean } from "https://esm.sh/gh/jeff-hykin/good-js@1.14.3.0/source/flattened/did_you_mean.js"
+import stringForIndexHtml from "./main/old/index.html.binaryified.js"
+
+const argsInfo = parseArgs({
+    rawArgs: Deno.args,
+    fields: [
+        [["--debug", "-d", ], flag, ],
+        [["--help"], flag, ],
+        [["--bag-file"], initialValue(null), (str)=>str],
+        [["--port"], initialValue(`9093`), (str)=>str],
+        [["--address"], initialValue(`127.0.0.1`), (str)=>str],
+        [["--list-topics"], flag, ],
+        [["--playback-speed", "-s"], initialValue(1), (str)=>parseFloat(str)],
+        [["--no-repeat-on-end", ], flag, initialValue(false)],
+        [["--use-timestamps-as-offsets", ], flag, initialValue(false)],
+        [["--dummy-wss"], flag, ],
+    ],
+    namedArgsStopper: "--",
+    allowNameRepeats: true,
+    valueTransformer: JSON.parse,
+    isolateArgsAfterStopper: false,
+    argsByNameSatisfiesNumberedArg: true,
+    implicitNamePattern: /^(--|-)[a-zA-Z0-9\-_]+$/,
+    implictFlagPattern: null,
+})
+didYouMean({
+    givenWords: Object.keys(argsInfo.implicitArgsByName).filter(each=>each.startsWith(`-`)),
+    possibleWords: Object.keys(argsInfo.explicitArgsByName).filter(each=>each.startsWith(`-`)),
+    autoThrow: true,
+    suggestionLimit: 1,
+})
+const args = argsInfo.simplifiedNames
+if (args.help) {
+    console.log(`
+Usage: rrs [options]
+
+Options:
+    --debug, -d
+        Run in debug mode (prints more stuff, maybe)
+    
+    --list-topics
+        List all the topics in the rosbag file, then exit
+    
+    --no-repeat-on-end
+        By default, the rosbag file will be repeated when it reaches the end
+        (i.e. when the rosbag file is over, it will start from the beginning)
+        This flag will disable that behavior
+
+    --playback-speed, -s
+        The relative speed to play back the rosbag file at
+        default: 1
+    
+    --bag-file [path]
+        The path to the rosbag file to serve
+        default: null
+    
+    --port
+        The port to run the server on
+        default: 9093
+
+    --address
+        The address to run the server on
+        default: 127.0.0.1
+    
+    --dummy-wss
+        Use a "secure" websocket connection
+        (self-signed cert/key, not actually secure)
+`)
+    Deno.exit()
+}
+
+if (args.debug) {
+    console.log(`Loading rosbag file: ${args.bagFile}`)
+}
+const bag = new Bag(new FileReader(args.bagFile))
+await bag.open()
+// const bag = new Bag(new FileReader(import.meta.resolve("./data.ignore/co_ral_narrow.bag").slice("file://".length)))
+    // bag.startTime
+    // bag.endTime
+    // bag.bagOpt
+const topics = [...bag.connections.values()].map(({ topic, type, messageDefinition, latching }) => ({ topic, type, latching, }))
+// messageDefinition
+const topicNames = topics.map(({ topic }) => topic)
+import * as yaml from "https://deno.land/std@0.168.0/encoding/yaml.ts"
+if (args.listTopics) {
+    console.log(`# the output is valid yaml (e.g. machine parsable/safe)`)
+    console.log(yaml.stringify({topics}))
+    Deno.exit()
+}
+
+import { BSON } from "https://esm.sh/bson@6.10.4"
+import * as CBOR from "https://esm.sh/cbor-js@0.1.0"
+function rosEncode(message, compression = "json") {
+    const { op, id, topic, msg, service, action } = message
+    // op is one of:
+        // "publish"
+        // "service_response"
+        // "call_service"
+        // "send_action_goal"
+        // "cancel_action_goal"
+        // "action_feedback"
+        // "action_result"
+        // "png"
+        // "status"
+    // compression is one of:
+    // "json"
+    // "cbor"
+    // "bson"
+
+    let rawData
+    if (compression == "json") {
+        message = JSON.stringify(message, (_, value) =>typeof value === 'bigint' ? value.toString() : value)
+    } else if (compression == "cbor") {
+        message = CBOR.encode(message)
+    } else if (compression == "bson") {
+        message = BSON.serialize(message)
+    } else {
+        throw Error(`Unknown compression type: ${compression}`)
+    }
+
+    return message
+}
+
+let subscribers = []
+let startTimeMilliseconds = null
+
+function timestampToMilliseconds({ sec, nsec }) {
+    return (sec * 1000) + nsec / 1000000
+}
+
+//
+// start sending out messages
+//
+;(async () => {
+    const playbackSpeed = args.playbackSpeed
+    let prevFakeTime = null
+    let prevRealTime = 0
+    while (1) {
+        // TODO: to be more efficient, there should be some batching+lookahead here
+        for await (const item of bag.messageIterator({ topics: topicNames })) {
+            const { topic, connectionId, timestamp, data, message } = item
+            const { sec, nsec } = timestamp
+            if (startTimeMilliseconds == null) {
+                if (args.useTimestampsAsOffsets) {
+                    startTimeMilliseconds = Date.now()
+                } else {
+                    startTimeMilliseconds = 0
+                }
+            }
+            if (prevFakeTime == null) {
+                prevFakeTime = timestampToMilliseconds(timestamp) + startTimeMilliseconds
+                prevRealTime = performance.now()
+            } else {
+                const realTimeGap = performance.now() - prevRealTime
+                prevRealTime = performance.now()
+                const fakeTime = timestampToMilliseconds(timestamp) + startTimeMilliseconds
+                const desiredTimeGap = (fakeTime - prevFakeTime) / playbackSpeed
+                prevFakeTime = fakeTime
+                if (prevFakeTime >= 2) {
+                    // 2ms is the smallest realistic amount of time
+                    await new Promise((r) => setTimeout(r, desiredTimeGap))
+                }
+            }
+            
+            // console.log(`sending message of ${topic}`)
+            if (subscribers.length != 0) {
+                const messageBytes = rosEncode({
+                    op: "publish",
+                    topic: item.topic,
+                    msg: { name: item.topic, timestamp, data: item.message},
+                })
+                for (const each of subscribers) {
+                    if (args.debug) {
+                        console.debug(`publishing item.topic is:`,item.topic)
+                    }
+                    // FIXME: ensure these are always encoded correctly (how are services handled?)
+                    each.send(messageBytes)
+                }
+            }
+
+            // {
+            //     topic: "/clock",
+            //     connectionId: 0,
+            //     timestamp: { sec: 1720510809, nsec: 899027777 },
+            //     data: Uint8Array(8) [
+            //         65,  86, 237, 101,
+            //         232, 242,  86,  50
+            //     ],
+            //     message: Record { clock: { sec: 1710052929, nsec: 844559080 } }
+            // }
+        }
+        console.log(`#`)
+        console.log(`# reached end of rosbag file`)
+        console.log(`#`)
+        if (args.noRepeatOnEnd) {
+            break
+        } else {
+            console.log(`# repeating from the beginning, use --no-repeat-on-end to disable this behavior`)
+        }
+    }
+})()
+
+let extras = {}
+if (args.dummyWss) {
+    extras = {
+        cert: certFileContents,
+        key: keyFileContents,
+    }
+}
+Deno.serve(
+    {
+        port: args.port-0,
+        hostname: args.address,
+        ...extras,
+        // onListen: () => {
+        //   console.log(`Running on http://127.0.0.1:9093`)
+        // },
+    },
+    (req) => {
+        console.debug(`req is:`, req)
+        //
+        // asked for something other than websocket
+        //
+        if (req.headers.get("upgrade") != "websocket") {
+            return new Response(new TextEncoder().encode("howdee"), { status: 200, headers: { "content-type": "text/plain" } })
+        }
+
+        const { socket, response } = Deno.upgradeWebSocket(req)
+        subscribers.push(socket)
+        socket.addEventListener("open", () => {
+            console.log("a client connected!")
+        })
+        socket.addEventListener("message", (event) => {
+            // TODO: clean up
+            if (event.data === "ping") {
+                console.log(`got ping`)
+            }
+        })
+        socket.addEventListener("close", () => {
+            subscribers = subscribers.filter((each) => each !== socket)
+        })
+
+        return response
+    }
+)
+
+// denoCacheMetadata={"headers":{"x-cache":"MISS","strict-transport-security":"max-age=31536000","access-control-allow-origin":"*","accept-ranges":"bytes","x-xss-protection":"1; mode=block","date":"Mon, 21 Jul 2025 21:50:29 GMT","content-type":"text/plain; charset=utf-8","x-content-type-options":"nosniff","via":"1.1 varnish","expires":"Mon, 21 Jul 2025 21:55:29 GMT","x-frame-options":"deny","x-fastly-request-id":"37a02caf38fd758e76c3ccb749737dec6cd35ab3","etag":"W/\"5efb8de2b6cd0ee59d5490720f32e72cc8df06b894088a1bde39ed6dc29c288e\"","source-age":"0","x-github-request-id":"63C9:143AB:3F38D:580E2:687EB625","cross-origin-resource-policy":"cross-origin","x-cache-hits":"0","x-timer":"S1753134629.339918,VS0,VE109","cache-control":"max-age=300","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-served-by":"cache-iah17227-IAH","vary":"Authorization,Accept-Encoding"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/rosbagAsBackend.js","time":1753134629}

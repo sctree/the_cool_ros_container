@@ -1,0 +1,24 @@
+// Ported and adapted from js-yaml-js-types v1.0.0:
+// https://github.com/nodeca/js-yaml-js-types/tree/ac537e7bbdd3c2cbbd9882ca3919c520c2dc022b
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { Type } from "../type.ts";
+
+export const undefinedType = new Type("tag:yaml.org,2002:js/undefined", {
+  kind: "scalar",
+  resolve() {
+    return true;
+  },
+  construct() {
+    return undefined;
+  },
+  predicate(object) {
+    return typeof object === "undefined";
+  },
+  represent() {
+    return "";
+  },
+});
+
+// denoCacheMetadata={"headers":{"x-amz-cf-pop":"IAD12-P5","referrer-policy":"strict-origin-when-cross-origin","content-type":"application/typescript; charset=utf-8","cross-origin-resource-policy":"same-origin","x-amz-version-id":"MO4MMhHbxWDW2K312i1dsUHgwFoesc1d","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","cross-origin-opener-policy":"same-origin","accept-ranges":"bytes","x-frame-options":"DENY","server":"deno/gcp-us-east4","server-timing":"fetchSource;dur=8","etag":"\"64d940221f3011121042ed6b4e3308d3\"","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-replication-status":"COMPLETED","x-amz-server-side-encryption":"AES256","x-content-type-options":"nosniff","access-control-allow-origin":"*","cross-origin-embedder-policy":"same-origin","cache-control":"public, max-age=31536000, immutable","date":"Mon, 21 Jul 2025 12:24:52 GMT","age":"33938","via":"http/2 edgeproxy-h","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-amz-cf-id":"j6f5T2hnnB8BMMnNk7mWB4B7ZximxD9WFDcRJcoqJBK5u5FcMrPRaw==","x-cache":"Hit from cloudfront","content-length":"611","vary":"Accept-Encoding, Origin"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/type/undefined.ts","time":1753134630}

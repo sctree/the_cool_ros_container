@@ -1,0 +1,168 @@
+
+export const capitalize = (string) => string.replace(/\b\w/g, (chr) => chr.toUpperCase())
+export const indent = ({ string, by="    ", noLead=false }) => (noLead?"":by) + string.replace(/\n/g, "\n" + by)
+
+export const toString = (value)=>{
+    // no idea why `${Symbol("blah")}` throws an error (and is the only primitive that throws)
+    if (typeof value == 'symbol') {
+        return `Symbol(${toRepresentation(value.description)})`
+    // all other primitives
+    } else if (!(value instanceof Object)) {
+        return value != null ? value.toString() : `${value}`
+    // instead of [Object object]
+    } else {
+        return toRepresentation(value)
+    }
+}
+
+export const digitsToEnglishArray = (value)=>{
+    // digits
+    value = toString(value)
+    if (value.length > 1) {
+        // split into digits then put back together
+        return [].concat(...[...value].map(each=>digitsToEnglishArray(each)))
+    }
+    if (value === "-") {
+        return [ "negative" ]
+    } else if (value === ".") {
+        return [ "point" ]
+    } else if (value === "0") {
+        return [ "zero" ]
+    } else if (value === "1") {
+        return [ "one" ]
+    } else if (value === "2") {
+        return [ "two" ]
+    } else if (value === "3") {
+        return [ "three" ]
+    } else if (value === "4") {
+        return [ "four" ]
+    } else if (value === "5") {
+        return [ "five" ]
+    } else if (value === "6") {
+        return [ "six" ]
+    } else if (value === "7") {
+        return [ "seven" ]
+    } else if (value === "8") {
+        return [ "eight" ]
+    } else if (value === "9") {
+        return [ "nine" ]
+    } else {
+        return ""
+    }
+}
+
+export const toRepresentation = (item)=>{
+    const alreadySeen = new Set()
+    const recursionWrapper = (item)=>{
+        // prevent infinite recursion
+        if (item instanceof Object) {
+            if (alreadySeen.has(item)) {
+                return `[Self Reference]`
+            } else {
+                alreadySeen.add(item)
+            }
+        }
+
+        let output
+        if (typeof item == 'string') {
+            output = `"${item.replace(/"|\n|\t|\r|\\/g, (char)=>{
+                switch (char) {
+                    case '"': return '\\"'
+                    case '\n': return '\\n'
+                    case '\t': return '\\t'
+                    case '\r': return '\\r'
+                    case '\\': return '\\\\'
+                }
+            })}"`
+        } else if (item instanceof Array) {
+            output = `[${item.map(each=>recursionWrapper(each)).join(",")}]`
+        } else if (item instanceof Set) {
+            output = `{${([...item]).map(each=>recursionWrapper(each)).join(",")}}`
+        // pure object
+        } else if (item instanceof Object && item.constructor == Object) {
+            let string = "{"
+            for (const [key, value] of Object.entries(item)) {
+                const stringKey = recursionWrapper(key)
+                const stringValue = recursionWrapper(value)
+                string += `\n  ${stringKey}: ${indent({string:stringValue, by:"  ", noLead:true})},`
+            }
+            string += "\n}"
+            output = string
+        // map
+        } else if (item instanceof Map) {
+            let string = "Map {"
+            for (const [key, value] of item.entries()) {
+                const stringKey = recursionWrapper(key)
+                const stringValue = recursionWrapper(value)
+                if (!stringKey.match(/\n/g)) {
+                    string += `\n  ${stringKey} => ${indent({string:stringValue, by:"  ", noLead:true})},`
+                // multiline key
+                } else {
+                    string += `\n  ${indent({string:stringKey, by:"  ", noLead:true})}\n    => ${indent({string:stringValue, by:"    ", noLead:true})},`
+                }
+            }
+            string += "\n}"
+            output = string
+        } else {
+            output = item != null ? item.toString() : `${item}`
+        }
+        
+        return output
+    }
+    return recursionWrapper(item)
+}
+
+export const wordList = (str) => {
+    const addedSeperator = str.replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/[^a-zA-Z0-9 _.-]/,"_").toLowerCase()
+    const words = addedSeperator.split(/[ _.-]+/g)
+    return words
+}
+
+export const toCamelCase = (str) => {
+    const words = wordList(str)
+    const capatalizedWords = words.map(each=>each.replace(/^\w/, (group0)=>group0.toUpperCase()))
+    // make the first one lowercase
+    capatalizedWords[0] = capatalizedWords[0].toLowerCase()
+    return capatalizedWords.join('')
+}
+
+export const toPascalCase = (str) => {
+    const words = wordList(str)
+    const capatalizedWords = words.map(each=>each.replace(/^\w/, (group0)=>group0.toUpperCase()))
+    return capatalizedWords.join('')
+}
+
+export const toKebabCase = (str) => {
+    const words = wordList(str)
+    return words.map(each=>each.toLowerCase()).join('-')
+}
+
+export const toSnakeCase = (str) => {
+    const words = wordList(str)
+    return words.map(each=>each.toLowerCase()).join('_')
+}
+
+export const toScreamingtoKebabCase = (str) => {
+    const words = wordList(str)
+    return words.map(each=>each.toUpperCase()).join('-')
+}
+
+export const toScreamingtoSnakeCase = (str) => {
+    const words = wordList(str)
+    return words.map(each=>each.toUpperCase()).join('_')
+}
+
+export const findAll = (regexPattern, sourceString) => {
+    const output = []
+    let match
+    // make sure the pattern has the global flag
+    const regexPatternWithGlobal = RegExp(regexPattern, [...new Set("g" + regexPattern.flags)].join(""))
+    while ((match = regexPatternWithGlobal.exec(sourceString))) {
+        // get rid of the string copy
+        delete match.input
+        // store the match data
+        output.push(match)
+    }
+    return output
+}
+// denoCacheMetadata={"headers":{"x-amz-cf-id":"LO6UXfZHOk18HmfCbSELwwXEWVltgvsweVgHDuZdLZYS_wDUCCmxpQ==","cross-origin-resource-policy":"same-origin","server":"deno/gcp-us-east4","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-content-type-options":"nosniff","x-frame-options":"DENY","access-control-allow-origin":"*","referrer-policy":"strict-origin-when-cross-origin","via":"http/2 edgeproxy-h","cross-origin-embedder-policy":"same-origin","etag":"W/\"343911d4b936db3d960742b0bff47256\"","server-timing":"fetchSource;dur=72","x-amz-version-id":"Cdcob9s3Vhnf6V33QO3FManpue.qNzje","x-amz-cf-pop":"IAD12-P5","x-cache":"Miss from cloudfront","last-modified":"Sun, 30 Oct 2022 19:15:02 GMT","strict-transport-security":"max-age=63072000; includeSubDomains; preload","date":"Mon, 21 Jul 2025 21:50:31 GMT","x-amz-replication-status":"COMPLETED","vary":"accept-encoding, Origin","cache-control":"public, max-age=31536000, immutable","content-type":"application/javascript","cross-origin-opener-policy":"same-origin"},"url":"https://deno.land/x/good@0.7.8/string.js","time":1753134630}

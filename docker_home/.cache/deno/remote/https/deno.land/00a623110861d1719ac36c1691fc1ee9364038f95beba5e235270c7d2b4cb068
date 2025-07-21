@@ -1,0 +1,27 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+// This module is browser compatible.
+
+/**
+ * All internal non-test code, that is files that do not have `test` or `bench` in the name, must use the assertion functions within `_utils/asserts.ts` and not `testing/asserts.ts`. This is to create a separation of concerns between internal and testing assertions.
+ */
+
+export class DenoStdInternalError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "DenoStdInternalError";
+  }
+}
+
+/** Make an assertion, if not `true`, then throw. */
+export function assert(expr: unknown, msg = ""): asserts expr {
+  if (!expr) {
+    throw new DenoStdInternalError(msg);
+  }
+}
+
+/** Use this to assert unreachable code. */
+export function unreachable(): never {
+  throw new DenoStdInternalError("unreachable");
+}
+
+// denoCacheMetadata={"headers":{"x-amz-server-side-encryption":"AES256","date":"Mon, 21 Jul 2025 06:24:56 GMT","last-modified":"Wed, 14 Dec 2022 22:35:42 GMT","server-timing":"fetchSource;dur=10","cross-origin-opener-policy":"same-origin","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-cf-id":"4ujS6OcZMAwCmK3AXHDE4VCrBB4t3GXbq8s3FSbJooX48J2ClQAO2w==","x-amz-version-id":"neMdKVOYNyXVGUZPQ5ji19_WAHJrWDjd","content-length":"854","vary":"Accept-Encoding, Origin","x-amz-replication-status":"COMPLETED","x-content-type-options":"nosniff","x-frame-options":"DENY","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","server":"deno/gcp-us-east4","cross-origin-embedder-policy":"same-origin","referrer-policy":"strict-origin-when-cross-origin","access-control-allow-origin":"*","etag":"\"b0f1fc60e82f54cf70e2ed1dc86bce1f\"","content-type":"application/typescript; charset=utf-8","cache-control":"public, max-age=31536000, immutable","cross-origin-resource-policy":"same-origin","via":"http/2 edgeproxy-h","accept-ranges":"bytes","x-cache":"Hit from cloudfront","age":"55535","x-amz-cf-pop":"IAD12-P5"},"url":"https://deno.land/std@0.168.0/_util/asserts.ts","time":1753134630}

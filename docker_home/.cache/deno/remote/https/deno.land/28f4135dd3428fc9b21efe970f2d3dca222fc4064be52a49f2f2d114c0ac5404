@@ -1,0 +1,37 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+// Copyright the Browserify authors. MIT License.
+// Ported mostly from https://github.com/browserify/path-browserify/
+// This module is browser compatible.
+
+import { isWindows } from "../_util/os.ts";
+import * as _win32 from "./win32.ts";
+import * as _posix from "./posix.ts";
+
+const path = isWindows ? _win32 : _posix;
+
+export const win32 = _win32;
+export const posix = _posix;
+export const {
+  basename,
+  delimiter,
+  dirname,
+  extname,
+  format,
+  fromFileUrl,
+  isAbsolute,
+  join,
+  normalize,
+  parse,
+  relative,
+  resolve,
+  sep,
+  toFileUrl,
+  toNamespacedPath,
+} = path;
+
+export * from "./common.ts";
+export { SEP, SEP_PATTERN } from "./separator.ts";
+export * from "./_interface.ts";
+export * from "./glob.ts";
+
+// denoCacheMetadata={"headers":{"accept-ranges":"bytes","x-amz-version-id":"o31n3tn_BUPnqikRwRfEQAA6luTnCKHG","referrer-policy":"strict-origin-when-cross-origin","cross-origin-resource-policy":"same-origin","vary":"Accept-Encoding, Origin","content-type":"application/typescript; charset=utf-8","cache-control":"public, max-age=31536000, immutable","content-length":"800","server":"deno/gcp-us-east4","cross-origin-opener-policy":"same-origin","server-timing":"fetchSource;dur=8","via":"http/2 edgeproxy-h","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","last-modified":"Thu, 03 Mar 2022 15:20:12 GMT","age":"53371","x-frame-options":"DENY","date":"Mon, 21 Jul 2025 07:00:59 GMT","x-amz-cf-id":"mrlyGtbVwearo7JgjlZq6FyGxfSFIhvsccIRKaVQrpxEZ76H3zZyqw==","x-amz-cf-pop":"IAD12-P5","x-amz-replication-status":"COMPLETED","x-cache":"Hit from cloudfront","strict-transport-security":"max-age=63072000; includeSubDomains; preload","etag":"\"08f89a7f3c97fea64130e79ae4b3aea9\"","access-control-allow-origin":"*","x-content-type-options":"nosniff","cross-origin-embedder-policy":"same-origin"},"url":"https://deno.land/std@0.128.0/path/mod.ts","time":1753134629}

@@ -1,0 +1,81 @@
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { BytesList } from "../bytes/bytes_list.ts";
+import type { Reader } from "./types.d.ts";
+
+/** Generate longest proper prefix which is also suffix array. */
+function createLPS(pat: Uint8Array): Uint8Array {
+  const lps = new Uint8Array(pat.length);
+  lps[0] = 0;
+  let prefixEnd = 0;
+  let i = 1;
+  while (i < lps.length) {
+    if (pat[i] == pat[prefixEnd]) {
+      prefixEnd++;
+      lps[i] = prefixEnd;
+      i++;
+    } else if (prefixEnd === 0) {
+      lps[i] = 0;
+      i++;
+    } else {
+      prefixEnd = lps[prefixEnd - 1];
+    }
+  }
+  return lps;
+}
+
+/** Read delimited bytes from a Reader. */
+export async function* readDelim(
+  reader: Reader,
+  delim: Uint8Array,
+): AsyncIterableIterator<Uint8Array> {
+  // Avoid unicode problems
+  const delimLen = delim.length;
+  const delimLPS = createLPS(delim);
+  const chunks = new BytesList();
+  const bufSize = Math.max(1024, delimLen + 1);
+
+  // Modified KMP
+  let inspectIndex = 0;
+  let matchIndex = 0;
+  while (true) {
+    const inspectArr = new Uint8Array(bufSize);
+    const result = await reader.read(inspectArr);
+    if (result === null) {
+      // Yield last chunk.
+      yield chunks.concat();
+      return;
+    } else if (result < 0) {
+      // Discard all remaining and silently fail.
+      return;
+    }
+    chunks.add(inspectArr, 0, result);
+    let localIndex = 0;
+    while (inspectIndex < chunks.size()) {
+      if (inspectArr[localIndex] === delim[matchIndex]) {
+        inspectIndex++;
+        localIndex++;
+        matchIndex++;
+        if (matchIndex === delimLen) {
+          // Full match
+          const matchEnd = inspectIndex - delimLen;
+          const readyBytes = chunks.slice(0, matchEnd);
+          yield readyBytes;
+          // Reset match, different from KMP.
+          chunks.shift(inspectIndex);
+          inspectIndex = 0;
+          matchIndex = 0;
+        }
+      } else {
+        if (matchIndex === 0) {
+          inspectIndex++;
+          localIndex++;
+        } else {
+          matchIndex = delimLPS[matchIndex - 1];
+        }
+      }
+    }
+  }
+}
+
+// denoCacheMetadata={"headers":{"via":"http/2 edgeproxy-h","cross-origin-resource-policy":"same-origin","x-content-type-options":"nosniff","content-length":"2122","cross-origin-opener-policy":"same-origin","etag":"\"a1f0b6d610ac6f1b88bc4fc269226667\"","cache-control":"public, max-age=31536000, immutable","content-type":"application/typescript; charset=utf-8","server-timing":"fetchSource;dur=10","date":"Thu, 17 Jul 2025 11:52:41 GMT","cross-origin-embedder-policy":"same-origin","accept-ranges":"bytes","x-frame-options":"DENY","last-modified":"Wed, 14 Dec 2022 22:35:44 GMT","server":"deno/gcp-us-east4","strict-transport-security":"max-age=63072000; includeSubDomains; preload","vary":"Accept-Encoding, Origin","x-amz-cf-id":"Jqz2bWYVw57H0TS-VmmJFfOKgxqoMbX5mwG2Ti685xMmdGU8G---DQ==","x-amz-cf-pop":"IAD12-P5","x-amz-replication-status":"COMPLETED","x-amz-server-side-encryption":"AES256","x-amz-version-id":"c_sdiwkhZqcoS3Syz4BXa3QSlO_uSaSg","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-cache":"Hit from cloudfront","access-control-allow-origin":"*","referrer-policy":"strict-origin-when-cross-origin","age":"381470"},"url":"https://deno.land/std@0.168.0/io/read_delim.ts","time":1753134630}

@@ -1,0 +1,51 @@
+// Copyright 2018-2023 the Deno authors. All rights reserved. MIT license.
+// This module is browser compatible.
+
+import { type Reader } from "../types.d.ts";
+import { BufReader } from "./buf_reader.ts";
+import { concat } from "../bytes/concat.ts";
+
+/**
+ * Read strings line-by-line from a Reader.
+ *
+ *  @example
+ * ```ts
+ * import { readLines } from "https://deno.land/std@$STD_VERSION/io/read_lines.ts";
+ * import * as path from "https://deno.land/std@$STD_VERSION/path/mod.ts";
+ *
+ * const filename = path.join(Deno.cwd(), "std/io/README.md");
+ * let fileReader = await Deno.open(filename);
+ *
+ * for await (let line of readLines(fileReader)) {
+ *   console.log(line);
+ * }
+ * ```
+ */
+export async function* readLines(
+  reader: Reader,
+  decoderOpts?: {
+    encoding?: string;
+    fatal?: boolean;
+    ignoreBOM?: boolean;
+  },
+): AsyncIterableIterator<string> {
+  const bufReader = new BufReader(reader);
+  let chunks: Uint8Array[] = [];
+  const decoder = new TextDecoder(decoderOpts?.encoding, decoderOpts);
+  while (true) {
+    const res = await bufReader.readLine();
+    if (!res) {
+      if (chunks.length > 0) {
+        yield decoder.decode(concat(...chunks));
+      }
+      break;
+    }
+    chunks.push(res.line);
+    if (!res.more) {
+      yield decoder.decode(concat(...chunks));
+      chunks = [];
+    }
+  }
+}
+
+// denoCacheMetadata={"headers":{"referrer-policy":"strict-origin-when-cross-origin","server":"deno/gcp-us-east4","server-timing":"fetchSource;dur=88","x-amz-cf-id":"xgq5uQ72aFzuOby-dEeMkFk65J0NpNEKozmRYopRBriys4NIcIGing==","x-frame-options":"DENY","cross-origin-embedder-policy":"same-origin","content-type":"application/typescript; charset=utf-8","cross-origin-resource-policy":"same-origin","date":"Mon, 21 Jul 2025 21:50:30 GMT","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","access-control-allow-origin":"*","cache-control":"public, max-age=31536000, immutable","via":"http/2 edgeproxy-h","content-length":"1325","cross-origin-opener-policy":"same-origin","x-amz-replication-status":"COMPLETED","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-server-side-encryption":"AES256","x-cache":"Miss from cloudfront","vary":"Accept-Encoding, Origin","x-amz-cf-pop":"IAD12-P5","x-content-type-options":"nosniff","accept-ranges":"bytes","x-amz-version-id":".Ed5l3Nu1g2KhuK2oDEq_hOjavLEjnQG","etag":"\"78993418e8e911f015aeb242fc7f38f7\"","last-modified":"Thu, 08 Jun 2023 23:29:14 GMT"},"url":"https://deno.land/std@0.191.0/io/read_lines.ts","time":1753134630}

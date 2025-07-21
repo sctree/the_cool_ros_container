@@ -1,0 +1,15 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2022 the Deno authors. All rights reserved. MIT license.
+
+import { Schema } from "../schema.ts";
+import { map, seq, str } from "../type/mod.ts";
+
+// Standard YAML's Failsafe schema.
+// http://www.yaml.org/spec/1.2/spec.html#id2802346
+export const failsafe = new Schema({
+  explicit: [str, seq, map],
+});
+
+// denoCacheMetadata={"headers":{"content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","access-control-allow-origin":"*","content-length":"514","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-cf-pop":"IAD12-P5","cross-origin-embedder-policy":"same-origin","x-frame-options":"DENY","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","last-modified":"Wed, 14 Dec 2022 22:35:43 GMT","server":"deno/gcp-us-east4","server-timing":"fetchSource;dur=18","x-amz-cf-id":"ZZBIvqn-yNeCEEFqygPQ4spW7Si2PvjZZhjwQcULNLY8eiTnSdh54g==","x-amz-server-side-encryption":"AES256","referrer-policy":"strict-origin-when-cross-origin","etag":"\"da7b1b11847ac2c869e0bf9e9e1bd69f\"","cache-control":"public, max-age=31536000, immutable","x-cache":"Hit from cloudfront","x-content-type-options":"nosniff","content-type":"application/typescript; charset=utf-8","accept-ranges":"bytes","via":"http/2 edgeproxy-h","x-amz-replication-status":"COMPLETED","x-amz-version-id":"tIfiQ3ZwRANPq7P9od1fafk4enRQKCGN","age":"33939","date":"Mon, 21 Jul 2025 12:24:52 GMT","vary":"Accept-Encoding, Origin"},"url":"https://deno.land/std@0.168.0/encoding/_yaml/schema/failsafe.ts","time":1753134630}

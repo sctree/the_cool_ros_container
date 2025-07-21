@@ -1,0 +1,4 @@
+/* esm.sh - github:jeff-hykin/good-js#f6d5bcb/source/flattened/is_generator_object */
+var o=function(t){return typeof t?.next=="function"};var r=function(t){return t!=null&&(typeof t[Symbol.iterator]=="function"||typeof t[Symbol.asyncIterator]=="function")};var f=t=>o(t)&&r(t);export{f as isGeneratorObject};
+//# sourceMappingURL=is_generator_object.mjs.map
+// denoCacheMetadata={"headers":{"date":"Mon, 21 Jul 2025 21:50:30 GMT","cache-control":"public, max-age=31536000, immutable","cf-cache-status":"MISS","access-control-allow-origin":"*","vary":"accept-encoding","last-modified":"Mon, 21 Jul 2025 21:50:30 GMT","alt-svc":"h3=\":443\"; ma=86400","cf-ray":"962dea0e892cf0be-DFW","server":"cloudflare","content-type":"application/javascript; charset=utf-8"},"url":"https://esm.sh/gh/jeff-hykin/good-js@f6d5bcb/denonext/source/flattened/is_generator_object.mjs","time":1753134630}

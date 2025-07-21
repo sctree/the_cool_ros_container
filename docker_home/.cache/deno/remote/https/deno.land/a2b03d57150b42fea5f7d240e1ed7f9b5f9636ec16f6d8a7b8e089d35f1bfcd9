@@ -1,0 +1,11 @@
+import { normalize, isAbsolute, join } from "https://deno.land/std@0.128.0/path/mod.ts"
+import { cwd } from "https://deno.land/x/deno_deno@1.42.1.7/main.js"
+
+export const makeAbsolutePath = (path)=> {
+    if (!isAbsolute(path)) {
+        return normalize(join(cwd(), path))
+    } else {
+        return normalize(path)
+    }
+}
+// denoCacheMetadata={"headers":{"cache-control":"public, max-age=31536000, immutable","x-frame-options":"DENY","referrer-policy":"strict-origin-when-cross-origin","x-amz-version-id":"ftfCNoxE7D2MxhtuiINYjF4tn6jLOU7v","x-content-type-options":"nosniff","content-type":"application/javascript","via":"http/2 edgeproxy-h","x-amz-cf-id":"Gll7ZJGMlpXdWymOvHGgjrZBJJVabwixUkZ2wYbotkjKMJc8ETmVSw==","x-amz-cf-pop":"IAD12-P5","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-replication-status":"COMPLETED","cross-origin-embedder-policy":"same-origin","cross-origin-opener-policy":"same-origin","accept-ranges":"bytes","access-control-allow-origin":"*","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","etag":"W/\"78ff721d757abba3657593b164a1c720\"","last-modified":"Sun, 04 May 2025 20:44:33 GMT","server-timing":"fetchSource;dur=76","server":"deno/gcp-us-east4","vary":"Accept-Encoding, Origin","x-cache":"Miss from cloudfront","cross-origin-resource-policy":"same-origin","x-amz-server-side-encryption":"AES256","date":"Mon, 21 Jul 2025 21:50:30 GMT"},"url":"https://deno.land/x/quickr@0.8.1/main/flat/make_absolute_path.js","time":1753134630}

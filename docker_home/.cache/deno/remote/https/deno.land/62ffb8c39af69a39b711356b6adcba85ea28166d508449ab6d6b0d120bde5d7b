@@ -1,0 +1,12 @@
+import { fromFileUrl } from "https://deno.land/std@0.128.0/path/mod.ts"
+
+export const pathStandardize = (path)=>{
+    // PathInfo object to path
+    path = path.path||path
+    // url-like file path to POSIX path
+    if (typeof path == 'string' && path.startsWith("file:///")) {
+        path = fromFileUrl(path)
+    }
+    return path
+}
+// denoCacheMetadata={"headers":{"x-frame-options":"DENY","cache-control":"public, max-age=31536000, immutable","x-amz-cf-pop":"IAD12-P5","cross-origin-resource-policy":"same-origin","etag":"W/\"330c8fbffd92d0c8a796049f8d17e854\"","date":"Mon, 21 Jul 2025 21:50:31 GMT","vary":"Accept-Encoding, Origin","x-amz-cf-id":"qu2Ue25uV5nohQvtDMX9y_-_a7f_44gTMWhYSfqIt0Tj7Wea_QdM4Q==","accept-ranges":"bytes","server":"deno/gcp-us-east4","referrer-policy":"strict-origin-when-cross-origin","server-timing":"fetchSource;dur=74","x-cache":"Miss from cloudfront","cross-origin-opener-policy":"same-origin","content-type":"application/javascript","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","access-control-allow-origin":"*","cross-origin-embedder-policy":"same-origin","last-modified":"Tue, 16 Jul 2024 21:09:16 GMT","x-content-type-options":"nosniff","x-amz-replication-status":"COMPLETED","via":"http/2 edgeproxy-h","x-amz-version-id":"Jp2Owd3cjZlUx6RApla7Zp3XvlhXb992","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-server-side-encryption":"AES256"},"url":"https://deno.land/x/quickr@0.6.72/main/flat/_path_standardize.js","time":1753134630}

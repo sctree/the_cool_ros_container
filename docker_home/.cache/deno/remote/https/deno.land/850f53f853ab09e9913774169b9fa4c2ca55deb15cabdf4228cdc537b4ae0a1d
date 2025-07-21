@@ -1,0 +1,57 @@
+import { FileSystem } from "https://deno.land/x/quickr@0.6.72/main/file_system.js"
+import { toCamelCase } from "https://deno.land/x/good@0.7.8/string.js"
+import { stringToBacktickRepresentation, bytesToString, pureBinaryify, pureUnbinaryifyFolder, pureBinaryifyFolder } from "./tools.js"
+import version from "./version.js"
+
+export async function binaryify({ pathToBinary, pathToBinarified, disableSelfUpdating = false, forceExportString = false }) {
+    pathToBinarified = pathToBinarified || pathToBinary + ".binaryified.js"
+    await FileSystem.write({
+        path: pathToBinarified,
+        data: pureBinaryify(
+            await Deno.readFile(pathToBinary),
+            FileSystem.makeRelativePath({from: FileSystem.parentPath(pathToBinarified), to: pathToBinary}),
+            version,
+            { disableSelfUpdating, forceExportString },
+        ),
+        overwrite: true,
+    })
+    if (FileSystem.isRelativePath(pathToBinarified)) {
+        pathToBinarified = `./${FileSystem.normalize(pathToBinarified)}`
+    }
+    const nameSuggestion = toCamelCase(FileSystem.basename(pathToBinary))
+    const realNameSuggestion = nameSuggestion[0].toUpperCase() + [...nameSuggestion].slice(1).join("")
+    return [realNameSuggestion, pathToBinarified]
+}
+
+/**
+ * EXPERIMENTAL: API WILL CHANGE
+ */
+export function unbinaryify({ whereToDumpData, folders, symlinks, hardlinks }) {
+    return pureUnbinaryifyFolder({
+        whereToDumpData,
+        folders,
+        symlinks,
+        hardlinks,
+        setPermissions: FileSystem.setPermissions,
+        makeNestedFolder: (path) => Deno.mkdir(path, {recursive: true}),
+        makeSymlink: ({target, path}) => Deno.symlinkSync(target, path),
+        writeBytes: ({path, bytes}) => Deno.writeFileSync(path, bytes),
+    })
+}
+
+/**
+ * EXPERIMENTAL: API WILL CHANGE
+ */
+export async function _binaryifyFolder(path) {
+    const absolutePath = FileSystem.normalize(FileSystem.makeAbsolutePath(path))+"/"
+    const paths = (await FileSystem.listFilePathsIn(absolutePath))
+    return pureBinaryifyFolder({
+        listOfPaths: paths.map(each=>each.slice(absolutePath.length)),
+        getPermissions: path=>FileSystem.getPermissions(absolutePath+path),
+        isSymlink: path=>FileSystem.sync.info(absolutePath+path).isSymlink,
+        isFolder: path=>FileSystem.sync.info(absolutePath+path).isFolder,
+        getFileBytes: path=>Deno.readFile(absolutePath+path),
+        readLink: path=>Deno.readLink(absolutePath+path),
+    })
+}
+// denoCacheMetadata={"headers":{"x-cache":"Miss from cloudfront","cross-origin-resource-policy":"same-origin","x-amz-server-side-encryption":"AES256","vary":"accept-encoding, Origin","etag":"W/\"c1fc7f455bea88114ade9b2cf6ddb099\"","last-modified":"Mon, 03 Mar 2025 21:16:48 GMT","cross-origin-opener-policy":"same-origin","server":"deno/gcp-us-east4","x-amz-replication-status":"COMPLETED","x-amz-version-id":"Ewr9uYaVlYl5vPAEBcFE3ZtV3Vorc7K3","x-content-type-options":"nosniff","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-amz-cf-pop":"IAD12-P5","date":"Mon, 21 Jul 2025 21:50:31 GMT","content-type":"application/javascript","x-frame-options":"DENY","referrer-policy":"strict-origin-when-cross-origin","access-control-allow-origin":"*","server-timing":"fetchSource;dur=62","strict-transport-security":"max-age=63072000; includeSubDomains; preload","via":"http/2 edgeproxy-h","x-amz-cf-id":"ydV2oxP_UTAP4WqaEonA1JL6PLJk4yBdm9C-BR2JMmezUrIcDBn3Qg==","cache-control":"public, max-age=31536000, immutable","cross-origin-embedder-policy":"same-origin"},"url":"https://deno.land/x/binaryify@2.5.5.0/binaryify_api.js","time":1753134630}

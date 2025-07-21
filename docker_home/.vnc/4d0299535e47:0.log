@@ -87,3 +87,39 @@ metacity-Message: 23:58:20.724: could not find XKB extension.
 18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -131070
 18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -131069
 18/07/25 23:58:41 rfbProcessClientNormalMessage: ignoring unknown encoding -309
+19/07/25 00:06:29 Client 172.17.0.1 gone
+19/07/25 00:06:29 Statistics:
+19/07/25 00:06:29   key events received 30, pointer events 764
+19/07/25 00:06:29   framebuffer updates 312, rectangles 1492, bytes 2083930
+19/07/25 00:06:29     cursor shape updates 52, bytes 5304
+19/07/25 00:06:29     cursor position updates 1, bytes 12
+19/07/25 00:06:29     raw rectangles 7, bytes 140
+19/07/25 00:06:29     copyRect rectangles 31, bytes 496
+19/07/25 00:06:29     zlib rectangles 1401, bytes 2077978
+19/07/25 00:06:29   raw bytes equivalent 76730804, compression ratio 36.923218
+
+19/07/25 00:06:31 Got connection from client 172.17.0.1
+19/07/25 00:06:31 Using protocol version 3.8
+19/07/25 00:06:35 Full-control authentication passed by 172.17.0.1
+19/07/25 00:06:35 Pixel format for client 172.17.0.1:
+19/07/25 00:06:35   32 bpp, depth 24, little endian
+19/07/25 00:06:35   true colour: max r 255 g 255 b 255, shift r 16 g 8 b 0
+19/07/25 00:06:35   no translation needed
+19/07/25 00:06:35 Using zlib encoding for client 172.17.0.1
+19/07/25 00:06:35 Using compression level 1 for client 172.17.0.1
+19/07/25 00:06:35 Enabling X-style cursor updates for client 172.17.0.1
+19/07/25 00:06:35 Enabling cursor position updates for client 172.17.0.1
+19/07/25 00:06:35 rfbProcessClientNormalMessage: ignoring unknown encoding -131072
+19/07/25 00:06:35 rfbProcessClientNormalMessage: ignoring unknown encoding -223
+19/07/25 00:06:35 rfbProcessClientNormalMessage: ignoring unknown encoding -131071
+19/07/25 00:06:35 rfbProcessClientNormalMessage: ignoring unknown encoding -131070
+19/07/25 00:06:35 rfbProcessClientNormalMessage: ignoring unknown encoding -131069
+19/07/25 00:06:35 rfbProcessClientNormalMessage: ignoring unknown encoding -309
+19/07/25 00:06:42 Client 172.17.0.1 gone
+19/07/25 00:06:42 Statistics:
+19/07/25 00:06:42   key events received 0, pointer events 33
+19/07/25 00:06:42   framebuffer updates 3, rectangles 36, bytes 106423
+19/07/25 00:06:42     cursor shape updates 2, bytes 164
+19/07/25 00:06:42     cursor position updates 1, bytes 12
+19/07/25 00:06:42     zlib rectangles 33, bytes 106247
+19/07/25 00:06:42   raw bytes equivalent 4110904, compression ratio 38.691954

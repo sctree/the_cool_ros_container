@@ -1,0 +1,162 @@
+/* esm.sh - @foxglove/rosmsg-serialization@2.0.3 */
+var E=new TextDecoder;function w(e){if(e.length>=50)return E.decode(e);for(let t=0;t<e.length;t++)if(e[t]&128)return E.decode(e);return String.fromCharCode.apply(null,e)}function y(e,t){return e==null&&console.warn("bigint arrays are not supported in this environment"),(n,r,i)=>{if(e==null)throw new Error("bigint arrays are not supported in this environment");let s=r,o=n.byteOffset+s,a=e.BYTES_PER_ELEMENT*i,f=n.byteLength-r;if(a<0||a>f)throw new RangeError(`Array(${t}) deserialization error: size ${a}, maxSize ${f}`);if(o%e.BYTES_PER_ELEMENT===0)return new e(n.buffer,o,i);if(i<10){let u=new e(i);for(let h=0;h<i;++h)u[h]=n[t](s,!0),s+=e.BYTES_PER_ELEMENT;return u}let c=new Uint8Array(a);return c.set(new Uint8Array(n.buffer,o,a)),new e(c.buffer,c.byteOffset,i)}}var p=new Map([["bool",1],["int8",1],["uint8",1],["int16",2],["uint16",2],["int32",4],["uint32",4],["int64",8],["uint64",8],["float32",4],["float64",8],["time",8],["duration",8]]),g={bool:(e,t)=>e.getUint8(t)!==0,int8:(e,t)=>e.getInt8(t),uint8:(e,t)=>e.getUint8(t),int16:(e,t)=>e.getInt16(t,!0),uint16:(e,t)=>e.getUint16(t,!0),int32:(e,t)=>e.getInt32(t,!0),uint32:(e,t)=>e.getUint32(t,!0),int64:(e,t)=>e.getBigInt64(t,!0),uint64:(e,t)=>e.getBigUint64(t,!0),float32:(e,t)=>e.getFloat32(t,!0),float64:(e,t)=>e.getFloat64(t,!0),time:(e,t)=>{let n=e.getUint32(t,!0),r=e.getUint32(t+4,!0);return{sec:n,nsec:r}},duration:(e,t)=>{let n=e.getInt32(t,!0),r=e.getInt32(t+4,!0);return{sec:n,nsec:r}},string:(e,t)=>{let n=e.getUint32(t,!0),r=e.byteOffset+t+4,i=e.byteLength-t;if(n<0||n>i)throw new RangeError(`String deserialization error: length ${n}, maxLength ${i}`);let s=new Uint8Array(e.buffer,r,n);return w(s)},boolArray:(e,t,n)=>{let r=t,i=new Array(n);for(let s=0;s<n;++s)i[s]=g.bool(e,r),r+=1;return i},int8Array:y(Int8Array,"getInt8"),uint8Array:y(Uint8Array,"getUint8"),int16Array:y(Int16Array,"getInt16"),uint16Array:y(Uint16Array,"getUint16"),int32Array:y(Int32Array,"getInt32"),uint32Array:y(Uint32Array,"getUint32"),int64Array:y(typeof BigInt64Array=="function"?BigInt64Array:void 0,"getBigInt64"),uint64Array:y(typeof BigUint64Array=="function"?BigUint64Array:void 0,"getBigUint64"),float32Array:y(Float32Array,"getFloat32"),float64Array:y(Float64Array,"getFloat64"),timeArray:(e,t,n)=>{let r=t,i=new Array(n),s=e.byteOffset+r;if(s%Int32Array.BYTES_PER_ELEMENT===0){let o=new Int32Array(e.buffer,s,n*2);for(let a=0,f=0;a<n;++a,f=f+2)i[a]={sec:o[f],nsec:o[f+1]}}else for(let o=0;o<n;++o)i[o]={sec:e.getInt32(r,!0),nsec:e.getInt32(r+4,!0)},r+=8;return i},durationArray:(e,t,n)=>g.timeArray(e,t,n),fixedArray:(e,t,n,r,i)=>{let s=t,o=new Array(n);for(let a=0;a<n;++a)o[a]=r(e,s),s+=i(e,s);return o},dynamicArray:(e,t,n,r)=>{let i=e.getUint32(t,!0);return g.fixedArray(e,t+4,i,n,r)}};var x={string:(e,t)=>{let n=e.getUint32(t,!0),r=e.byteLength-t-4;if(n<0||n>r)throw new RangeError(`String length error: length ${n}, maxLength ${r}`);return 4+n},fixedArray:(e,t,n,r)=>{let i=t,s=0;for(let a=0;a<n;++a){let f=r(e,i);s+=f,i+=f}let o=e.byteLength-t;if(s>o)throw new RangeError(`Fixed array length error: size ${s}, maxSize ${o}`);return s},array:(e,t,n)=>{let r=t,i=e.getUint32(r,!0),s=4;r+=4;for(let a=0;a<i;++a){let f=n(e,r);s+=f,r+=f}let o=e.byteLength-t;if(s>o)throw new RangeError(`Dynamic array length error: size ${s}, maxSize ${o}`);return s}};function m(e){return e.replace(/^[0-9]|[^a-zA-Z0-9_]/g,"_")}function F(e){if(e.isConstant===!0)return"";let t=p.get(e.type);if(t==null){let n=e.type==="string"?"builtinSizes.string":`${m(e.type)}.size`;return e.isArray===!0?e.arrayLength!=null?`
+          static __${e.name}$size(view /* dataview */, offset) {
+              return builtinSizes.fixedArray(view, offset, ${e.arrayLength}, ${n});
+          }`:`
+          static __${e.name}$size(view /* dataview */, offset) {
+              return builtinSizes.array(view, offset, ${n});
+          }`:`
+      static __${e.name}$size(view /* dataview */, offset) {
+          return ${n}(view, offset);
+      }`}else return e.isArray===!0?e.arrayLength!=null?`
+          static __${e.name}$size(view /* dataview */, offset) {
+            return ${t} * ${e.arrayLength};
+          }`:`
+          static __${e.name}$size(view /* dataview */, offset) {
+            const len = view.getUint32(offset, true);
+            return 4 + len * ${t};
+          }`:`
+      static __${e.name}$size(view /* dataview */, offset) {
+          return ${t};
+      }`}function N(e,t){if(t.isConstant===!0)return"";let n=p.get(t.type),r=t.isArray===!0&&t.arrayLength!=null;if(n!=null&&(r||t.isArray===!1))if(t.arrayLength!=null){let i=n*t.arrayLength;return`
+        // ${t.type}[${t.arrayLength}] ${t.name}
+        totalSize += ${i};
+        offset += ${i};
+      `}else return`
+        // ${t.type} ${t.name}
+        totalSize += ${n};
+        offset += ${n};
+      `;return`
+    // ${t.type} ${t.name}
+    {
+        const size = ${e}.__${t.name}$size(view, offset);
+        totalSize += size;
+        offset += size;
+    }
+    `}function j(e){if(e.isConstant===!0)return"";let t=e.type in g,n=e.type in x,r=t?`deserializers.${e.type}`:`${m(e.type)}.build`,i=n?`builtinSizes.${e.type}`:`${m(e.type)}.size`,s=p.get(e.type);if(e.isArray===!0){let o=e.arrayLength;return o!=null?s!=null?`
+          // ${e.type}[${o}] ${e.name}
+          get ${e.name}() {
+            const offset = this.__${e.name}$offset(this.#view, this.#offset);
+            return deserializers.${e.type}Array(this.#view, offset, ${o});
+          }`:`
+        // ${e.type}[${o}] ${e.name}
+          get ${e.name}() {
+            const offset = this.__${e.name}$offset(this.#view, this.#offset);
+            return deserializers.fixedArray(this.#view, offset, ${o}, ${r}, ${i});
+          }`:s!=null?`
+          // ${e.type}[] ${e.name}
+          get ${e.name}() {
+            const offset = this.__${e.name}$offset(this.#view, this.#offset);
+            const len = this.#view.getUint32(offset, true);
+            return deserializers.${e.type}Array(this.#view, offset + 4, len);
+          }`:`
+          // ${e.type}[] ${e.name}
+          get ${e.name}() {
+            const offset = this.__${e.name}$offset(this.#view, this.#offset);
+            return deserializers.dynamicArray(this.#view, offset, ${r}, ${i});
+          }`}else return`get ${e.name}() {
+        const offset = this.__${e.name}$offset(this.#view, this.#offset);
+        return ${r}(this.#view, offset);
+      }`}function b(e){let t=new Array,n="__RootMsg";for(let a of e){let f=m(a.name??n),c=new Array,u=new Array,h;for(let l of a.definitions)l.isConstant!==!0&&(h==null?c.push(`
+          __${l.name}$offset(view, initOffset) {
+            return initOffset;
+          }`):(u.push(`#_${l.name}_offset_cache = undefined;`),c.push(`
+          __${l.name}$offset(view, initOffset) {
+            if (this.#_${l.name}_offset_cache) {
+              return this.#_${l.name}_offset_cache;
+            }
+            const prevOffset = this.__${h.name}$offset(view, initOffset);
+            const totalOffset = prevOffset + ${f}.__${h.name}$size(view, prevOffset);
+            this.#_${l.name}_offset_cache = totalOffset;
+            return totalOffset;
+          }`)),h=l);let d=`class ${f} {
+        ${a.definitions.map(F).join(`
+`)}
+
+        // return the total serialized size of the message in the view
+        static size(view /* DataView */, initOffset = 0) {
+          let totalSize = 0;
+          let offset = initOffset;
+
+          ${a.definitions.map(N.bind(void 0,f)).join(`
+`)}
+
+          return totalSize;
+        }
+
+        ${c.join(`
+`)}
+
+        // return an instance of ${f} from the view at initOffset bytes into the view
+        // NOTE: the underlying view data lifetime must be at least the lifetime of the instance
+        static build(view /* DataView */, offset = 0) {
+          return new ${f}(view, offset);
+        }
+
+        #view = undefined;
+        #offset;
+        ${u.join(`
+`)}
+  
+        constructor(view, offset = 0) {
+          this.#view = view;
+          this.#offset = offset;
+        }
+
+        // return a json object of the fields
+        // This fully deserializes all fields of the message into native types
+        // Typed arrays are considered native types and remain as typed arrays
+        toJSON() {
+          const view = this.#view;
+          const buffer = new Uint8Array(view.buffer, view.byteOffset + this.#offset, view.byteLength - this.#offset);
+          const reader = new StandardTypeReader(buffer);
+          return new (typeReaders.get(${JSON.stringify(a.name??n)}))(reader);
+        }
+
+        // return a plain javascript object of the message
+        // This fully deserializes all fields of the message into native types
+        // Typed arrays are considered native types and remain as typed arrays
+        toObject() {
+          const view = this.#view;
+          const buffer = new Uint8Array(view.buffer, view.byteOffset + this.#offset, view.byteLength - this.#offset);
+          const reader = new StandardTypeReader(buffer);
+          return new (typeReaders.get(${JSON.stringify(a.name??n)}))(reader);
+        }
+
+        ${a.definitions.map(j).join(`
+`)}
+    }`;t.push(d)}let r=t.reverse().join(`
+
+`),i=_({definitions:e,topLevelReaderKey:n}),s=new Function("deserializers","builtinSizes","typeReaders","StandardTypeReader",`${r}
+return __RootMsg;`),o=s.call(void 0,g,x,i,$);return o.source=()=>s.toString(),o}function J(){let e=new Uint8Array(4),t=new Uint32Array(e.buffer);return t[0]=1,e[3]===1}var M=!J();if(!M)throw new Error("Only Little Endian architectures are supported");var U=class{constructor(t){this.readerImpl=b(t),this.definitions=t}size(t){let n=new DataView(t.buffer,t.byteOffset,t.byteLength);return this.readerImpl.size(n)}source(){return this.readerImpl.source()}readMessage(t){let n=new DataView(t.buffer,t.byteOffset,t.byteLength);return this.readerImpl.build(n)}};var $=class{constructor(t){this.buffer=t,this.offset=0,this.view=new DataView(t.buffer,t.byteOffset,t.byteLength)}json(){let t=this.string();try{return JSON.parse(t)}catch{return`Could not parse ${t}`}}string(){let t=this.uint32(),n=this.view.byteOffset+this.offset,r=this.view.byteLength-this.offset;if(t<0||t>r)throw new RangeError(`String deserialization error: length ${t}, maxLength ${r}`);let i=new Uint8Array(this.view.buffer,n,t);return this.offset+=t,w(i)}bool(){return this.uint8()!==0}int8(){return this.view.getInt8(this.offset++)}uint8(){return this.view.getUint8(this.offset++)}typedArray(t,n){let r=t??this.uint32(),i=this.view,s=this.offset+i.byteOffset;if(this.offset+=r*n.BYTES_PER_ELEMENT,s%n.BYTES_PER_ELEMENT===0)return new n(i.buffer,s,r);let o=n.BYTES_PER_ELEMENT*r,a=new Uint8Array(o);return a.set(new Uint8Array(i.buffer,s,o)),new n(a.buffer,a.byteOffset,r)}int16(){let t=this.view.getInt16(this.offset,!0);return this.offset+=2,t}uint16(){let t=this.view.getUint16(this.offset,!0);return this.offset+=2,t}int32(){let t=this.view.getInt32(this.offset,!0);return this.offset+=4,t}uint32(){let t=this.view.getUint32(this.offset,!0);return this.offset+=4,t}float32(){let t=this.view.getFloat32(this.offset,!0);return this.offset+=4,t}float64(){let t=this.view.getFloat64(this.offset,!0);return this.offset+=8,t}int64(){let t=this.offset;return this.offset+=8,this.view.getBigInt64(t,!0)}uint64(){let t=this.offset;return this.offset+=8,this.view.getBigUint64(t,!0)}time(){let t=this.offset;this.offset+=8;let n=this.view.getUint32(t,!0),r=this.view.getUint32(t+4,!0);return{sec:n,nsec:r}}duration(){let t=this.offset;this.offset+=8;let n=this.view.getInt32(t,!0),r=this.view.getInt32(t+4,!0);return{sec:n,nsec:r}}},R=(e,t="")=>{let n="",r=e.filter(i=>{let s=i.name??"";if(!t)return!s;let o=t.includes("/")?t:`/${t}`;return s.endsWith(o)?(n=s,!0):!1});if(r.length!==1)throw new Error(`Expected 1 top level type definition for '${t}' but found ${r.length}.`);return{...r[0],name:n}},v=e=>e.replace(/\//g,"_");function D(e){switch(e){case"int8":return"Int8Array";case"uint8":return"Uint8Array";case"int16":return"Int16Array";case"uint16":return"Uint16Array";case"int32":return"Int32Array";case"uint32":return"Uint32Array";case"int64":return"BigInt64Array";case"uint64":return"BigUint64Array";case"float32":return"Float32Array";case"float64":return"Float64Array";default:return}}var _=({definitions:e,options:t={},topLevelReaderKey:n})=>{if(e.length===0)throw new Error("no types given");let r=e.filter(f=>!f.name);if(r.length>1)throw new Error("multiple unnamed types");let i=r.length>0?r[0]:e[0],s=e.filter(f=>!!f.name),o=f=>{let c=[];return f.definitions.forEach(u=>{if(u.isConstant!==!0)if(u.isArray===!0){let h=D(u.type);if(h!=null){c.push(`this.${u.name} = reader.typedArray(${String(u.arrayLength)}, ${h});`);return}let d=`length_${u.name}`;c.push(`var ${d} = ${u.arrayLength!=null?u.arrayLength:"reader.uint32();"}`);let l=`this.${u.name}`;if(c.push(`${l} = new Array(${d})`),c.push(`for (var i = 0; i < ${d}; i++) {`),u.isComplex===!0){let C=R(e,u.type);c.push(`  ${l}[i] = new Record.${v(C.name)}(reader);`)}else c.push(`  ${l}[i] = reader.${u.type}();`);c.push("}")}else if(u.isComplex===!0){let h=R(e,u.type);c.push(`this.${u.name} = new Record.${v(h.name)}(reader);`)}else c.push(`this.${u.name} = reader.${u.type}();`)}),t.freeze===!0&&c.push("Object.freeze(this);"),c.join(`
+    `)},a=`
+  const builtReaders = new Map();
+  var Record = function (reader) {
+    ${o(i)}
+  };
+  builtReaders.set(topLevelReaderKey, Record);
+  `;for(let f of s)a+=`
+  Record.${v(f.name)} = function(reader) {
+    ${o(f)}
+  };
+  builtReaders.set(${JSON.stringify(f.name)}, Record.${v(f.name)});
+  `;return a+="return builtReaders;",new Function("topLevelReaderKey",a)(n)},L=class{constructor(t,n={}){this.reader=_({definitions:t,options:n,topLevelReaderKey:"<toplevel>"}).get("<toplevel>")}readMessage(t){let n=new $(t);return new this.reader(n)}};function O(e){let t=0,n=e.length;for(let r=0;r<n;r++){let i=e.charCodeAt(r);if(i<=127)t+=1;else if(i<=2047)t+=2;else if(55296<=i&&i<=56319){let s=e.charCodeAt(r+1);56320<=s&&s<=57343?(t+=4,r++):t+=3}else t+=3}return t}function I(e,t,n){t.setUint32(n,e.sec,!0),t.setUint32(n+4,e.nsec,!0)}var A=class{constructor(){this.offset=0}_incrementAndReturn(t){let n=this.offset;return this.offset+=t,n}json(t){return this.string(JSON.stringify(t))}string(t){if(typeof t!="string")throw new Error(`Expected string but got ${typeof t}`);let n=4+O(t);return this._incrementAndReturn(n)}bool(){return this.uint8()}int8(){return this._incrementAndReturn(1)}uint8(){return this._incrementAndReturn(1)}int16(){return this._incrementAndReturn(2)}uint16(){return this._incrementAndReturn(2)}int32(){return this._incrementAndReturn(4)}uint32(){return this._incrementAndReturn(4)}float32(){return this._incrementAndReturn(4)}float64(){return this._incrementAndReturn(8)}int64(){return this._incrementAndReturn(8)}uint64(){return this._incrementAndReturn(8)}time(){return this._incrementAndReturn(8)}duration(){return this._incrementAndReturn(8)}},S=class{constructor(t){this.data=t,this.view=new DataView(t.buffer,t.byteOffset,t.byteLength),this.offsetCalculator=new A}json(t){this.string(JSON.stringify(t))}string(t){this.textEncoder==null&&(this.textEncoder=new TextEncoder);let n=this.offsetCalculator.string(t),r=this.offsetCalculator.offset-n-4;this.view.setUint32(n,r,!0);let{read:i,written:s}=this.textEncoder.encodeInto(t,this.data.subarray(n+4));if(i!==t.length)throw new Error(`Not enough space to encode string into subarray (wrote ${i} of ${t.length} code units into ${s} of ${this.data.subarray(n+4).length} bytes)`)}bool(t){this.uint8(t?1:0)}int8(t){this.view.setInt8(this.offsetCalculator.int8(),t)}uint8(t){this.view.setUint8(this.offsetCalculator.uint8(),t)}int16(t){this.view.setInt16(this.offsetCalculator.int16(),t,!0)}uint16(t){this.view.setUint16(this.offsetCalculator.uint16(),t,!0)}int32(t){this.view.setInt32(this.offsetCalculator.int32(),t,!0)}uint32(t){this.view.setUint32(this.offsetCalculator.uint32(),t,!0)}float32(t){this.view.setFloat32(this.offsetCalculator.float32(),t,!0)}float64(t){this.view.setFloat64(this.offsetCalculator.float64(),t,!0)}int64(t){this.view.setBigInt64(this.offsetCalculator.int64(),BigInt(t),!0)}uint64(t){this.view.setBigUint64(this.offsetCalculator.uint64(),BigInt(t),!0)}time(t){I(t,this.view,this.offsetCalculator.time())}duration(t){I(t,this.view,this.offsetCalculator.time())}},B=(e,t="")=>{let n="",r=e.filter(i=>{let s=i.name??"";if(t.length===0)return s.length===0;let o=t.includes("/")?t:`/${t}`;return s.endsWith(o)?(n=s,!0):!1});if(r.length!==1)throw new Error(`Expected 1 top level type definition for '${t}' but found ${r.length}.`);return{...r[0],name:n}},z=e=>e.replace(/\//g,"_");function P(types){if(types.length===0)throw new Error("no types given");let unnamedTypes=types.filter(e=>e.name==null);if(unnamedTypes.length>1)throw new Error("multiple unnamed types");let unnamedType=unnamedTypes.length>0?unnamedTypes[0]:types[0],namedTypes=types.filter(e=>e.name!=null),constructorBody=(e,t)=>{let n=[];return e.definitions.forEach(r=>{if(r.isConstant??!1)return;let i=`message["${r.name}"]`;if(r.isArray??!1){let s=`length_${r.name}`;if(r.arrayLength!=null?n.push(`var ${s} = ${r.arrayLength};`):(n.push(`var ${s} = ${i}.length;`),n.push(`${t}.uint32(${s});`)),n.push(`for (var i = 0; i < ${s}; i++) {`),r.isComplex??!1){let o=B(types,r.type);n.push(`  ${z(o.name)}(${t}, ${i}[i]);`)}else n.push(`  ${t}.${r.type}(${i}[i]);`);n.push("}")}else if(r.isComplex??!1){let s=B(types,r.type);n.push(`${z(s.name)}(${t}, ${i});`)}else n.push(`${t}.${r.type}(${i});`)}),n.join(`
+    `)},writerJs="",calculateSizeJs="";namedTypes.forEach(e=>{writerJs+=`
+  function ${z(e.name)}(writer, message) {
+    ${constructorBody(e,"writer")}
+  };
+`,calculateSizeJs+=`
+  function ${z(e.name)}(offsetCalculator, message) {
+    ${constructorBody(e,"offsetCalculator")}
+  };
+`}),writerJs+=`
+  return function write(writer, message) {
+    ${constructorBody(unnamedType,"writer")}
+    return writer.data;
+  };`,calculateSizeJs+=`
+  return function calculateSize(offsetCalculator, message) {
+    ${constructorBody(unnamedType,"offsetCalculator")}
+    return offsetCalculator.offset;
+  };`;let write,calculateSize;try{write=eval(`(function buildWriter() { ${writerJs} })()`)}catch(e){throw console.error("error building writer:",writerJs),e}try{calculateSize=eval(`(function buildSizeCalculator() { ${calculateSizeJs} })()`)}catch(e){throw console.error("error building size calculator:",calculateSizeJs),e}return{writer(e,t){let n=new S(t);return write(n,e)},byteSizeCalculator(e){let t=new A;return calculateSize(t,e)}}}var T=class{constructor(t){let{writer:n,byteSizeCalculator:r}=P(t);this.writer=n,this.byteSizeCalculator=r}calculateByteSize(t){return this.byteSizeCalculator(t)}writeMessage(t,n){return this.writer(t,n??new Uint8Array(this.calculateByteSize(t)))}};export{U as LazyMessageReader,L as MessageReader,T as MessageWriter,$ as StandardTypeReader,_ as createParsers};
+//# sourceMappingURL=rosmsg-serialization.mjs.map
+// denoCacheMetadata={"headers":{"content-type":"application/javascript; charset=utf-8","alt-svc":"h3=\":443\"; ma=86400","date":"Mon, 21 Jul 2025 21:50:30 GMT","access-control-allow-origin":"*","vary":"Accept-Encoding","cf-ray":"962dea0dbe81f0be-DFW","cf-cache-status":"MISS","cache-control":"public, max-age=31536000, immutable","last-modified":"Mon, 21 Jul 2025 21:50:30 GMT","server":"cloudflare"},"url":"https://esm.sh/@foxglove/rosmsg-serialization@2.0.3/denonext/rosmsg-serialization.mjs","time":1753134630}

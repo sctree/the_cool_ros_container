@@ -1,0 +1,60 @@
+// Copyright 2018-2020 Cruise LLC
+// Copyright 2021 Foxglove Technologies Inc
+//
+// This source code is licensed under the Apache License, Version 2.0,
+// found in the LICENSE file in the root directory of this source tree.
+// You may not use this file except in compliance with the License.
+
+import type { Time } from "https://esm.sh/@foxglove/rostime";
+
+import type { IBagReader } from "./IBagReader.ts";
+import type { Chunk, ChunkInfo, Connection, IndexData } from "./record.ts";
+
+export type RawFields = { [k: string]: Uint8Array };
+
+export interface Constructor<T> {
+  new (fields: RawFields): T;
+}
+
+export interface Filelike {
+  read(offset: number, length: number): Promise<Uint8Array>;
+  size(): number;
+}
+
+export type Decompress = {
+  [compression: string]: (buffer: Uint8Array, size: number) => Uint8Array;
+};
+
+export type ChunkReadResult = {
+  chunk: Chunk;
+  indices: IndexData[];
+};
+
+export type IteratorConstructorArgs = {
+  position: Time;
+  connections: Map<number, Connection>;
+  chunkInfos: ChunkInfo[];
+  reader: IBagReader;
+  decompress: Decompress;
+
+  topics?: string[];
+  parse?: (data: Uint8Array, connection: Connection) => unknown;
+};
+
+export type MessageEvent = {
+  topic: string;
+  timestamp: Time;
+  data: Uint8Array;
+  connectionId: number;
+
+  message?: unknown;
+};
+
+export type MessageIterator = {
+  /**
+   * @returns An AsyncIterator for serialized message data from the forward iterator
+   */
+  [Symbol.asyncIterator](): AsyncIterator<MessageEvent>;
+};
+
+// denoCacheMetadata={"headers":{"x-content-type-options":"nosniff","date":"Mon, 21 Jul 2025 21:50:29 GMT","cache-control":"max-age=300","content-type":"text/plain; charset=utf-8","strict-transport-security":"max-age=31536000","etag":"W/\"58e700426433182a7dc58a86cf1e9c81005b3a8d598fa8fb02ce4f1ec3bf9d6c\"","x-served-by":"cache-iah17227-IAH","vary":"Authorization,Accept-Encoding","x-github-request-id":"9038:371EF7:58B64:71D0F:687EB625","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","source-age":"0","x-xss-protection":"1; mode=block","access-control-allow-origin":"*","x-timer":"S1753134630.594158,VS0,VE91","via":"1.1 varnish","accept-ranges":"bytes","x-cache":"MISS","x-cache-hits":"0","cross-origin-resource-policy":"cross-origin","x-fastly-request-id":"045aee238d4b82e1de5af8bba15797f96ad625f4","x-frame-options":"deny","expires":"Mon, 21 Jul 2025 21:55:29 GMT"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/subrepos/foxglove_rosbag/src/types.ts","time":1753134629}

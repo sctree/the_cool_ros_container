@@ -1,0 +1,30 @@
+// Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
+// This module is browser compatible.
+
+import { GlobOptions } from "../_common/glob_to_reg_exp.ts";
+import { join } from "./join.ts";
+import { SEPARATOR } from "./constants.ts";
+import { normalizeGlob } from "./normalize_glob.ts";
+
+/** Like join(), but doesn't collapse "**\/.." when `globstar` is true. */
+export function joinGlobs(
+  globs: string[],
+  { extended = true, globstar = false }: GlobOptions = {},
+): string {
+  if (!globstar || globs.length === 0) {
+    return join(...globs);
+  }
+  if (globs.length === 0) return ".";
+  let joined: string | undefined;
+  for (const glob of globs) {
+    const path = glob;
+    if (path.length > 0) {
+      if (!joined) joined = path;
+      else joined += `${SEPARATOR}${path}`;
+    }
+  }
+  if (!joined) return ".";
+  return normalizeGlob(joined, { extended, globstar });
+}
+
+// denoCacheMetadata={"headers":{"via":"http/2 edgeproxy-h","date":"Mon, 21 Jul 2025 07:47:10 GMT","accept-ranges":"bytes","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-amz-cf-pop":"IAD12-P5","cache-control":"public, max-age=31536000, immutable","etag":"\"ec7944435bae2bf6a0802058de19e91e\"","cross-origin-resource-policy":"same-origin","cross-origin-embedder-policy":"same-origin","x-frame-options":"DENY","last-modified":"Thu, 01 Feb 2024 05:38:47 GMT","content-length":"896","referrer-policy":"strict-origin-when-cross-origin","server-timing":"fetchSource;dur=14","access-control-allow-origin":"*","x-amz-replication-status":"COMPLETED","content-type":"application/typescript; charset=utf-8","x-amz-server-side-encryption":"AES256","vary":"Accept-Encoding, Origin","x-content-type-options":"nosniff","x-amz-cf-id":"KhoH0YhaD73OjRaUcqNRc8ElQArKAt9bURkkbIMKuFO_OZDWRjDqAA==","x-cache":"Hit from cloudfront","cross-origin-opener-policy":"same-origin","strict-transport-security":"max-age=63072000; includeSubDomains; preload","x-amz-version-id":"ZPKoCXgZUCOwopEckYvSiusm6cgqlAFt","age":"50601","server":"deno/gcp-us-east4"},"url":"https://deno.land/std@0.214.0/path/posix/join_globs.ts","time":1753134630}
