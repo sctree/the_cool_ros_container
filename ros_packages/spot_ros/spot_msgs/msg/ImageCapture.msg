@@ -1,9 +1,0 @@
-time acquisition_time
-
-FrameTreeSnapshot transforms_snapshot
-string frame_name_image_sensor
-
-sensor_msgs/Image image
-
-duration capture_exposure_duration
-float64 capture_sensor_gain
