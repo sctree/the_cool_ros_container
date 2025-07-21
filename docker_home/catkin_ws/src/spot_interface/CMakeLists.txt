@@ -8,13 +8,13 @@ project(spot_interface)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  std_msgs
-geometry_msgs
-sensor_msgs
-message_generation
-pcl_ros
+    roscpp
+    rospy
+    std_msgs
+    geometry_msgs
+    sensor_msgs
+    message_generation
+    pcl_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -165,9 +165,6 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
  catkin_install_python(PROGRAMS
-    # scripts/vel2.py
-    # scripts/frames.py
-    # scripts/fiducial_detection.py
 #   scripts/my_python_script
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )

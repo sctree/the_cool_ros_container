@@ -1,50 +1,45 @@
 <?xml version="1.0"?>
 <launch>
+    <!--<remap from="/scan_cloud" to="/tf_points2"/>
+    <remap from="/rgb/image" to="/spot/camera/frontleft/image"/>
+    <remap from="/rgb/camera_info" to="/spot/camera/frontleft/camera_info"/>-->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
+        <param name="map_frame" value="map"/>
+        <param name="odom_frame" value="odom"/>
+        <param name="base_frame" value="base_link"/>
+        
+        <remap from="/map" to="/grid_map"/>
+        <remap from="/cmd_vel" to="/prova"/>
+        
+        <param name="base_local_planner" value="local_planner/LocalPlanner"/>
+        <param name="footprint_padding" value="0.01" />
+        <param name="controller_frequency" value="0.5" />
+        <param name="controller_patience" value="3.0" />
+        <param name="oscillation_timeout" value="30.0" />
+        <param name="oscillation_distance" value="0.5" />
+        <param name="planner_patience" value="1" />
+        <param name="controller_patience" value="1" /> 
+        
+        <param name="recovery_behavior_enabled" value="true" />
+        <param name="clearing_rotation_allowed" value="false" />
+        <!-- <param name="recovery_behaviors" value="[{name: small_rotation, type: spot_recovery/RotateRecovery}]" /> -->
+        <rosparam param="recovery_behaviors"> [ { name: "small_rotation", type: "spot_recovery/RotateRecovery" } ] </rosparam>
+        <rosparam file="$(find spot_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find spot_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find spot_navigation)/param/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find spot_navigation)/param/global_costmap_params.yaml" command="load" />
+        <!--<rosparam file="$(find rrt_exploration)/param/eband_local_planner_params.yaml" command="load" />  -->
+        <param name="global_costmap/global_frame" value="odom"/>
+        <param name="global_costmap/robot_base_frame" value="base_link"/>
+        <param name="global_costmap/laser_scan_sensor/sensor_frame" value="velodyne_base_link"/>
+        <param name="global_costmap/laser_scan_sensor/topic" value="/tf_points2"/>    
+        <param name="local_costmap/global_frame" value="odom"/>
+        <param name="local_costmap/robot_base_frame" value="base_link"/>
+        <param name="local_costmap/laser_scan_sensor/sensor_frame" value="velodyne_base_link"/>
+        <param name="local_costmap/laser_scan_sensor/topic" value="/tf_points2"/>
+        <param name="local_costmap/obstacle_layer/laser_scan_sensor/topic" value="/tf_points2"/>
+    </node>
 
-  <!--<remap from="/scan_cloud" to="/tf_points2"/>
-<remap from="/rgb/image" to="/spot/camera/frontleft/image"/>
-<remap from="/rgb/camera_info" to="/spot/camera/frontleft/camera_info"/>-->
-
-
- 
-
-<node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
-
-     <param name="map_frame" value="map"/>
-      <param name="odom_frame" value="odom"/>
-      <param name="base_frame" value="base_link"/>
-<remap from="/map" to="/grid_map"/>
-<remap from="/cmd_vel" to="/prova"/>
-  <param name="base_local_planner" value="local_planner/LocalPlanner"/>
-    <param name="footprint_padding" value="0.01" />
-    <param name="controller_frequency" value="0.5" />
-    <param name="controller_patience" value="3.0" />
-    <param name="oscillation_timeout" value="30.0" />
-    <param name="oscillation_distance" value="0.5" />
-    <param name="planner_patience" value="1" />
-    <param name="controller_patience" value="1" /> 
-    
-    <param name="recovery_behavior_enabled" value="true" />
-    <param name="clearing_rotation_allowed" value="false" />
-    <!-- <param name="recovery_behaviors" value="[{name: small_rotation, type: spot_recovery/RotateRecovery}]" /> -->
-    <rosparam param="recovery_behaviors"> [ { name: "small_rotation", type: "spot_recovery/RotateRecovery" } ] </rosparam>
-    <rosparam file="$(find spot_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find spot_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find spot_navigation)/param/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find spot_navigation)/param/global_costmap_params.yaml" command="load" />
-    <!--<rosparam file="$(find rrt_exploration)/param/eband_local_planner_params.yaml" command="load" />  -->
-    <param name="global_costmap/global_frame" value="odom"/>
-    <param name="global_costmap/robot_base_frame" value="base_link"/>
-    <param name="global_costmap/laser_scan_sensor/sensor_frame" value="velodyne_base_link"/>
-    <param name="global_costmap/laser_scan_sensor/topic" value="/tf_points2"/>    
-    <param name="local_costmap/global_frame" value="odom"/>
-    <param name="local_costmap/robot_base_frame" value="base_link"/>
-    <param name="local_costmap/laser_scan_sensor/sensor_frame" value="velodyne_base_link"/>
-    <param name="local_costmap/laser_scan_sensor/topic" value="/tf_points2"/>
-    <param name="local_costmap/obstacle_layer/laser_scan_sensor/topic" value="/tf_points2"/>
-  </node>
-
-<node pkg="spot_navigation" type="VelGotopoint.py" respawn="false" name="gotopint" output="screen">
-</node>
-
+    <node pkg="spot_navigation" type="spot_main.py" respawn="false" name="spot_main1" output="screen">
+    </node>
 </launch>
