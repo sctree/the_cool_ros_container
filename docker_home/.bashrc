@@ -100,6 +100,7 @@ fi
 # for ROS
 . "/opt/ros/$ROS_DISTRO/setup.bash" --
 export DENO_INSTALL="$HOME/.deno"
+export PATH="$PATH:$DENO_INSTALL/bin"
 # if were at the inital non-root login
 if [ "$SHLVL" = "2" ] && ! [ "$(whoami)" = "root" ]
 then

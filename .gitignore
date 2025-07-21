@@ -2,6 +2,12 @@
 # custom
 # 
 docker_home/.deno/bin/deno
+docker_home/.vnc/*.pid
+docker_home/.vnc/*.log
+docker_home/.logs/*
+docker_home/.dbus/*
+*.bag
+!docker_home/.cache/deno
 #
 # for the docker home container
 #
