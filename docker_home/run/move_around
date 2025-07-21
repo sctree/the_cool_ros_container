@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# NOTE: not tested, need to ask Zoe
+roslaunch spot_navigation spot_main.py
