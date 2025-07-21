@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/bdaiinstitute/spot_description.git
+	branch = main
+	commit = d5726b4ca654f2a0aa8ef4094defcfc70a9e7a1e
+	parent = fe24c341485cb7f6bcefc1b5fc90dfcca19516ca
+	method = merge
+	cmdver = 0.4.5
