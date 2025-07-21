@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:bdaiinstitute/spot_ros2.git
+	branch = main
+	commit = f732130ecfa97be1e65aaa33ec65e8471987f203
+	parent = 4944f4acf91bb6de80bf4612f6d4817d9ae07232
+	method = merge
+	cmdver = 0.4.5

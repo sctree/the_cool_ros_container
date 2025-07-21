@@ -1,0 +1,6 @@
+string waypoint_id # waypoint ID to navigate to
+---
+bool success   # indicate successful run of triggered service
+string message # informational, e.g. for error messages
+---
+string waypoint_id 
