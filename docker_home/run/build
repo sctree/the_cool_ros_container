@@ -1,22 +1,38 @@
 #!/usr/bin/env bash
-cd ~/catkin_ws
-python3 -m pip install -e ./src/spot_ros/spot_wrapper/
-rm -rf build devel
+
+set -e  # Exit immediately on any unhandled error
+
+cd ~/catkin_ws || { echo "Failed to change directory to ~/catkin_ws"; exit 1; }
+
+# Install spot_wrapper in editable mode
+python3 -m pip install -e ./src/spot_ros/spot_wrapper/ || { echo "Failed to install spot_wrapper"; exit 1; }
+
+# Clean build and devel directories
+rm -rf build devel || { echo "Failed to clean build and devel directories"; exit 1; }
+
 echo "#"
 echo "#" catkin_make 1 of 3
 echo "#"
 sleep 1
-catkin_make; 
+catkin_make > /dev/null 2>&1 || true  # Suppress output and ignore error
+
 echo "#"
 echo "#" catkin_make 2 of 3
 echo "#"
 sleep 1
-catkin_make; 
+catkin_make > /dev/null 2>&1 || true  # Suppress output and ignore error
+
 echo "#"
 echo "#" catkin_make 3 of 3
 echo "#"
 sleep 1
-catkin_make
-. ./devel/setup.bash
-cd -
-python3 -m pip install transforms3d
+catkin_make || { echo "Final catkin_make failed"; exit 1; }
+
+# Source the workspace
+. ./devel/setup.bash || { echo "Failed to source setup.bash"; exit 1; }
+
+# Return to previous directory
+cd - || { echo "Failed to return to previous directory"; exit 1; }
+
+# Install transforms3d
+python3 -m pip install transforms3d || { echo "Failed to install transforms3d"; exit 1; }
