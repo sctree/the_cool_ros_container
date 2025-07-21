@@ -9,7 +9,9 @@ docker_home/.dbus/*
 *.bag
 *.cache/*
 **/*.cache/*
-!/docker_home/.cache/deno
+!/docker_home/.cache/deno/gen
+!/docker_home/.cache/deno/npm
+!/docker_home/.cache/deno/remote
 #
 # for the docker home container
 #
