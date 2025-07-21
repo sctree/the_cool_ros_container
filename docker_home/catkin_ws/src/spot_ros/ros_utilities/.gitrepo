@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/bdaiinstitute/ros_utilities.git
+	branch = main
+	commit = bbe365dfafef15e9a6379246f801aca4d90a932b
+	parent = 04ce8c059b0655ed501e89d3a02900a00666e3fb
+	method = merge
+	cmdver = 0.4.5
