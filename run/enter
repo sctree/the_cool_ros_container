@@ -32,7 +32,7 @@ mkdir -p "$PWD/docker_home"
 docker run --privileged --cgroupns=host \
     -v "$PWD"/docker_home:/home/user1:rw \
     -d --name "$container_name" \
-    -p "$external_vnc_port":5900 \   # why 5900 here instead of 5901
+    -p "$external_vnc_port":5900 \
     -p "$external_ssh_port":22 \
     -p "$external_foxglove_port":8765 \
     -p "$external_visual_port":8080 \
