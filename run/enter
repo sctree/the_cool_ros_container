@@ -21,6 +21,7 @@ container_name="quick_ros_docker"
 external_vnc_port="5901"
 external_ssh_port="2222"
 external_foxglove_port="8765"
+external_visual_port="8080"
 
 echo may take a second
 docker stop "$container_name" &>/dev/null
@@ -31,9 +32,10 @@ mkdir -p "$PWD/docker_home"
 docker run --privileged --cgroupns=host \
     -v "$PWD"/docker_home:/home/user1:rw \
     -d --name "$container_name" \
-    -p "$external_vnc_port":5900 \
+    -p "$external_vnc_port":5900 \   # why 5900 here instead of 5901
     -p "$external_ssh_port":22 \
     -p "$external_foxglove_port":8765 \
+    -p "$external_visual_port":8080 \
     -e VNC_PASSWORD=cbd109 \
     -e VNC_RESOLUTION=1280x800 \
     -P \
