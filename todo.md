@@ -1,24 +1,24 @@
 right now-ish
 - get frontend of HTML visualizer thing working:
-    - create docker_home/visualizer/
+    ✅ - create docker_home/visualizer/
         - put the HTML and js in there
         - name the html file `index.html`
-    - create docker_home/run/viz
+    ✅ - create docker_home/run/viz
         - make it an executable shell script
         - have it do:
             - `cd "$HOME/visualizer"; archy .`
-    - run/viz # in docker
-    - that command should print out a port number, add that to run/enter (follow the pattern of the vnc port)
-    - in the browser (outside of docker) open the url printed by the run/viz
-    - if it works, that means the frontend is functional
+    ✅ - run/viz # in docker
+    ✅ - that command should print out a port number, add that to run/enter (follow the pattern of the vnc port)
+    ✅ - in the browser (outside of docker) open the url printed by the run/viz
+    ❌- if it works, that means the frontend is functional
 - get the fake backend working in docker
-  - add docker_home/run/serve_rosbag
-    - make it an executable shell script
-    - have it just call `rosbagAsBackend "$@" &;_pid=$!;echo "to stop the server do:"; echo "   kill $_pid"`
-  - put that test rosbag file youve got into docker_home/visualizer/test.rosbag
-  - `run/serve_rosbag --rosbag-file ./visualizer/test.rosbag`
-  - `run/viz`
-  - check the website see if its successfully connecting to the backend. if yes, great fake backend is done.
+    ✅ - add docker_home/run/serve_rosbag
+    ✅ - make it an executable shell script
+    ✅ - have it just call `rosbagAsBackend "$@" &;_pid=$!;echo "to stop the server do:"; echo "   kill $_pid"`
+    ✅ - put that test rosbag file youve got into docker_home/visualizer/test.rosbag
+    - `run/serve_rosbag --rosbag-file ./visualizer/test.rosbag`
+    - `run/viz`
+    - check the website see if its successfully connecting to the backend. if yes, great fake backend is done.
 - get real backend working
   - google roslibjs tutorial
   - look for the "ros bridge" part of the tutorial
