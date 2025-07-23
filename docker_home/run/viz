@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-cd "$HOME/visualizer"; python3 -m http.server 9093 "$@" 
+cd "$HOME/visualizer"; python3 -m http.server 9093 "$@" &>rosbag_front.log

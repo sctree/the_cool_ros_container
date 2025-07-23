@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-rosbagAsBackend "$@" &;_pid=$!;echo "to stop the server do:"; echo "   kill $_pid"
+rosbagAsBackend "$@" &>rosbag.log &
+_pid=$!
+echo "to stop the server do:"
+echo "   kill $_pid"

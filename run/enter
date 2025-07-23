@@ -21,7 +21,8 @@ container_name="quick_ros_docker"
 external_vnc_port="5901"
 external_ssh_port="2222"
 external_foxglove_port="8765"
-external_visual_port="9093"
+external_visual_frontend_port="9093"
+external_visual_backend_port="9094"
 
 echo may take a second
 docker stop "$container_name" &>/dev/null
@@ -35,7 +36,8 @@ docker run --privileged --cgroupns=host \
     -p "$external_vnc_port":5900 \
     -p "$external_ssh_port":22 \
     -p "$external_foxglove_port":8765 \
-    -p "$external_visual_port":9093 \
+    -p "$external_visual_frontend_port":9093 \
+    -p "$external_visual_backend_port":9094 \
     -e VNC_PASSWORD=cbd109 \
     -e VNC_RESOLUTION=1280x800 \
     -P \
