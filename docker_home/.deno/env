@@ -1,0 +1,11 @@
+#!/bin/sh
+# deno shell setup; adapted from rustup
+# affix colons on either side of $PATH to simplify matching
+case ":${PATH}:" in
+    *:"/home/user1/.deno/bin":*)
+        ;;
+    *)
+        # Prepending path in case a system-installed deno executable needs to be overridden
+        export PATH="/home/user1/.deno/bin:$PATH"
+        ;;
+esac
