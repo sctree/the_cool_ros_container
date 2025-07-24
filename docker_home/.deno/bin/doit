@@ -15,8 +15,8 @@ function shellEscape(string) {
 // setup
 // 
 const tempFilePath = await Deno.makeTempFile()
-const recreateEnvPosix = Object.entries(key).map(
-    (key,value)=>`${key}=${shellEscape(value)}`
+const recreateEnvPosix = Object.entries(Console.env).map(
+    ([key, value])=>`${key}=${shellEscape(`${value??""}`)}`
 ).join("\n")
 await FileSystem.write({
     data: recreateEnvPosix,
