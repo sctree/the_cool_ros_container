@@ -19,6 +19,14 @@ right now-ish
     ✅ - `run/serve_rosbag --rosbag-file ./visualizer/test.rosbag`
     ✅ - `run/viz`
     ❌ - check the website see if its successfully connecting to the backend. if yes, great fake backend is done.
+
+- Networking
+- search for websocket problems through docker (how ws works with docker)
+    - acquire general knowledge like (when does hostname matter when starting a local server)
+    - whats the diff b/t localhost and 127.0.0.1 (may b something with docker/sockets or hostnames)
+    - confuosn b/t hostnames in and out of the docker container
+
+
 - get real backend working
   - google roslibjs tutorial
   - look for the "ros bridge" part of the tutorial
