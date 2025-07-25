@@ -2808,7 +2808,9 @@
             })
 
             // Create a connection to the rosbridge WebSocket server.
-            ros.connect("ws://127.0.0.1:9094")
+            //ros.connect("ws://127.0.0.1:9094")
+            console.log('smoogle: ', window.location.hostname)
+            ros.connect('ws://${window.location.hostname}:9094')
 
             // Like when publishing a topic, we first create a Topic object with details of the topic's name
             // and message type. Note that we can call publish or subscribe on the same topic object.
