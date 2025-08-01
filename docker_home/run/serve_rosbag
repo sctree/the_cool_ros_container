@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rosbagAsBackend "$@" &>rosbag.log &
+rosbagAsBackend --address 0.0.0.0 --port 9094 "$@" 1>rosbag.log &
 _pid=$!
 echo "to stop the server do:"
 echo "   kill $_pid"
