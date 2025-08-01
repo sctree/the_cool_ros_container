@@ -2775,8 +2775,8 @@
         </div>
 
         <div id="debugLog"></div>
-        <script type="module" src="main.js"></script>
-        <script>
+        <script type="module">
+            import {whenStatusUpdateTopicGiven, whenOdometryUpdateTopicGiven } from "./main.js"
             // Connecting to ROS
             // -----------------
             var ros = new ROSLIB.Ros()
