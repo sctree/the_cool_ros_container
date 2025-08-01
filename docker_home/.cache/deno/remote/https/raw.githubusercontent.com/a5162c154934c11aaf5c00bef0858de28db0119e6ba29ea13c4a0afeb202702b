@@ -5,7 +5,7 @@ import { certFileContents, keyFileContents } from "./main/dummyCertFiles.js"
 // import ArrayReader from "./subrepos/foxglove_rosbag/src/web/ArrayReader.ts"
 import { FileSystem, glob } from "https://deno.land/x/quickr@0.8.1/main/file_system.js"
 
-import { parseArgs, flag, required, initialValue } from "https://esm.sh/gh/jeff-hykin/good-js@1.14.3.0/source/flattened/parse_args.js"
+import { parseArgs, flag, required, initialValue } from "https://esm.sh/gh/jeff-hykin/good-js@1.18.0.0/source/flattened/parse_args.js"
 import { didYouMean } from "https://esm.sh/gh/jeff-hykin/good-js@1.14.3.0/source/flattened/did_you_mean.js"
 import stringForIndexHtml from "./main/old/index.html.binaryified.js"
 
@@ -24,7 +24,7 @@ const argsInfo = parseArgs({
         [["--dummy-wss"], flag, ],
     ],
     namedArgsStopper: "--",
-    allowNameRepeats: true,
+    nameRepeats: "useLast",
     valueTransformer: JSON.parse,
     isolateArgsAfterStopper: false,
     argsByNameSatisfiesNumberedArg: true,
@@ -73,6 +73,8 @@ Options:
     --dummy-wss
         Use a "secure" websocket connection
         (self-signed cert/key, not actually secure)
+Notes:
+    - Giving an argument twice will use the last one given
 `)
     Deno.exit()
 }
@@ -252,4 +254,4 @@ Deno.serve(
     }
 )
 
-// denoCacheMetadata={"headers":{"x-cache":"MISS","strict-transport-security":"max-age=31536000","access-control-allow-origin":"*","accept-ranges":"bytes","x-xss-protection":"1; mode=block","date":"Mon, 21 Jul 2025 21:50:29 GMT","content-type":"text/plain; charset=utf-8","x-content-type-options":"nosniff","via":"1.1 varnish","expires":"Mon, 21 Jul 2025 21:55:29 GMT","x-frame-options":"deny","x-fastly-request-id":"37a02caf38fd758e76c3ccb749737dec6cd35ab3","etag":"W/\"5efb8de2b6cd0ee59d5490720f32e72cc8df06b894088a1bde39ed6dc29c288e\"","source-age":"0","x-github-request-id":"63C9:143AB:3F38D:580E2:687EB625","cross-origin-resource-policy":"cross-origin","x-cache-hits":"0","x-timer":"S1753134629.339918,VS0,VE109","cache-control":"max-age=300","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","x-served-by":"cache-iah17227-IAH","vary":"Authorization,Accept-Encoding"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/rosbagAsBackend.js","time":1753134629}
+// denoCacheMetadata={"headers":{"x-cache-hits":"1","x-content-type-options":"nosniff","x-cache":"HIT","vary":"Authorization,Accept-Encoding","expires":"Fri, 01 Aug 2025 16:11:17 GMT","x-frame-options":"deny","accept-ranges":"bytes","content-type":"text/plain; charset=utf-8","via":"1.1 varnish","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox","cross-origin-resource-policy":"cross-origin","x-fastly-request-id":"8c7c96afce339293889a829c3b4ae146fde66e23","x-xss-protection":"1; mode=block","source-age":"111","x-timer":"S1754064377.374630,VS0,VE0","cache-control":"max-age=300","x-served-by":"cache-iah1720102-IAH","access-control-allow-origin":"*","etag":"W/\"64d7fed3757d72635266918d5f5717fcf728bf94d657222527f2e14edf064f8c\"","x-github-request-id":"A332:32CC6C:1D9E50:24D782:688CE588","strict-transport-security":"max-age=31536000","date":"Fri, 01 Aug 2025 16:06:17 GMT"},"url":"https://raw.githubusercontent.com/jeff-hykin/rapid_ros_server/dev/rosbagAsBackend.js","time":1754064377}
