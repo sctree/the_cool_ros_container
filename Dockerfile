@@ -90,6 +90,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     apt-get update && apt-get install -y \
         python3-pip \
         python3-dev \
+        ros-noetic-ros-base \
+        ros-noetic-rosbridge-server \
+        ros-noetic-common-tutorials \
+        ros-noetic-rospy-tutorials \
         ros-noetic-joy \
         ros-noetic-interactive-marker-twist-server \
         ros-noetic-teleop-twist-joy \
@@ -333,6 +337,8 @@ RUN : && \
         xfonts-100dpi \
         light-themes \
         iproute2 \
+        firefox \
+
     && rm -rf /var/lib/apt/lists/*
 
 ENV DEBUG="1"
@@ -402,6 +408,14 @@ RUN :                            && \
 
 # Expose ports.
 EXPOSE 5900
+
+# Applications and Utilities
+RUN : && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        firefox \
+    && rm -rf /var/lib/apt/lists/*
+
 
 # 
 # add to global bashrc
